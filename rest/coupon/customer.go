@@ -10,7 +10,7 @@ type CustomerCouponService interface {
 
 
 func (h *CouponHandler) GetCouponList(c *gin.Context) {
-	couponList, err := h.c
+	//couponList, err := h.c
 }
 
 func (h *CouponHandler) GainCoupon(c *gin.Context) {

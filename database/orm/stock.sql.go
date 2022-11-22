@@ -10,32 +10,40 @@ import (
 	"database/sql"
 )
 
-const addInventoryItem = `-- name: AddInventoryItem :execresult
-INSERT INTO stock (name)
-VALUES (?)
+const addStockItem = `-- name: AddStockItem :execresult
+INSERT INTO
+    stock (name)
+VALUES
+    (?)
 `
 
-func (q *Queries) AddInventoryItem(ctx context.Context, name string) (sql.Result, error) {
-	return q.db.ExecContext(ctx, addInventoryItem, name)
+func (q *Queries) AddStockItem(ctx context.Context, name string) (sql.Result, error) {
+	return q.db.ExecContext(ctx, addStockItem, name)
 }
 
-const deleteInventoryItem = `-- name: DeleteInventoryItem :exec
-DELETE FROM stock
-WHERE stock_id = (?)
+const deleteStockItem = `-- name: DeleteStockItem :exec
+DELETE FROM
+    stock
+WHERE
+    stock_id = (?)
 `
 
-func (q *Queries) DeleteInventoryItem(ctx context.Context, stockID int64) error {
-	_, err := q.db.ExecContext(ctx, deleteInventoryItem, stockID)
+func (q *Queries) DeleteStockItem(ctx context.Context, stockID int64) error {
+	_, err := q.db.ExecContext(ctx, deleteStockItem, stockID)
 	return err
 }
 
-const getAllInventoryList = `-- name: GetAllInventoryList :many
-SELECT stock_id, name, count
-FROM stock
+const getAllStockList = `-- name: GetAllStockList :many
+SELECT
+    stock_id,
+    name,
+    count
+FROM
+    stock
 `
 
-func (q *Queries) GetAllInventoryList(ctx context.Context) ([]Stock, error) {
-	rows, err := q.db.QueryContext(ctx, getAllInventoryList)
+func (q *Queries) GetAllStockList(ctx context.Context) ([]Stock, error) {
+	rows, err := q.db.QueryContext(ctx, getAllStockList)
 	if err != nil {
 		return nil, err
 	}
@@ -57,18 +65,21 @@ func (q *Queries) GetAllInventoryList(ctx context.Context) ([]Stock, error) {
 	return items, nil
 }
 
-const updateInventoryItem = `-- name: UpdateInventoryItem :exec
-UPDATE stock
-SET count = (?)
-WHERE stock_id = (?)
+const updateStockItem = `-- name: UpdateStockItem :exec
+UPDATE
+    stock
+SET
+    count = (?)
+WHERE
+    stock_id = (?)
 `
 
-type UpdateInventoryItemParams struct {
+type UpdateStockItemParams struct {
 	Count   int32
 	StockID int64
 }
 
-func (q *Queries) UpdateInventoryItem(ctx context.Context, arg UpdateInventoryItemParams) error {
-	_, err := q.db.ExecContext(ctx, updateInventoryItem, arg.Count, arg.StockID)
+func (q *Queries) UpdateStockItem(ctx context.Context, arg UpdateStockItemParams) error {
+	_, err := q.db.ExecContext(ctx, updateStockItem, arg.Count, arg.StockID)
 	return err
 }

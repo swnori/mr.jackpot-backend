@@ -1,17 +1,14 @@
 package vui
 
-import "mr.jackpot-backend/model"
+import (
+	"mr.jackpot-backend/database/db"
+	"mr.jackpot-backend/model"
+)
 
-
-
-type MOCKDB interface {
-	ReadAllPreOrderList() ([]model.PreOrderTable, error)
-	ReadAllProOrderList() ([]model.ProOrderTable, error)
-}
 
 
 type VUIGraph struct {
-	db MOCKDB
+	db db.VUILayer
 
 	preNodes map[int]NodeInterface
 	proNodes map[int]NodeInterface
@@ -19,6 +16,7 @@ type VUIGraph struct {
 
 func NewVUIGraph() *VUIGraph {
 	graph := VUIGraph{
+		db: db.NewVUIDB(),
 		preNodes: make(map[int]NodeInterface),
 		proNodes: make(map[int]NodeInterface),
 	}

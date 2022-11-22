@@ -2,12 +2,21 @@
 INSERT INTO coupon_issued (code, amount, title, description, created_at, expires_at)
 VALUES (?, ?, ?, ?, ?, ?);
 
+-- name: GetCouponIssued :many
+SELECT *
+FROM coupon_issued;
+
 -- name: GetCouponMatched :one
 SELECT coupon_id
 FROM coupon_issued
 WHERE code = (?);
 
--- name: CreateCoupon :exec
+-- name: GetCouponInfo :one
+SELECT *
+FROM coupon_issued
+WHERE coupon_id = (?);
+
+-- name: OwnCoupon :exec
 INSERT INTO coupon_owned (coupon_id, owner_id)
 VALUES (?, ?);
 
@@ -18,11 +27,13 @@ WHERE coupon_id = (?)
 AND owner_id = (?);
 
 -- name: GetCouponAvailable :many
-SELECT (amount, title, description, created_at, expires_at)
+SELECT coupon_id, amount, title, description, created_at, expires_at
 FROM coupon_owned owned, coupon_issued issued
 WHERE owned.owner_id = (?)
+AND owned.coupon_id = issued.coupon_id
 AND owned.valid IS TRUE
-AND owned.coupon_id = issued.coupon_id;
+AND coupon_issued.expires_at <= GETDATE;
 
 -- name: DeleteCoupon :exec
-DELETE 
+DELETE FROM coupon_issued
+WHERE coupon_id = (?);

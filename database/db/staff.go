@@ -17,7 +17,6 @@ type StaffLayer interface {
 
 	GetStaffInfo(staffid int) (model.StaffInfo, error)
 	GetAllStaffInfo() ([]model.StaffInfo, error)
-
 }
 
 type StaffDB struct {

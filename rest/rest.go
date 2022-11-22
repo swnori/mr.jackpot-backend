@@ -4,10 +4,10 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/rest/coupon"
-	"mr.jackpot-backend/rest/inventory"
 	"mr.jackpot-backend/rest/manager"
 	"mr.jackpot-backend/rest/order"
 	"mr.jackpot-backend/rest/orderinfo"
+	"mr.jackpot-backend/rest/stock"
 	"mr.jackpot-backend/rest/task"
 )
 
@@ -71,14 +71,14 @@ func RunAPI(address string) error {
 
 	Staff := r.Group("/staff")
 	{
-		Stock := Staff.Group("/inventory")
+		Stock := Staff.Group("/stock")
 		{
-			var h inventory.InventoryService = inventory.NewInventoryHandler()
+			var h stock.StockService = stock.NewStockHandler()
 
-			Stock.GET("/itemlist", h.GetAllInventoryList)
-			Stock.POST("/update", h.UpdateInventoryItem)
-			Stock.POST("/add", h.AddInventoryItem)
-			Stock.POST("/delete", h.DeleteInventoryItem)
+			Stock.GET("/itemlist", h.GetAllStockList)
+			Stock.POST("/update", h.UpdateStockItem)
+			Stock.POST("/add", h.AddStockItem)
+			Stock.POST("/delete", h.DeleteStockItem)
 		}
 
 		Order := Staff.Group("/order")

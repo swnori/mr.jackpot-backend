@@ -1,4 +1,4 @@
-package inventory
+package stock
 
 import (
 	"net/http"
@@ -7,17 +7,15 @@ import (
 	"mr.jackpot-backend/model"
 )
 
+func (h *StockHandler) AddStockItem(c *gin.Context) {
 
-
-func (h *InventoryHandler) AddInventoryItem(c *gin.Context) {
-
-	item := model.InventoryItem{}
+	item := model.StockItem{}
 	if err := c.ShouldBindJSON(&item); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	
-	if err := h.inventory.AddInventoryItem(item.Name); err != nil {
+
+	if err := h.stock.AddStockItem(item.Name); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -25,15 +23,15 @@ func (h *InventoryHandler) AddInventoryItem(c *gin.Context) {
 	c.JSON(http.StatusOK, "")
 }
 
-func (h *InventoryHandler) UpdateInventoryItem(c *gin.Context) {
+func (h *StockHandler) UpdateStockItem(c *gin.Context) {
 
-	item := model.InventoryItem{}
+	item := model.StockItem{}
 	if err := c.ShouldBindJSON(&item); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	if err := h.inventory.UpdateInventoryItem(item.ID, item.Count); err != nil {
+	if err := h.stock.UpdateStockItem(item.ID, item.Count); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -41,15 +39,15 @@ func (h *InventoryHandler) UpdateInventoryItem(c *gin.Context) {
 	c.JSON(http.StatusOK, "")
 }
 
-func (h *InventoryHandler) DeleteInventoryItem(c *gin.Context) {
+func (h *StockHandler) DeleteStockItem(c *gin.Context) {
 
-	item := model.InventoryItem{}
+	item := model.StockItem{}
 	if err := c.ShouldBindJSON(&item); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	if err := h.inventory.DeleteInventoryItem(item.ID); err != nil {
+	if err := h.stock.DeleteStockItem(item.ID); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -57,15 +55,13 @@ func (h *InventoryHandler) DeleteInventoryItem(c *gin.Context) {
 	c.JSON(http.StatusOK, "")
 }
 
+func (h *StockHandler) GetAllStockList(c *gin.Context) {
 
-
-func (h *InventoryHandler) GetAllInventoryList(c *gin.Context) {
-
-	inventoryList, err := h.inventory.GetAllInventoryList()
+	stockList, err := h.stock.GetAllStockList()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, inventoryList)
+	c.JSON(http.StatusOK, stockList)
 }
