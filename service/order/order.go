@@ -1,28 +1,30 @@
 package order
 
-import "mr.jackpot-backend/model"
+import (
+	"mr.jackpot-backend/model"
+	"mr.jackpot-backend/service/order/state"
+)
 
 type Order struct {
 	ID           int
 	DeliveryInfo model.DeliveryInfo
 	OrderInfo    model.Order
 
-	currentState OrderState
+	currentState state.OrderState
 
-	created    OrderState
-	accepted   OrderState
-	started    OrderState
-	cooking    OrderState
-	styling    OrderState
-	prepared   OrderState
-	delivering OrderState
-	delivered  OrderState
-	requested  OrderState
-	collected  OrderState
+	created    state.OrderState
+	accepted   state.OrderState
+	started    state.OrderState
+	styling    state.OrderState
+	prepared   state.OrderState
+	delivering state.OrderState
+	delivered  state.OrderState
+	requested  state.OrderState
+	collected  state.OrderState
 
-	rejected   OrderState
-	cancelled  OrderState
-	finished   OrderState	
+	rejected   state.OrderState
+	cancelled  state.OrderState
+	finished   state.OrderState	
 }
 
 func NewOrder(id int) *Order {
@@ -30,15 +32,42 @@ func NewOrder(id int) *Order {
 		ID: id,
 	}
 
-	order.created    = &CreatedState   {ID: id, NextStep: &order.accepted  }
-	order.accepted   = &AcceptedState  {ID: id, NextStep: &order.started   }
-	order.started    = &StartedState   {ID: id, NextStep: &order.cooking   }
-	order.cooking    = &CookingState   {ID: id, NextStep: &order.styling   }
-	order.prepared   = &PreparedState  {ID: id, NextStep: &order.delivering}
-	order.delivering = &DeliveringState{ID: id, NextStep: &order.accepted  }
-	order.delivered  = &DeliveredState {ID: id, NextStep: &order.requested }
-	order.requested  = &RequestedState {ID: id, NextStep: &order.collected }
-	order.collected  = &CollectedState {ID: id, NextStep: &order.finished  }
+	order.created = &state.AcceptedState{
+		ID: id,
+		NextStep: &order.accepted,
+		CeasedStep: &order.rejected,
+	}
+
+	order.accepted = &state.AcceptedState{
+		ID: id,
+		NextStep: &order.started,
+	}
+
+	order.started = &state.StartedState{
+		ID: id,
+		NextStep: &order.prepared,
+	}
+
+	order.prepared = &state.PreparedState{
+		ID: id,
+		NextStep: &order.delivered,
+	}
+	order.delivering = &state.DeliveringState{
+		ID: id,
+		NextStep: &order.accepted,
+	}
+	order.delivered = &state.DeliveredState{
+		ID: id,
+		NextStep: &order.requested,
+	}
+	order.requested = &state.RequestedState{
+		ID: id,
+		NextStep: &order.collected,
+	}
+	order.collected = &state.CollectedState{
+		ID: id,
+		NextStep: &order.finished,
+	}
 
 	order.currentState = order.created
 
@@ -58,11 +87,11 @@ func (o *Order) ProcessStep() {
 	o.currentState.ProcessStep()
 }
 
-func (o *Order) SetState(step OrderState) {
+func (o *Order) SetState(step state.OrderState) {
 	o.currentState = step
 }
 
-func (o *Order) GetNextStep() *OrderState {
+func (o *Order) GetNextStep() *state.OrderState {
 	return o.currentState.GetNextStep()
 }
 

@@ -13,7 +13,10 @@ type OrderManager struct {
 	db db.OrderLayer
 }
 
-var OrderManagers = &OrderManager{
-	Orders: make(map[int]*Order),
-	db: db.NewOrderDB(),
+var OrderManagers *OrderManager
+
+func NewOrderManager() *OrderManager {
+	OrderManagers.Orders = make(map[int]*Order)
+	OrderManagers.db = db.NewOrderDB()
+	return OrderManagers
 }

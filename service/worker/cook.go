@@ -16,10 +16,9 @@ type CookManager struct {
 
 func (w *CookManager) FinishTaskProcess(orderid int) error {
 	return nil
-	// 로직 보충 필요함
 }
 
-var Cook *CookManager
+var Cook = &CookManager{}
 
 
 func init() {

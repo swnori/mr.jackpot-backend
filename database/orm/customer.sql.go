@@ -10,6 +10,19 @@ import (
 	"database/sql"
 )
 
+const checkCustomerID = `-- name: CheckCustomerID :one
+SELECT customer_id
+FROM customer_auth
+WHERE id = (?)
+`
+
+func (q *Queries) CheckCustomerID(ctx context.Context, id string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, checkCustomerID, id)
+	var customer_id int64
+	err := row.Scan(&customer_id)
+	return customer_id, err
+}
+
 const createCustomer = `-- name: CreateCustomer :exec
 INSERT INTO customer (customer_id, name, address, phone)
 VALUES (?, ?, ?, ?)

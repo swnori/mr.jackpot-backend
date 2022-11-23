@@ -17,8 +17,7 @@ CREATE TABLE visitor (
 );
 
 CREATE TABLE customer (
-    customer_id bigint      NOT NULL,
-    userid    varchar(32) NOT NULL,
+    customer_id bigint    NOT NULL,
     status    boolean     NOT NULL DEFAULT TRUE,
 
     name    varchar(16) NOT NULL,
@@ -29,13 +28,13 @@ CREATE TABLE customer (
     rating  tinyint NOT NULL DEFAULT 0,
     paid    int     NOT NULL DEFAULT 0,
 
-    PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES user (user_id)
+    PRIMARY KEY (customer_id),
+    FOREIGN KEY (customer_id) REFERENCES user (user_id)
 );
 
 CREATE TABLE customer_auth (
-    id        varchar(32) NOT NULL,
-    password  varchar(60) NOT NULL,
+    id          varchar(32) NOT NULL,
+    password    varchar(60) NOT NULL,
     customer_id bigint      NOT NULL,
 
     PRIMARY KEY (id),
@@ -64,7 +63,7 @@ CREATE TABLE coupon_owned (
 
     PRIMARY KEY (coupon_id, owner_id),
     FOREIGN KEY (coupon_id) REFERENCES coupon_issued (coupon_id),
-    FOREIGN KEY (owner_id)  REFERENCES customer (user_id)
+    FOREIGN KEY (owner_id)  REFERENCES customer (customer_id)
 );
 
 

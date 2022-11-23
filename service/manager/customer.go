@@ -16,11 +16,9 @@ type CustomerManager struct {
 	Member
 }
 
-var Customer = &CustomerManager{
-	db: db.NewCustomerDB(),
-}
-
+var Customer = &CustomerManager{}
 func NewCustomerManager() *CustomerManager {
 	Customer.Token = DefaultToken
+	Customer.db = db.NewCustomerDB()
 	return Customer
 }

@@ -1,6 +1,9 @@
 package manager
 
-import "mr.jackpot-backend/database/db"
+import (
+
+	"mr.jackpot-backend/database/db"
+)
 
 
 
@@ -13,11 +16,10 @@ type VisitorManager struct {
 	Client
 }
 
-var Visitor = &VisitorManager{
-	db: db.NewVisitorDB(),
-}
+var Visitor = &VisitorManager{}
 
 func NewVisitorManager() *VisitorManager {
 	Visitor.Token = DefaultToken
+	Visitor.db = db.NewVisitorDB()
 	return Visitor
 }

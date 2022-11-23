@@ -25,8 +25,8 @@ func NewVUIGraph() *VUIGraph {
 
 
 
-func (g *VUIGraph) GetTargetListBySeqId(seq_top int) (targetList []string, nxtIdList []int) {
-	nxtIdList = g.GetNxtProList(seq_top)
+func (g *VUIGraph) GetTargetListBySeqId(seqTop int) (targetList []string, nxtIdList []int) {
+	nxtIdList = g.GetNxtProList(seqTop)
 
 	for _, nxtId := range nxtIdList {
 		node := g.proNodes[nxtId].GetNodeInfo()

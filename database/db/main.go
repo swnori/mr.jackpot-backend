@@ -1,6 +1,7 @@
 package db
 
 import (
+//	"context"
 	"database/sql"
 	"fmt"
 
@@ -14,20 +15,14 @@ type DBAccessor struct {
 	q *ormpkg.Queries
 }
 
-var Accessor *ormpkg.Queries
+var DB *sql.DB
 
 func NewAccessor() *ormpkg.Queries {
-	return Accessor
+	return ormpkg.New(DB)
 }
 
-
-func ConnectDB(address, dbname, dsn string) error {
-
-	db, err := sql.Open("mysql", fmt.Sprintf("root@tcp(%s)/%s%s", address, dbname, dsn))
-	if err != nil {
-		return err
-	}
-	Accessor = ormpkg.New(db)
-	return nil
+func ConnectDB(address, dbname, dsn string) (err error) {
+	DB, err = sql.Open("mysql", fmt.Sprintf("root@tcp(%s)/%s%s", address, dbname, dsn))
+	return err
 }
 

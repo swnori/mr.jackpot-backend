@@ -11,6 +11,11 @@ SELECT password, customer_id
 FROM customer_auth
 WHERE id = (?);
 
+-- name: CheckCustomerID :one
+SELECT customer_id
+FROM customer_auth
+WHERE id = (?);
+
 -- name: GetPersonalInfo :one
 SELECT customer_id, name, address, phone
 FROM customer

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/model"
+	"mr.jackpot-backend/utility/util"
 )
 
 
@@ -24,7 +25,7 @@ func (h *CustomerAuthHandler) Register(c *gin.Context) {
 	}
 
 	if err := h.m.CreateAccound(request); err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusUnauthorized, err.Error())
 		return
 	}
 
@@ -42,8 +43,11 @@ func (h *CustomerAuthHandler) Unregister(c *gin.Context) {
 }
 
 
-func (h *VisitorAuthHandler) Register(c *gin.Context) {
-	
+func (h *VisitorAuthHandler) Register() (string, error) {
+	identifier := util.GetRandomString(16)
+
+	_, err := h.m.CreateAccount(identifier)
+	return identifier, err
 }
 
 

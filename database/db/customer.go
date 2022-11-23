@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
@@ -42,6 +43,11 @@ func (db *CustomerDB) GetCustomerPassword(id string) (string, int, error) {
 
 func (db *CustomerDB) CreateAccount(customer model.CustomerRegister) error {
 	ctx := context.Background()
+
+	flag, err := db.q.CheckCustomerID(ctx, customer.UserID)
+	if flag != 0 {
+		return errors.New("ID already exist")
+	}
 
 	result, err := db.q.CreateUser(ctx)
 	if err != nil {

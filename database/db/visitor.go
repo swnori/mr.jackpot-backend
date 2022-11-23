@@ -44,7 +44,6 @@ func (db *VisitorDB) CreateVisitor(identifier string)  (int, error) {
 
 func (db *VisitorDB) GetVisitorByIdentifier(identifier string) (int, error) {
 	ctx := context.Background()
-
 	id, err := db.q.GetVisitorID(ctx, identifier)
 	return int(id), err
 }

@@ -17,7 +17,7 @@ func (w *DeliveryManager) FinishTaskProcess(orderid int) error {
 	return w.o.FinishOrderStep(orderid);
 }
 
-var Delivery *DeliveryManager
+var Delivery = &DeliveryManager{}
 
 
 func init() {

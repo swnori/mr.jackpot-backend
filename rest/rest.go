@@ -19,6 +19,7 @@ func RunAPI(address string) error {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000", "https://mr-jackpot.run.goorm.io/", "https://mr-jackpot.run.goorm.io:5173"},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{""},
 		AllowCredentials: true,
 	}))
 
@@ -27,7 +28,7 @@ func RunAPI(address string) error {
 
 	Auth := r.Group("/auth")
 	{
-		Visitor := Auth.Group("/customer")
+		Visitor := Auth.Group("/visitor")
 		{
 			var h authority.VisitorAuthService = authority.NewVisitorAuthHandler()
 
@@ -41,8 +42,8 @@ func RunAPI(address string) error {
 
 			Customer.POST("/signin", h.Signin)
 			Customer.POST("/signout", h.Signout)
-			Customer.POST("/Register", h.Register)
-			Customer.POST("/Unregister", h.Unregister)
+			Customer.POST("/register", h.Register)
+			Customer.POST("/unregister", h.Unregister)
 		}
 
 		Staff := Auth.Group("/staff")
@@ -82,6 +83,13 @@ func RunAPI(address string) error {
 
 			Coupon.GET("/list", h.GetCouponList)
 			Coupon.POST("/asdf", h.GainCoupon)
+		}
+
+		Personal := Customer.Group("/personalinfo")
+		{
+			var h manager.ManagerHandler = *manager.NewManagerHandler()
+			Personal.GET("/", h.GetPersonalInfo)
+			Personal.POST("/", h.UpdatePersonalInfo)
 		}
 	}
 

@@ -5,17 +5,17 @@ import "time"
 
 
 type User struct {
-	UserID   string
-	Password string
+	UserID   string `json:"userID"`
+	Password string `json:"password"`
 }
 
 
 
 type PersonalInfo struct {
-	ID      int
-	Name    string
-	Phone   string
-	Address string
+	ID      int    `json:"-"`
+	Name    string `json:"name"`
+	Phone   string `json:"phone"`
+	Address string `json:"address"`
 }
 
 
@@ -27,11 +27,11 @@ type UserInfo struct {
 
 type CustomerRegister struct {
 	ID      int
-	UserID   string
-	Password string
-	Name     string
-	Phone    string
-	Address  string
+	UserID   string `json:"userID"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
+	Phone    string `json:"phone"`
+	Address  string `json:"address"`
 }
 
 type CustomerInfo struct {

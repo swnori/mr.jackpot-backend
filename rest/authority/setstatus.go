@@ -1,8 +1,6 @@
 package authority
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/model"
 )
@@ -17,7 +15,9 @@ type SetAuthMiddlewareService interface {
 func (h *AuthMiddlewareHandler) SetAuthority(c *gin.Context) {
 	tokenString, err := c.Cookie("access-token")
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.Set("status", model.UserStatusUnauthorized)
+		c.Set("userid", 0)
+		c.Next()
 		return
 	}
 
