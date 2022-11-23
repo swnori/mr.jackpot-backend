@@ -34,6 +34,24 @@ type CouponOwned struct {
 	Valid    bool
 }
 
+type Customer struct {
+	CustomerID int64
+	Userid     string
+	Status     bool
+	Name       string
+	Address    sql.NullString
+	Phone      sql.NullString
+	Orders     int32
+	Rating     int32
+	Paid       int32
+}
+
+type CustomerAuth struct {
+	ID         string
+	Password   string
+	CustomerID int64
+}
+
 type DeliveryInfo struct {
 	OrderID int64
 	Name    string
@@ -61,19 +79,6 @@ type DinnersStyle struct {
 type EntityType struct {
 	TypeID   int32
 	Typename string
-}
-
-type Member struct {
-	ID       int64
-	Userid   string
-	Password string
-}
-
-type MemberInfo struct {
-	UserID  int64
-	Name    string
-	Address sql.NullString
-	Phone   sql.NullString
 }
 
 type Menu struct {
@@ -104,11 +109,6 @@ type MenuRole struct {
 type MenuType struct {
 	ID   int32
 	Name string
-}
-
-type Nonmember struct {
-	ID    int64
-	Token string
 }
 
 type Order struct {
@@ -179,15 +179,16 @@ type Role struct {
 }
 
 type Staff struct {
-	StaffID  int64
-	StaffKey string
-	RoleID   int32
+	StaffID int64
+	Status  bool
+	RoleID  int32
+	Name    string
+	Score   int32
 }
 
-type StaffInfo struct {
+type StaffAuth struct {
+	Code    string
 	StaffID int64
-	Name    string
-	Phone   string
 }
 
 type State struct {
@@ -209,4 +210,9 @@ type Style struct {
 
 type User struct {
 	UserID int64
+}
+
+type Visitor struct {
+	Identifier string
+	VisitorID  int64
 }

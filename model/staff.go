@@ -14,10 +14,17 @@ type Staff struct {
 }
 
 type StaffInfo struct {
-	Code    string
-	Name    string
-	Role    string
-	Part    string
+	ID    int
+	Code  string
+	Name  string
+	Role  string
+	Part  string
 	Score int
 	CreatedAt time.Time
+}
+
+type StaffRegister struct {
+	Code string
+	Name string
+	RoleID int
 }

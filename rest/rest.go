@@ -3,6 +3,7 @@ package rest
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"mr.jackpot-backend/rest/authority"
 	"mr.jackpot-backend/rest/coupon"
 	"mr.jackpot-backend/rest/manager"
 	"mr.jackpot-backend/rest/order"
@@ -16,30 +17,45 @@ func RunAPI(address string) error {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "https://mr-jackpot.run.goorm.io/"},
+		AllowOrigins:     []string{"http://localhost:3000", "https://mr-jackpot.run.goorm.io/", "https://mr-jackpot.run.goorm.io:5173"},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE", "OPTIONS"},
 		AllowCredentials: true,
 	}))
 
-	r.Use()
+	var mh authority.AuthMiddlewareService = authority.NewAuthMiddlewareHandler()
+	r.Use(mh.SetAuthority)
 
 	Auth := r.Group("/auth")
 	{
+		Visitor := Auth.Group("/customer")
+		{
+			var h authority.VisitorAuthService = authority.NewVisitorAuthHandler()
+
+			Visitor.POST("/signin", h.Signin)
+			Visitor.POST("/signout", h.Signout)
+		}
+
 		Customer := Auth.Group("/customer")
 		{
-			Customer.POST("/signin")
-			Customer.POST("/signout")
-			Customer.POST("/Register")
-			Customer.POST("/Unegister")
+			var h authority.CustomerAuthService = authority.NewCustomerAuthHandler()
+
+			Customer.POST("/signin", h.Signin)
+			Customer.POST("/signout", h.Signout)
+			Customer.POST("/Register", h.Register)
+			Customer.POST("/Unregister", h.Unregister)
 		}
+
 		Staff := Auth.Group("/staff")
 		{
-			Staff.POST("/login")
-			Staff.POST("/logout")
+			var h authority.StaffAuthService = authority.NewStaffAuthHandler()
+
+			Staff.POST("/signin", h.Signin)
+			Staff.POST("/signout", h.Signout)
 		}
 	}
 
 	Customer := r.Group("/customer")
+	Customer.Use(mh.CheckCustomer)
 	{
 		Order := Customer.Group("/orderinfo")
 		{
@@ -70,6 +86,7 @@ func RunAPI(address string) error {
 	}
 
 	Staff := r.Group("/staff")
+	Staff.Use(mh.CheckStaff)
 	{
 		Stock := Staff.Group("/stock")
 		{
@@ -99,6 +116,7 @@ func RunAPI(address string) error {
 	}
 
 	Ceo := r.Group("/ceo")
+	Ceo.Use(mh.CheckCEO)
 	{
 		Order := Ceo.Group("/order")
 		{

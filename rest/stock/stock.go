@@ -56,12 +56,6 @@ func (h *StockHandler) DeleteStockItem(c *gin.Context) {
 }
 
 func (h *StockHandler) GetAllStockList(c *gin.Context) {
-
-	stockList, err := h.stock.GetAllStockList()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
-
+	stockList := h.stock.GetAllStockList()
 	c.JSON(http.StatusOK, stockList)
 }

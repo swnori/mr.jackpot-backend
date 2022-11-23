@@ -12,8 +12,9 @@ type User struct {
 
 
 type PersonalInfo struct {
-	Name   string
-	Phone  string
+	ID      int
+	Name    string
+	Phone   string
 	Address string
 }
 
@@ -24,12 +25,13 @@ type UserInfo struct {
 	UserID string
 }
 
-type RegisterRequest struct {
+type CustomerRegister struct {
 	ID      int
-	UserID  string
-	Name    string
-	Phone   string
-	Address string
+	UserID   string
+	Password string
+	Name     string
+	Phone    string
+	Address  string
 }
 
 type CustomerInfo struct {

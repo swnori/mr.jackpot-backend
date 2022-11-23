@@ -6,8 +6,10 @@ import (
 )
 
 type CustomerAuthService interface {
-	CheckAuthority(user model.User) error
-	CreateAccound(user model.RegisterRequest) error
+	AuthService
+
+	CheckAuthority(user model.User) (int, error)
+	CreateAccound(user model.CustomerRegister) error
 	RemoveAccount(userid int) error
 }
 
@@ -20,20 +22,19 @@ func (m *CustomerManager) ComparePassword(s, t string) error {
 	return nil
 }
 
-func (m *CustomerManager) CheckAuthority(user model.User) error {
-	if err := m.db.CheckUserExist(user.UserID); err != nil {
-		return err
-	}
-	
-	password, err := m.db.GetUserPassword(user.UserID)
+func (m *CustomerManager) CheckAuthority(user model.User) (int, error) {
+	password, userid, err := m.db.GetCustomerPassword(user.UserID)
 	if err != nil {
-		return err
+		return 0, err
+	}
+	if userid == 0 {
+		return 0, errors.New("NO ID")
 	}
 
-	return m.ComparePassword(password, user.Password);
+	return userid, m.ComparePassword(password, user.Password);
 }
 
-func (m *CustomerManager) CreateAccound(user model.RegisterRequest) error {
+func (m *CustomerManager) CreateAccound(user model.CustomerRegister) error {
 	return m.db.CreateAccount(user);
 }
 

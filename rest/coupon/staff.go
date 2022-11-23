@@ -2,7 +2,6 @@ package coupon
 
 import (
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/model"
 )
@@ -33,9 +32,6 @@ func (h *CouponHandler) IssueCoupon(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, coupon)
-
-
-
 }
 
 func (h *CouponHandler) DeleteCoupon(c *gin.Context) {

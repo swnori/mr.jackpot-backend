@@ -22,7 +22,7 @@ func (q *Queries) DeleteCoupon(ctx context.Context, couponID int64) error {
 }
 
 const getCouponAvailable = `-- name: GetCouponAvailable :many
-SELECT amount, title, description, created_at, expires_at
+SELECT issued.coupon_id, code, amount, title, description, created_at, expires_at
 FROM coupon_owned owned, coupon_issued issued
 WHERE owned.owner_id = (?)
 AND owned.coupon_id = issued.coupon_id
@@ -30,24 +30,18 @@ AND owned.valid IS TRUE
 AND coupon_issued.expires_at <= GETDATE
 `
 
-type GetCouponAvailableRow struct {
-	Amount      int32
-	Title       sql.NullString
-	Description sql.NullString
-	CreatedAt   time.Time
-	ExpiresAt   time.Time
-}
-
-func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]GetCouponAvailableRow, error) {
+func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]CouponIssued, error) {
 	rows, err := q.db.QueryContext(ctx, getCouponAvailable, ownerID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetCouponAvailableRow
+	var items []CouponIssued
 	for rows.Next() {
-		var i GetCouponAvailableRow
+		var i CouponIssued
 		if err := rows.Scan(
+			&i.CouponID,
+			&i.Code,
 			&i.Amount,
 			&i.Title,
 			&i.Description,
@@ -137,7 +131,7 @@ func (q *Queries) GetCouponMatched(ctx context.Context, code string) (int64, err
 	return coupon_id, err
 }
 
-const issueCoupon = `-- name: IssueCoupon :exec
+const issueCoupon = `-- name: IssueCoupon :execresult
 INSERT INTO coupon_issued (code, amount, title, description, created_at, expires_at)
 VALUES (?, ?, ?, ?, ?, ?)
 `
@@ -151,8 +145,8 @@ type IssueCouponParams struct {
 	ExpiresAt   time.Time
 }
 
-func (q *Queries) IssueCoupon(ctx context.Context, arg IssueCouponParams) error {
-	_, err := q.db.ExecContext(ctx, issueCoupon,
+func (q *Queries) IssueCoupon(ctx context.Context, arg IssueCouponParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, issueCoupon,
 		arg.Code,
 		arg.Amount,
 		arg.Title,
@@ -160,7 +154,6 @@ func (q *Queries) IssueCoupon(ctx context.Context, arg IssueCouponParams) error 
 		arg.CreatedAt,
 		arg.ExpiresAt,
 	)
-	return err
 }
 
 const ownCoupon = `-- name: OwnCoupon :exec

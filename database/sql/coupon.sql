@@ -1,4 +1,4 @@
--- name: IssueCoupon :exec
+-- name: IssueCoupon :execresult
 INSERT INTO coupon_issued (code, amount, title, description, created_at, expires_at)
 VALUES (?, ?, ?, ?, ?, ?);
 
@@ -27,7 +27,7 @@ WHERE coupon_id = (?)
 AND owner_id = (?);
 
 -- name: GetCouponAvailable :many
-SELECT coupon_id, amount, title, description, created_at, expires_at
+SELECT issued.coupon_id, code, amount, title, description, created_at, expires_at
 FROM coupon_owned owned, coupon_issued issued
 WHERE owned.owner_id = (?)
 AND owned.coupon_id = issued.coupon_id

@@ -3,26 +3,34 @@ package manager
 import "errors"
 
 
-type Manager struct {}
 
-var errMessage string = "Implement Inherited Class"
+type Member struct {}
 
-func (m *Manager) CheckAuthority() error {
-	return errors.New(errMessage)
-}
-func (m *Manager) CreateAccound() error {
-	return errors.New(errMessage)
-}
-func (m *Manager) RemoveAccount() error {
-	return errors.New(errMessage)
+func NewMember() *Member {
+	return &Member{}
 }
 
-func (m *Manager) GetUserInfo() error {
+
+
+var errMessage string = "Implementing Inherited Class Required"
+
+func (m *Member) CheckAuthority() error {
 	return errors.New(errMessage)
 }
-func (m *Manager) GetAllUserInfo() error {
+func (m *Member) CreateAccound() error {
 	return errors.New(errMessage)
 }
-func (m *Manager) UpdateUserInfo() error {
+func (m *Member) RemoveAccount() error {
 	return errors.New(errMessage)
 }
+
+func (m *Member) GetUserInfo() error {
+	return errors.New(errMessage)
+}
+func (m *Member) GetAllUserInfo() error {
+	return errors.New(errMessage)
+}
+func (m *Member) UpdateUserInfo() error {
+	return errors.New(errMessage)
+}
+

@@ -7,8 +7,10 @@ import (
 )
 
 type StafAuthService interface {
+	AuthService
+
 	CheckAuthority(user model.Staff) error
-	CreateAccount(staff model.StaffInfo) error
+	CreateAccount(staff model.StaffRegister) error
 	RemoveAccount(staffid int) error
 }
 
@@ -24,7 +26,7 @@ func (m *StaffManager) CheckAuthority(user model.Staff) error {
 	return nil
 }
 
-func (m *StaffManager) CreateAccount(staff model.StaffInfo) error {
+func (m *StaffManager) CreateAccount(staff model.StaffRegister) error {
 	return m.db.CreateAccount(staff)
 }
 

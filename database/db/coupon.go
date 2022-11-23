@@ -71,17 +71,22 @@ func (db *CouponDB) GetCouponListByID(userid int) ([]model.CouponInfo, error) {
 	CouponList := make([]model.CouponInfo, 0);
 	for _, coupon := range couponList {
 		CouponList = append(CouponList, model.CouponInfo{
-			
+			ID: int(coupon.CouponID),
+			Code: coupon.Code,
+			Amount: int(coupon.Amount),
+			Title: coupon.Title.String,
+			Message: coupon.Description.String,
+			ExpiresAt: coupon.ExpiresAt,
 		})
 	}
 
 	return CouponList, err
 }
 
-func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (string, error) {
+func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (model.CouponInfo, error) {
 	ctx := context.Background()
 
-	db.q.IssueCoupon(ctx, orm.IssueCouponParams{
+	result, err := db.q.IssueCoupon(ctx, orm.IssueCouponParams{
 		Code:   coupon.Code,
 		Amount: int32(coupon.Amount),
 		Title: sql.NullString{
@@ -94,6 +99,25 @@ func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (string, error) {
 		},
 		CreatedAt: time.Now(),
 	})
+
+	if err != nil {
+		return model.CouponInfo{}, err
+	}
+
+	couponID, err := result.LastInsertId()
+	if err != nil {
+		return model.CouponInfo{}, err
+	}
+
+	couponIssued, err := db.q.GetCouponInfo(ctx, couponID)
+
+	return model.CouponInfo{
+		ID: int(couponID),
+		Code: couponIssued.Code,
+		Title: couponIssued.Title.String,
+		Message: couponIssued.Description.String,
+		ExpiresAt: couponIssued.ExpiresAt,
+	}, err
 }
 
 func (db *CouponDB) GetIssuedCouponList() ([]model.CouponInfo, error) {

@@ -1,40 +1,65 @@
 package authority
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+	"github.com/gin-gonic/gin"
+	"mr.jackpot-backend/model"
+)
 
 
-type AuthMiddlewareService interface {
-	SetAuthority(c *gin.Context)
-	SetAuthorityMiddleware() gin.HandlerFunc
 
+type CheckAuthMiddlewareService interface {
 	CheckCEO(c *gin.Context)
-	CheckCEOMiddleware() gin.HandlerFunc
 	CheckCustomer(c *gin.Context)
-	CheckCustomerMiddleware() gin.HandlerFunc
+	CheckCustomerOnly(c *gin.Context)
 	CheckStaff(c *gin.Context)
-	CheckStaffMiddleware() gin.HandlerFunc
 }
 
-type AuthMiddlewareHandler struct {
-	
+
+
+func (h *AuthMiddlewareHandler) CheckCEO(c *gin.Context) {
+	status := c.Keys["status"].(string)
+
+	if status == model.UserStatusCEO {
+		c.Next()
+		return
+	}
+
+	c.JSON(http.StatusUnauthorized, "Not a CEO")
+	c.Abort()
 }
 
-func (h *AuthMiddlewareHandler) SetAuthority(c *gin.Context) {}
-func (h *AuthMiddlewareHandler) SetAuthorityMiddleware() gin.HandlerFunc {
-	return h.SetAuthority
+func (h *AuthMiddlewareHandler) CheckCustomer(c *gin.Context) {
+	status := c.Keys["status"].(string)
+
+	if status == model.UserStatusCustomer || status == model.UserStatusVisitor {
+		c.Next()
+		return
+	}
+
+	c.JSON(http.StatusUnauthorized, "Not a Customer")
+	c.Abort()
 }
 
-func (h *AuthMiddlewareHandler) CheckCEO(c *gin.Context) {}
-func (h *AuthMiddlewareHandler) CheckCEOMiddleware() gin.HandlerFunc {
-	return h.CheckCEO
-}
+func (h *AuthMiddlewareHandler) CheckCustomerOnly(c *gin.Context) {
+	status := c.Keys["status"].(string)
 
-func (h *AuthMiddlewareHandler) CheckCustomer(c *gin.Context) {}
-func (h *AuthMiddlewareHandler) CheckCustomerMiddleware() gin.HandlerFunc {
-	return h.CheckCustomer
-}
+	if status == model.UserStatusCustomer {
+		c.Next()
+		return
+	}
 
-func (h *AuthMiddlewareHandler) CheckStaff(c *gin.Context) {}
-func (h *AuthMiddlewareHandler) CheckStaffMiddleware() gin.HandlerFunc {
-	return h.CheckStaff
+	c.JSON(http.StatusUnauthorized, "Not a Customer")
+	c.Abort()
+}
+func (h *AuthMiddlewareHandler) CheckStaff(c *gin.Context) {
+	status := c.Keys["status"].(string)
+
+	if status == model.UserStatusStaff || status == model.UserStatusCEO {
+		c.Next()
+		return
+	}
+
+	c.JSON(http.StatusUnauthorized, "Not a Staff")
+	c.Abort()
 }

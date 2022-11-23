@@ -3,7 +3,7 @@ package manager
 import "mr.jackpot-backend/model"
 
 type CustomerInfoService interface {
-	GetUserInfo(userid int) (model.CustomerInfo, error)
+	GetUserInfo(userid int) (model.PersonalInfo, error)
 	GetAllUserInfo() ([]model.CustomerInfo, error)
 	UpdateUserInfo(userid int, personal model.PersonalInfo) error
 	GetPersonalnfo(userid int) (model.PersonalInfo, error)
@@ -11,8 +11,8 @@ type CustomerInfoService interface {
 
 
 
-func (m *CustomerManager) GetUserInfo(userid int) (model.CustomerInfo, error) {
-	return m.db.GetCustomerInfo(userid)
+func (m *CustomerManager) GetUserInfo(userid int) (model.PersonalInfo, error) {
+	return m.db.GetPersonalnfo(userid)
 }
 
 func (m *CustomerManager) GetAllUserInfo() ([]model.CustomerInfo, error) {

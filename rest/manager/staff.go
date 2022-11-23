@@ -23,7 +23,7 @@ func (h *ManagerHandler) GetStaffList(c *gin.Context) {
 }
 
 func (h *ManagerHandler) RegisterStaff(c *gin.Context) {
-	request := model.StaffInfo{}
+	request := model.StaffRegister{}
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return

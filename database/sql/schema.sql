@@ -8,33 +8,41 @@ CREATE TABLE user (
     PRIMARY KEY (user_id)
 );
 
-CREATE TABLE nonmember (
-    id    bigint NOT NULL,
-    token varchar(128) NOT NULL,
+CREATE TABLE visitor (
+    identifier varchar(128) NOT NULL,
+    visitor_id bigint       NOT NULL,
 
-    PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES user (user_id)
+    PRIMARY KEY (identifier),
+    FOREIGN KEY (visitor_id) REFERENCES user (user_id)
 );
 
-CREATE TABLE member (
-    id       bigint      NOT NULL,
-    userid  varchar(32) NOT NULL,
-    password varchar(60) NOT NULL,
+CREATE TABLE customer (
+    customer_id bigint      NOT NULL,
+    userid    varchar(32) NOT NULL,
+    status    boolean     NOT NULL DEFAULT TRUE,
 
-    PRIMARY KEY (id),
-    UNIQUE  KEY (userid),
-    FOREIGN KEY (id) REFERENCES user (user_id)
-);
-
-CREATE TABLE member_info (
-    user_id bigint      NOT NULL,
     name    varchar(16) NOT NULL,
     address varchar(256),
     phone   varchar(16),
 
-    PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES member (user_id)
+    orders  tinyint NOT NULL DEFAULT 0,
+    rating  tinyint NOT NULL DEFAULT 0,
+    paid    int     NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES user (user_id)
 );
+
+CREATE TABLE customer_auth (
+    id        varchar(32) NOT NULL,
+    password  varchar(60) NOT NULL,
+    customer_id bigint      NOT NULL,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
+);
+
+
 
 CREATE TABLE coupon_issued (
     coupon_id   bigint      NOT NULL AUTO_INCREMENT,
@@ -56,7 +64,7 @@ CREATE TABLE coupon_owned (
 
     PRIMARY KEY (coupon_id, owner_id),
     FOREIGN KEY (coupon_id) REFERENCES coupon_issued (coupon_id),
-    FOREIGN KEY (owner_id)  REFERENCES member (user_id)
+    FOREIGN KEY (owner_id)  REFERENCES customer (user_id)
 );
 
 
@@ -293,21 +301,26 @@ CREATE TABLE menu_role (
 
 CREATE TABLE staff (
     staff_id  bigint      NOT NULL AUTO_INCREMENT,
-    staff_key varchar(16) NOT NULL,
+    status    boolean     NOT NULL DEFAULT TRUE,
     role_id   tinyint     NOT NULL,
+    name      varchar(16) NOT NULL,
+    score     tinyint     NOT NULL DEFAULT 0,
 
     PRIMARY KEY (staff_id),
     FOREIGN KEY (role_id) REFERENCES role (role_id)
 );
 
-CREATE TABLE staff_info (
+CREATE TABLE staff_auth (
+    code     varchar(16) NOT NULL,
     staff_id bigint      NOT NULL,
-    name     varchar(16) NOT NULL,
-    phone    varchar(16) NOT NULL,
 
-    PRIMARY KEY (staff_id),
+    PRIMARY KEY (code),
     FOREIGN KEY (staff_id) REFERENCES staff (staff_id)
 );
+
+
+
+
 
 CREATE TABLE stock (
     stock_id bigint      NOT NULL AUTO_INCREMENT,

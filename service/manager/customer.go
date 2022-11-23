@@ -11,7 +11,9 @@ type CustomerService interface {
 
 type CustomerManager struct {
 	db db.CustomerLayer
-	Manager
+
+	Client
+	Member
 }
 
 var Customer = &CustomerManager{
@@ -19,5 +21,6 @@ var Customer = &CustomerManager{
 }
 
 func NewCustomerManager() *CustomerManager {
+	Customer.Token = DefaultToken
 	return Customer
 }

@@ -7,11 +7,14 @@ import "mr.jackpot-backend/database/db"
 type StaffService interface {
 	StafAuthService
 	StaffInfoService
+	AuthService
 }
 
 type StaffManager struct {
 	db db.StaffLayer
-	Manager
+
+	Client
+	Member
 }
 
 var Staff = &StaffManager{
@@ -19,5 +22,6 @@ var Staff = &StaffManager{
 }
 
 func NewStaffManager() *StaffManager {
+	Customer.Token = DefaultToken
 	return Staff
 }
