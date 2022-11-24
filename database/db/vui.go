@@ -24,12 +24,14 @@ func NewVUIDB() *VUIDB {
 
 
 func (db *VUIDB) ReadAllPreOrderList() ([]model.PreOrderTable, error) {
+
 	ctx := context.Background()
 
 	PreOrderList, err := db.q.ReadPreOrderChoice(ctx)
 	if err != nil {
 		return nil, err
 	}
+
 
 	preOrderNxtList, err := db.q.ReadPreOrderChoiceNxtSeq(ctx)
 	if err != nil {
@@ -56,6 +58,7 @@ func (db *VUIDB) ReadAllPreOrderList() ([]model.PreOrderTable, error) {
 	}
 
 	return preOrderList, nil
+
 }
 
 

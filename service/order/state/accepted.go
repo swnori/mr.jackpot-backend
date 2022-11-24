@@ -16,9 +16,7 @@ type AcceptedState struct {
 }
 
 func (o *AcceptedState) ProcessStep() error {
-	o.Order.GetAllTaskList()	
-	// o.Order.GetAllTaskList() // 어떤 방식으로 요청할지는 잘 모르겠다
-	//for : worker.Cook.StartTaskProcess()
+
 	return nil
 }
 func (o *AcceptedState) CeaseStep() error {

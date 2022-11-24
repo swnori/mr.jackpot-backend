@@ -34,7 +34,7 @@ func (h *CustomerAuthHandler) Signin(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("access-token", token, 0, "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("access-token", token, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"access-token": token,
@@ -88,8 +88,8 @@ func (h *VisitorAuthHandler) Signin(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("access-token", tokenString, 0, "/", "http://127.0.0.1:3000", false, true)
-	c.SetCookie("identifier",   identifier,  0, "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("access-token", tokenString, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("identifier",   identifier,  int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
 	c.JSON(http.StatusOK, "")
 }
 

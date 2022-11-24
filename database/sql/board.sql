@@ -11,7 +11,7 @@ WHERE dinner_id = (?);
 -- name: ReadMenuEntity :many
 SELECT menu_id, name, price, option1_name, option2_name
 FROM menu m, board_entity e
-WHERE n.entity_id = e.entity_id;
+WHERE m.entity_id = e.entity_id;
 
 -- name: ReadOption1Entity :many
 SELECT option_id, name, price
@@ -26,6 +26,10 @@ WHERE o.entity_id = e.entity_id
   AND o.menu_id = (?);
 
 -- name: ReadStyleEntity :many
-SELECT style_id, name, price
+SELECT style_id, name, description, price
 FROM style s, board_entity e
 WHERE s.entity_id = e.entity_id;
+
+-- name: ReadOrderState :many
+SELECT state_id, name
+FROM state;

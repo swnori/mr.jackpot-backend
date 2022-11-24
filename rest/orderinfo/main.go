@@ -1,6 +1,9 @@
 package orderinfo
 
-import "mr.jackpot-backend/service/vui"
+import (
+	"mr.jackpot-backend/service/board"
+	"mr.jackpot-backend/service/vui"
+)
 
 
 type OrderInfoService interface {
@@ -17,7 +20,8 @@ type OrderInfoHandler struct {
 
 func NewOrderInfoHandler() *OrderInfoHandler {
 	handler := &OrderInfoHandler{}
-	handler.vui = vui.VUI
+	handler.vui = vui.NewVUIAccessor()
+	handler.board = board.NewBoard()
 
 	return handler
 }

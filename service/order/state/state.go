@@ -10,7 +10,7 @@ type OrderState interface {
 }
 
 type OrderInterface interface {
-	GetAllTaskList() map[int]map[int]int
+	GetAllTaskList() map[int][]int
 }
 
 type State struct {

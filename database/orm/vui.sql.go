@@ -124,8 +124,7 @@ func (q *Queries) ReadPreOrderChoiceNxtSeq(ctx context.Context) ([]PreOrderChoic
 
 const readProOrderChoice = `-- name: ReadProOrderChoice :many
 SELECT seq_id, message, target
-FROM pro_order_choice p, order_choice_target t
-WHERE p.seq_id = t.target_id
+FROM pro_order_choice
 `
 
 type ReadProOrderChoiceRow struct {

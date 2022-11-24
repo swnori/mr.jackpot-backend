@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"errors"
 
 	"mr.jackpot-backend/database/db"
 	"mr.jackpot-backend/service/order"

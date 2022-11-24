@@ -77,7 +77,7 @@ func (q *Queries) ReadDinnersMenu(ctx context.Context, dinnerID int32) ([]int32,
 const readMenuEntity = `-- name: ReadMenuEntity :many
 SELECT menu_id, name, price, option1_name, option2_name
 FROM menu m, board_entity e
-WHERE n.entity_id = e.entity_id
+WHERE m.entity_id = e.entity_id
 `
 
 type ReadMenuEntityRow struct {
@@ -189,16 +189,45 @@ func (q *Queries) ReadOption2Entity(ctx context.Context, menuID int32) ([]ReadOp
 	return items, nil
 }
 
+const readOrderState = `-- name: ReadOrderState :many
+SELECT state_id, name
+FROM state
+`
+
+func (q *Queries) ReadOrderState(ctx context.Context) ([]State, error) {
+	rows, err := q.db.QueryContext(ctx, readOrderState)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []State
+	for rows.Next() {
+		var i State
+		if err := rows.Scan(&i.StateID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const readStyleEntity = `-- name: ReadStyleEntity :many
-SELECT style_id, name, price
+SELECT style_id, name, description, price
 FROM style s, board_entity e
 WHERE s.entity_id = e.entity_id
 `
 
 type ReadStyleEntityRow struct {
-	StyleID int32
-	Name    string
-	Price   int32
+	StyleID     int32
+	Name        string
+	Description string
+	Price       int32
 }
 
 func (q *Queries) ReadStyleEntity(ctx context.Context) ([]ReadStyleEntityRow, error) {
@@ -210,7 +239,12 @@ func (q *Queries) ReadStyleEntity(ctx context.Context) ([]ReadStyleEntityRow, er
 	var items []ReadStyleEntityRow
 	for rows.Next() {
 		var i ReadStyleEntityRow
-		if err := rows.Scan(&i.StyleID, &i.Name, &i.Price); err != nil {
+		if err := rows.Scan(
+			&i.StyleID,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

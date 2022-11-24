@@ -68,7 +68,7 @@ CREATE TABLE coupon_owned (
 
 
 CREATE TABLE pro_order_choice (
-    seq_id  tinyint     NOT NULL,
+    seq_id  tinyint     NOT NULL AUTO_INCREMENT,
     tag     varchar(64) NOT NULL,
     target  varchar(64) NOT NULL,
     message varchar(256)  NOT NULL,
@@ -120,7 +120,7 @@ CREATE TABLE board_entity (
     price     int         NOT NULL DEFAULT 0,
 
     PRIMARY KEY (entity_id),
-    FOREIGN KEY (target_id) REFERENCES pro_order_choice (target_id),
+    FOREIGN KEY (target_id) REFERENCES pro_order_choice (seq_id),
     FOREIGN KEY (type_id)   REFERENCES entity_type (type_id)
 );
 

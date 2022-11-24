@@ -1,8 +1,8 @@
 package order
 
 import (
-	"mr.jackpot-backend/model"
 	"mr.jackpot-backend/service/order/state"
+	"mr.jackpot-backend/model"
 )
 
 type Order struct {
@@ -10,7 +10,7 @@ type Order struct {
 	DeliveryInfo model.DeliveryInfo
 	OrderInfo    model.Order
 
-	TaskList map[int]map[int]int
+	TaskList map[int][]int
 
 	currentState state.OrderState
 
@@ -32,7 +32,7 @@ type Order struct {
 func NewOrder(id int) *Order {
 	order := &Order{
 		ID: id,
-		TaskList: make(map[int]map[int]int),
+		TaskList: make(map[int][]int),
 	}
 
 	order.created = &state.AcceptedState{
@@ -125,6 +125,6 @@ func (o *Order) GetOrderState() string {
 	return o.currentState.GetStateName()
 }
 
-func (o *Order) GetAllTaskList() map[int]map[int]int {
+func (o *Order) GetAllTaskList() map[int][]int {
 	return o.TaskList
 }

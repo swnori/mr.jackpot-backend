@@ -12,7 +12,7 @@ import (
 type WorkerController interface {
 	AddWorker(workerid int) error
 	RemoveWorker(workerid int) error
-	GetSubtaskList(workerid int) ([]model.Task, error)
+	GetSubtaskList(workerid int) ([]Task, error)
 
 	StartTaskProcess(taskid int, subtask []int) error
 	FinishTaskProcess(taskid int) error
@@ -74,7 +74,9 @@ func (w *WorkerManager) RemoveWorker(workerid int) error {
 			return nil
 		}
 
-		w.AssignSubTask(workerid, taskid)
+		w.AssignSubTask(workerid, &Task{
+			TaskID: taskid, // ????
+		})
 	}
 
 	return nil
@@ -96,12 +98,15 @@ func (w *WorkerManager) GetLeastWorker() (workerid int, err error) {
 }
 
 func (w *WorkerManager) AssignSubTask(workerid int, task *Task) error {
+	/*
 	worker, exist :=  w.Workers[workerid]
 	if exist {
 		return errors.New("")
 	}
 
 	return worker.AssignTask(task)
+	*/
+	return nil
 }
 
 func (w *WorkerManager) RemoveSubTask(workerid int, taskid int) error {
@@ -143,13 +148,20 @@ func (w *WorkerManager) CheckAllTaskFinished() []int {
 	return finished
 }
 
-func (w *WorkerManager) StartTaskProcess(taskid int, subtaskid []int) error {
+func (w *WorkerManager) StartTaskProcess(orderid, taskid int, subtasklist []int) error {
 	_, exist := w.Tasklist[taskid]
 	if exist {
 		return errors.New("")
 	}
 
-	w.Tasklist[taskid] = subtaskid
+	for _, subtask := range subtasklist {
+		w.Tasklist[taskid] = append(w.Tasklist[taskid], &Task{
+			OrderID: orderid,
+			TaskID: subtask,
+			Status: model.TaskStatusWaiting,
+		})
+	}
+
 	return nil
 }
 

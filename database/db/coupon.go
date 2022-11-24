@@ -18,6 +18,7 @@ type CouponLayer interface {
 	CreateCoupon(model.CouponInfo) (model.CouponInfo, error)
 	GetIssuedCouponList() ([]model.CouponInfo, error)
 	DeleteCoupon(int) error
+	UseCoupon(userid, couponid int) error
 }
 
 type CouponDB struct {
@@ -146,4 +147,14 @@ func (db *CouponDB) DeleteCoupon(id int) error {
 	ctx := context.Background()
 
 	return db.q.DeleteCoupon(ctx, int64(id))
+}
+
+
+func (db *CouponDB) UseCoupon(userid, couponid int) error {
+	ctx := context.Background()
+
+	return db.q.UseCoupon(ctx, orm.UseCouponParams{
+		CouponID: int64(couponid),
+		OwnerID: int64(userid),
+	})
 }

@@ -16,6 +16,7 @@ type TokenService interface {
 	CreateToken(userid int, status string) (string, error)
 	ParseToken(tokenString string) (id int, status string, err error)
 	GetAccessTokenKey(token *jwt.Token) (interface{}, error)
+	GetAccessExpireTime() time.Duration
 }
 
 type Token struct {

@@ -12,6 +12,8 @@ import (
 type BoardLayer interface {
 	GetDinnerList() ([]model.DinnerBoardItem, error)
 	GetMenuList() ([]model.MenuBoardItem, error)
+	GetStyleList() ([]model.StyleBoardItem, error)
+	GetOrderStateList() ([]model.OrderState, error)
 }
 
 
@@ -30,8 +32,11 @@ func (db *BoardDB) GetDinnerList() ([]model.DinnerBoardItem, error) {
 	ctx := context.Background()
 
 	DinnerBoardList, err := db.q.ReadDinnerEntity(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	dinnerBoardList := make([]model.DinnerBoardItem, 0, len(DinnerBoardList))
+	dinnerBoardList := make([]model.DinnerBoardItem, 0)
 
 	for _, DinnerBoard := range DinnerBoardList {
 
@@ -56,12 +61,15 @@ func (db *BoardDB) GetDinnerList() ([]model.DinnerBoardItem, error) {
 
 
 
-func (db *BoardDB) GetMenuBoard() ([]model.MenuBoardItem, error) {
+func (db *BoardDB) GetMenuList() ([]model.MenuBoardItem, error) {
 	ctx := context.Background()
 
 	MenuBoardList, err := db.q.ReadMenuEntity(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	menuBoardList := make([]model.MenuBoardItem, len(MenuBoardList))
+	menuBoardList := make([]model.MenuBoardItem, 0)
 
 	for _, MenuBoard := range MenuBoardList {
 
@@ -116,7 +124,7 @@ func (db *BoardDB) GetOption1Board(menuId int) ([]model.OptionBoardItem, error) 
 
 	Option1List, err := db.q.ReadOption1Entity(ctx, int32(menuId))
 
-	optionList := make([]model.OptionBoardItem, 0, len(Option1List))
+	optionList := make([]model.OptionBoardItem, 0)
 
 	for _, Option1 := range Option1List {
 		option := model.OptionBoardItem{
@@ -138,7 +146,7 @@ func (db *BoardDB) GetOption2Board(menuId int) ([]model.OptionBoardItem, error) 
 
 	Option2List, err := db.q.ReadOption2Entity(ctx, int32(menuId))
 
-	optionList := make([]model.OptionBoardItem, 0, len(Option2List))
+	optionList := make([]model.OptionBoardItem, 0)
 
 	for _, Option1 := range Option2List {
 		option := model.OptionBoardItem{
@@ -152,3 +160,40 @@ func (db *BoardDB) GetOption2Board(menuId int) ([]model.OptionBoardItem, error) 
 
 	return optionList, err
 }
+
+
+
+func (db *BoardDB) GetStyleList() ([]model.StyleBoardItem, error) {
+	ctx := context.Background()
+	stylelist, err := db.q.ReadStyleEntity(ctx)
+
+	Stylelist := make([]model.StyleBoardItem, 0)
+	for _, style := range stylelist {
+
+		Stylelist = append(Stylelist, model.StyleBoardItem{
+			Id: int(style.StyleID),
+			Name: style.Name,
+			Price: int(style.Price),
+			Desc: style.Description,
+		})
+	}
+
+	return Stylelist, err
+}
+
+func (db *BoardDB) GetOrderStateList() ([]model.OrderState, error) {
+	ctx := context.Background()
+	statelist, err := db.q.ReadOrderState(ctx)
+
+	Statelist := make([]model.OrderState, 0)
+	for _, state := range statelist {
+
+		Statelist = append(Statelist, model.OrderState{
+			Id: int(state.StateID),
+			State: state.Name,
+		})
+	}
+
+	return Statelist, err
+}
+

@@ -119,12 +119,6 @@ type Order struct {
 	ReservatedAt time.Time
 }
 
-type OrderChoiceTarget struct {
-	TargetID int32
-	Tag      string
-	Target   string
-}
-
 type OrderState struct {
 	OrderID int64
 	StateID int32
@@ -163,6 +157,7 @@ type PreOrderChoiceNxtSeq struct {
 type ProOrderChoice struct {
 	SeqID   int32
 	Tag     string
+	Target  string
 	Message string
 }
 

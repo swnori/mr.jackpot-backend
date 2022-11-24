@@ -16,12 +16,11 @@ func NewBoard() *OrderBoard {
 	return Board
 }
 
-func Initialize() {
+func Initialize() error {
 	Board.db = db.NewBoardDB()
+	Board.GetAllEntity()
 
-	if err := Board.GetAllEntity(); err != nil {
-		panic(err)
-	}
+	return nil
 }
 
 

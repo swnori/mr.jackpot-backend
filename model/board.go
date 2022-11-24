@@ -29,6 +29,7 @@ type StyleBoardItem struct {
 	Id    int
 	Name  string
 	Price int
+	Desc  string
 }
 
 type OrderState struct {
