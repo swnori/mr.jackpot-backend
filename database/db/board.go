@@ -9,9 +9,9 @@ import (
 
 
 
-type BoardProvider interface {
-	GetDinnerBoard() ([]model.DinnerBoardItem, error)
-	GetMenuBoard() ([]model.MenuBoardItem, error)
+type BoardLayer interface {
+	GetDinnerList() ([]model.DinnerBoardItem, error)
+	GetMenuList() ([]model.MenuBoardItem, error)
 }
 
 
@@ -19,9 +19,14 @@ type BoardDB struct {
 	DBAccessor
 }
 
+func NewBoardDB() *BoardDB {
+	db := &BoardDB{}
+	db.q = NewAccessor()
 
+	return db
+}
 
-func (db *BoardDB) GetDinnerBoard() ([]model.DinnerBoardItem, error) {
+func (db *BoardDB) GetDinnerList() ([]model.DinnerBoardItem, error) {
 	ctx := context.Background()
 
 	DinnerBoardList, err := db.q.ReadDinnerEntity(ctx)

@@ -24,9 +24,9 @@ type PreOrderTable struct {
 
 type ProOrderTable struct {
 	Id int
-	SeqList    []int
-	Message    string
-	Target     string
+	SeqList []int
+	Message string
+	Target  string
 	Action
 }
 

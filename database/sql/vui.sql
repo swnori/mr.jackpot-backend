@@ -34,3 +34,12 @@ WHERE entity_id = (?);
 SELECT option_id
 FROM menu_option2
 WHERE entity_id = (?);
+
+
+-- name: GetEntityInfo :many
+SELECT e.typename, d.dinner_id, t.target_id, c.message
+FROM dinner d, pro_order_choice c, order_choice_target t, entity_type e, 
+WHERE d.entity_id = board_entity.entity_id
+AND 
+
+UNION ALL

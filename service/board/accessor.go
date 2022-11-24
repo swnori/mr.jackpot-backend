@@ -7,15 +7,18 @@ type BoardProvider struct {
 	OrderBoard
 }
 
-
-func (b *BoardProvider) GetDinnerBoard() []model.DinnerBoardItem {
-	return b.DinnerList
+func (b *BoardProvider) GetBoard() () {
 }
 
-func (b *BoardProvider) GetMenuBoard() []model.MenuBoardItem {
+
+
+func (b *BoardProvider) GetStateList() []model.MenuBoardItem {
 	return b.MenuList
 }
+
 
 func (b *BoardProvider) TransferToEntity(entityId int) (model.Action) {
 	return b.EntityList[entityId]
 }
+
+

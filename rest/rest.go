@@ -64,6 +64,9 @@ func RunAPI(address string) error {
 
 			Order.GET("/dinnerboard", h.GetDinnerBoard)
 			Order.GET("/menuboard", h.GetMenuBoard)
+			Order.GET("/styleboard", h.GetStyleBoard)
+			Order.GET("/statelist", h.GetStateList)
+			
 			Order.POST("/vuistep", h.HandleVUIStep)
 			Order.GET("/history", h.GetOrderHistory)
 		}

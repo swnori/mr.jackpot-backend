@@ -23,7 +23,7 @@ type Order struct {
 	collected  state.OrderState
 
 	rejected   state.OrderState
-	cancelled  state.OrderState
+	canceled  state.OrderState
 	finished   state.OrderState	
 }
 
@@ -41,6 +41,7 @@ func NewOrder(id int) *Order {
 	order.accepted = &state.AcceptedState{
 		ID: id,
 		NextStep: &order.started,
+		CeasedStep: &order.canceled,
 	}
 
 	order.started = &state.StartedState{
@@ -52,18 +53,22 @@ func NewOrder(id int) *Order {
 		ID: id,
 		NextStep: &order.delivered,
 	}
+
 	order.delivering = &state.DeliveringState{
 		ID: id,
 		NextStep: &order.accepted,
 	}
+
 	order.delivered = &state.DeliveredState{
 		ID: id,
 		NextStep: &order.requested,
 	}
+
 	order.requested = &state.RequestedState{
 		ID: id,
 		NextStep: &order.collected,
 	}
+
 	order.collected = &state.CollectedState{
 		ID: id,
 		NextStep: &order.finished,
@@ -73,6 +78,8 @@ func NewOrder(id int) *Order {
 
 	return order
 }
+
+
 
 func (o *Order) CreaetOrder(order model.Order, delivery model.DeliveryInfo) {
 	o.DeliveryInfo = delivery
