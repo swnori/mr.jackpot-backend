@@ -109,6 +109,8 @@ func (db *BoardDB) GetMenuList() ([]model.MenuBoardItem, error) {
 			Id: int(MenuBoard.MenuID),
 			Price: int(MenuBoard.Price),
 			OptionModelList: optionModelList,
+			Name: MenuBoard.Name,
+			MenuType: MenuBoard.Typename,
 		}
 
 		menuBoardList = append(menuBoardList, menuBoard)

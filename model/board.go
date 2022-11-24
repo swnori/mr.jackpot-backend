@@ -11,6 +11,7 @@ type MenuBoardItem struct {
 	Id         int
 	Name       string
 	Price      int
+	MenuType   string
 	OptionModelList []OptionModel
 }
 

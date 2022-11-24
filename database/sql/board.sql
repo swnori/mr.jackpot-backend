@@ -9,9 +9,10 @@ FROM dinners_menu
 WHERE dinner_id = (?);
 
 -- name: ReadMenuEntity :many
-SELECT menu_id, name, price, option1_name, option2_name
-FROM menu m, board_entity e
-WHERE m.entity_id = e.entity_id;
+SELECT menu_id, e.name, price, option1_name, option2_name, t.name as typename
+FROM menu m, board_entity e, menu_type t
+WHERE m.entity_id = e.entity_id
+  AND t.id = m.type_id;
 
 -- name: ReadOption1Entity :many
 SELECT option_id, name, price

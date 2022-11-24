@@ -75,9 +75,10 @@ func (q *Queries) ReadDinnersMenu(ctx context.Context, dinnerID int32) ([]int32,
 }
 
 const readMenuEntity = `-- name: ReadMenuEntity :many
-SELECT menu_id, name, price, option1_name, option2_name
-FROM menu m, board_entity e
+SELECT menu_id, e.name, price, option1_name, option2_name, t.name as typename
+FROM menu m, board_entity e, menu_type t
 WHERE m.entity_id = e.entity_id
+  AND t.id = m.type_id
 `
 
 type ReadMenuEntityRow struct {
@@ -86,6 +87,7 @@ type ReadMenuEntityRow struct {
 	Price       int32
 	Option1Name sql.NullString
 	Option2Name sql.NullString
+	Typename    string
 }
 
 func (q *Queries) ReadMenuEntity(ctx context.Context) ([]ReadMenuEntityRow, error) {
@@ -103,6 +105,7 @@ func (q *Queries) ReadMenuEntity(ctx context.Context) ([]ReadMenuEntityRow, erro
 			&i.Price,
 			&i.Option1Name,
 			&i.Option2Name,
+			&i.Typename,
 		); err != nil {
 			return nil, err
 		}
