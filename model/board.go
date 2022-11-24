@@ -31,6 +31,10 @@ type StyleBoardItem struct {
 	Price int
 }
 
+type OrderState struct {
+	Id int
+	State string
+}
 
 
 

@@ -11,6 +11,7 @@ import (
 type DeliveredState struct {
 	State
 	ID int
+	Order OrderInterface
 	NextStep *OrderState
 }
 

@@ -24,7 +24,7 @@ type WorkerController interface {
 type WorkerManager struct {
 	db db.StaffLayer
 	Workers map[int]*Worker
-	Tasklist map[int][]int
+	Tasklist map[int][]*Task
 }
 
 
@@ -95,13 +95,13 @@ func (w *WorkerManager) GetLeastWorker() (workerid int, err error) {
 	return
 }
 
-func (w *WorkerManager) AssignSubTask(workerid int, taskid int) error {
+func (w *WorkerManager) AssignSubTask(workerid int, task *Task) error {
 	worker, exist :=  w.Workers[workerid]
 	if exist {
 		return errors.New("")
 	}
 
-	return worker.AssignTask(taskid)
+	return worker.AssignTask(task)
 }
 
 func (w *WorkerManager) RemoveSubTask(workerid int, taskid int) error {
@@ -158,7 +158,7 @@ func (w *WorkerManager) FinishTaskProcess(taskid int) error {
 	return errors.New("")
 }
 
-func (w *WorkerManager) GetSubtaskList(workerid int) ([]model.Task, error) {
+func (w *WorkerManager) GetSubtaskList(workerid int) ([]Task, error) {
 	worker, exist := w.Workers[workerid]
 	if !exist {
 		return nil, errors.New("")

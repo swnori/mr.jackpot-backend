@@ -11,6 +11,7 @@ import (
 type RejectedState struct {
 	State
 	ID int
+	Order OrderInterface
 	NextStep *OrderState
 }
 

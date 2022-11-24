@@ -19,15 +19,14 @@ type StaffOrderService interface {
 
 func (h *OrderHandler) AcceptOrder(c *gin.Context) {
 
-	order := model.OrderRequest{}
+	var order int
+
 	if err := c.ShouldBindJSON(&order); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	userid := c.Keys["userid"].(int)
-
-	if err := h.order.CreateOrder(userid, order.Order, order.DeliveryInfo); err != nil {
+	if err := h.order.FinishOrderStep(order); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}

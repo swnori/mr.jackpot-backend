@@ -5,6 +5,7 @@ import "mr.jackpot-backend/model"
 type CanceledState struct {
 	State
 	ID int
+	Order OrderInterface
 	NextStep *OrderState
 }
 

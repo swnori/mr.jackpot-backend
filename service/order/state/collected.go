@@ -12,6 +12,7 @@ import (
 type CollectedState struct {
 	State
 	ID int
+	Order OrderInterface
 	NextStep *OrderState
 }
 

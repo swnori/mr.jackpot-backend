@@ -19,7 +19,7 @@ func RunAPI(address string) error {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000", "https://mr-jackpot.run.goorm.io/", "https://mr-jackpot.run.goorm.io:5173"},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{""},
+		AllowHeaders:     []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization,X-CSRF-Token"},
 		AllowCredentials: true,
 	}))
 
@@ -62,11 +62,8 @@ func RunAPI(address string) error {
 		{
 			var h orderinfo.OrderInfoService = orderinfo.NewOrderInfoHandler()
 
-			Order.GET("/dinnerboard", h.GetDinnerBoard)
-			Order.GET("/menuboard", h.GetMenuBoard)
-			Order.GET("/styleboard", h.GetStyleBoard)
+			Order.GET("/orderboard", h.GetOrderBoard)
 			Order.GET("/statelist", h.GetStateList)
-			
 			Order.POST("/vuistep", h.HandleVUIStep)
 			Order.GET("/history", h.GetOrderHistory)
 		}

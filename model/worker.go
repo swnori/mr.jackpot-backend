@@ -1,10 +1,7 @@
 package model
 
 
-type Task struct {
-	TaskID int
-	Status string
-}
+
 
 var (
 	TaskStatusWaiting   string = "Waiting"

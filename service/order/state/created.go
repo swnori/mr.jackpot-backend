@@ -6,6 +6,7 @@ import "mr.jackpot-backend/model"
 type CreatedState struct {
 	State
 	ID int
+	Order OrderInterface
 	NextStep *OrderState
 	CeasedStep *OrderState
 }

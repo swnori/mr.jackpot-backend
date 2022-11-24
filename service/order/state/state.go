@@ -9,10 +9,13 @@ type OrderState interface {
 	GetStateName() string
 }
 
-
+type OrderInterface interface {
+	GetAllTaskList() map[int]map[int]int
+}
 
 type State struct {
 	ID int
+	Order OrderInterface
 	NextStep *OrderState
 	CeasedStep *OrderState
 }
