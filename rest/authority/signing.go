@@ -34,26 +34,71 @@ func (h *CustomerAuthHandler) Signin(c *gin.Context) {
 		return
 	}
 
+	personal, err := h.m.GetPersonalnfo(userid)
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+
 	c.SetCookie("access-token", token, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"access-token": token,
+		"personalInfo": personal,
 	})
 }
 
 func (h *CustomerAuthHandler) Signout(c *gin.Context) {
-	c.SetCookie("access-token",  "", 0, "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("access-token",  "", -1, "/", "http://127.0.0.1:3000", false, true)
 	c.JSON(http.StatusOK, "")
 }
 
 
 
 func (h *StaffAuthHandler) Signin(c *gin.Context) {
+	var (
+		staff model.Staff
+		status string
+	)
 
+	if err := c.ShouldBindJSON(&staff); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	staffid, err := h.m.CheckAuthority(staff);
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	staffinfo, err := h.m.GetUserInfo(staffid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if staffinfo.Role == "CEO" {
+		status = model.UserStatusCEO
+	} else {
+		status = model.UserStatusStaff
+	}
+	
+	token, err := h.m.CreateToken(staffid, status)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.SetCookie("access-token", token, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
+	c.JSON(http.StatusOK, gin.H{
+		"access-token": token,
+		"staffInfo": staffinfo,
+	})
 }
 
 func (h *StaffAuthHandler) Signout(c *gin.Context) {
-	c.SetCookie("access-token",  "", 0, "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("access-token",  "", -1, "/", "http://127.0.0.1:3000", false, true)
 	c.JSON(http.StatusOK, "")
 }
 
@@ -64,7 +109,7 @@ func (h *VisitorAuthHandler) Signin(c *gin.Context) {
 		err error
 		identifier string
 		userid int
-		tokenString string
+		token string
 	)
 
 	identifier, err = c.Cookie("identifier")
@@ -82,21 +127,23 @@ func (h *VisitorAuthHandler) Signin(c *gin.Context) {
 		return
 	}
 
-	tokenString, err = h.m.CreateToken(userid, model.UserStatusVisitor)
+	token, err = h.m.CreateToken(userid, model.UserStatusVisitor)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, err.Error())
 		return
 	}
 
-	c.SetCookie("access-token", tokenString, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("access-token", token, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
 	c.SetCookie("identifier",   identifier,  int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
-	c.JSON(http.StatusOK, "")
+	c.JSON(http.StatusOK, gin.H{
+		"access-token": token,
+	})
 }
 
 
 
 func (h *VisitorAuthHandler) Signout(c *gin.Context) {
-	c.SetCookie("access-token",  "", 0, "/", "http://127.0.0.1:3000", false, true)
+	c.SetCookie("access-token",  "", -1, "/", "http://127.0.0.1:3000", false, true)
 	c.SetCookie("identifier",  "", 0, "/", "http://127.0.0.1:3000", false, true)
 	c.JSON(http.StatusOK, "")
 }

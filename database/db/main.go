@@ -1,7 +1,8 @@
 package db
 
 import (
-//	"context"
+	//	"context"
+	"context"
 	"database/sql"
 	"fmt"
 
@@ -14,6 +15,12 @@ import (
 type DBAccessor struct {
 	q *ormpkg.Queries
 }
+
+func (db *DBAccessor) Ping() error {
+	ctx := context.Background()
+	return db.q.Ping(ctx)
+}
+
 
 var DB *sql.DB
 

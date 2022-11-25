@@ -14,23 +14,41 @@ FROM pre_order_choice_nxt_seq;
 SELECT seq_id, nxt_id
 FROM pro_order_choice_nxt_seq;
 
--- name: GetDinnerId :one
-SELECT dinner_id
-FROM dinner
-WHERE entity_id = (?);
+-- name: GetDinnerEntity :many
+SELECT target_id, dinner_id, typename
+FROM  dinner, entity_type, board_entity
+WHERE dinner.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id;
 
--- name: GetMenuId :one
-SELECT menu_id
-FROM menu
-WHERE entity_id = (?);
+-- name: GetMenuEntity :many
+SELECT target_id, menu_id, typename
+FROM  menu, entity_type, board_entity
+WHERE menu.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id;
 
--- name: GetOption1Id :one
-SELECT option_id
-FROM menu_option1
-WHERE entity_id = (?);
+-- name: GetStyleEntity :many
+SELECT target_id, style_id, typename
+FROM  style, entity_type, board_entity
+WHERE style.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id;
 
--- name: GetOption2Id :one
-SELECT option_id
-FROM menu_option2
-WHERE entity_id = (?);
+-- name: GetOptionEntity :many
+SELECT target_id, option_id, typename
+FROM  menu_option1, entity_type, board_entity
+WHERE menu_option1.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id
+UNION
+SELECT target_id, option_id, typename
+FROM  menu_option2, entity_type, board_entity
+WHERE menu_option2.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id;
+
+-- name: GetAllEntityIdList :many
+SELECT seq_id as target_id
+FROM pro_order_choice;
+
+-- name: Ping :exec
+INSERT INTO user
+VALUES ();
+
 

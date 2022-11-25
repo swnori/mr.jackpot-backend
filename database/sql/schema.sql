@@ -222,7 +222,7 @@ CREATE TABLE state (
 
 CREATE TABLE order_state (
     order_id bigint  NOT NULL,
-    state_id tinyint NOT NULL DEFAULT 0,
+    state_id tinyint NOT NULL DEFAULT 1,
 
     PRIMARY KEY (order_id),
     FOREIGN KEY (order_id) REFERENCES `order` (order_id),

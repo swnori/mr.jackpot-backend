@@ -20,20 +20,20 @@ type StockEntity struct {
 var H int
 
 var Stock = &StockEntity{
-	db: db.NewStockDB(),
+	ItemList: make(map[int]*StockItem),
 }
 
 func NewStock() *StockEntity {
 	return Stock
 }
 
-func Initialize() {
+func Initialize() error {
+	Stock.db = db.NewStockDB()
+
 	itemList, err := Stock.db.GetAllStockList()
-	if err != nil {
-		panic(err)
-	}
 
 	for _, item := range itemList {
 		Stock.ItemList[item.ID] = NewStockItem(item)
 	}
+	return err
 }

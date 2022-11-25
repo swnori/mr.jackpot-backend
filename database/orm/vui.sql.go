@@ -9,56 +9,191 @@ import (
 	"context"
 )
 
-const getDinnerId = `-- name: GetDinnerId :one
-SELECT dinner_id
-FROM dinner
-WHERE entity_id = (?)
+const getAllEntityIdList = `-- name: GetAllEntityIdList :many
+SELECT seq_id as target_id
+FROM pro_order_choice
 `
 
-func (q *Queries) GetDinnerId(ctx context.Context, entityID int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getDinnerId, entityID)
-	var dinner_id int32
-	err := row.Scan(&dinner_id)
-	return dinner_id, err
+func (q *Queries) GetAllEntityIdList(ctx context.Context) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getAllEntityIdList)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var target_id int32
+		if err := rows.Scan(&target_id); err != nil {
+			return nil, err
+		}
+		items = append(items, target_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const getMenuId = `-- name: GetMenuId :one
-SELECT menu_id
-FROM menu
-WHERE entity_id = (?)
+const getDinnerEntity = `-- name: GetDinnerEntity :many
+SELECT target_id, dinner_id, typename
+FROM  dinner, entity_type, board_entity
+WHERE dinner.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id
 `
 
-func (q *Queries) GetMenuId(ctx context.Context, entityID int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getMenuId, entityID)
-	var menu_id int32
-	err := row.Scan(&menu_id)
-	return menu_id, err
+type GetDinnerEntityRow struct {
+	TargetID int32
+	DinnerID int32
+	Typename string
 }
 
-const getOption1Id = `-- name: GetOption1Id :one
-SELECT option_id
-FROM menu_option1
-WHERE entity_id = (?)
-`
-
-func (q *Queries) GetOption1Id(ctx context.Context, entityID int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getOption1Id, entityID)
-	var option_id int32
-	err := row.Scan(&option_id)
-	return option_id, err
+func (q *Queries) GetDinnerEntity(ctx context.Context) ([]GetDinnerEntityRow, error) {
+	rows, err := q.db.QueryContext(ctx, getDinnerEntity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetDinnerEntityRow
+	for rows.Next() {
+		var i GetDinnerEntityRow
+		if err := rows.Scan(&i.TargetID, &i.DinnerID, &i.Typename); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
-const getOption2Id = `-- name: GetOption2Id :one
-SELECT option_id
-FROM menu_option2
-WHERE entity_id = (?)
+const getMenuEntity = `-- name: GetMenuEntity :many
+SELECT target_id, menu_id, typename
+FROM  menu, entity_type, board_entity
+WHERE menu.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id
 `
 
-func (q *Queries) GetOption2Id(ctx context.Context, entityID int32) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getOption2Id, entityID)
-	var option_id int32
-	err := row.Scan(&option_id)
-	return option_id, err
+type GetMenuEntityRow struct {
+	TargetID int32
+	MenuID   int32
+	Typename string
+}
+
+func (q *Queries) GetMenuEntity(ctx context.Context) ([]GetMenuEntityRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMenuEntity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMenuEntityRow
+	for rows.Next() {
+		var i GetMenuEntityRow
+		if err := rows.Scan(&i.TargetID, &i.MenuID, &i.Typename); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOptionEntity = `-- name: GetOptionEntity :many
+SELECT target_id, option_id, typename
+FROM  menu_option1, entity_type, board_entity
+WHERE menu_option1.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id
+UNION
+SELECT target_id, option_id, typename
+FROM  menu_option2, entity_type, board_entity
+WHERE menu_option2.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id
+`
+
+type GetOptionEntityRow struct {
+	TargetID int32
+	OptionID int32
+	Typename string
+}
+
+func (q *Queries) GetOptionEntity(ctx context.Context) ([]GetOptionEntityRow, error) {
+	rows, err := q.db.QueryContext(ctx, getOptionEntity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetOptionEntityRow
+	for rows.Next() {
+		var i GetOptionEntityRow
+		if err := rows.Scan(&i.TargetID, &i.OptionID, &i.Typename); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getStyleEntity = `-- name: GetStyleEntity :many
+SELECT target_id, style_id, typename
+FROM  style, entity_type, board_entity
+WHERE style.entity_id = board_entity.entity_id
+AND entity_type.type_id = board_entity.type_id
+`
+
+type GetStyleEntityRow struct {
+	TargetID int32
+	StyleID  int32
+	Typename string
+}
+
+func (q *Queries) GetStyleEntity(ctx context.Context) ([]GetStyleEntityRow, error) {
+	rows, err := q.db.QueryContext(ctx, getStyleEntity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetStyleEntityRow
+	for rows.Next() {
+		var i GetStyleEntityRow
+		if err := rows.Scan(&i.TargetID, &i.StyleID, &i.Typename); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const ping = `-- name: Ping :exec
+INSERT INTO user
+VALUES ()
+`
+
+func (q *Queries) Ping(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, ping)
+	return err
 }
 
 const readPreOrderChoice = `-- name: ReadPreOrderChoice :many

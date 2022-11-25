@@ -4,8 +4,8 @@ import "mr.jackpot-backend/database/db"
 
 
 type OrderLayer interface {
-	OrderProviderLayer
-	OrderControllerLayer
+	OrderProvider
+	OrderController
 }
 
 type OrderManager struct {
@@ -13,7 +13,7 @@ type OrderManager struct {
 	db db.OrderLayer
 }
 
-var OrderManagers *OrderManager
+var OrderManagers = &OrderManager{}
 
 func NewOrderManager() *OrderManager {
 	OrderManagers.Orders = make(map[int]*Order)

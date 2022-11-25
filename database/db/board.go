@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"mr.jackpot-backend/model"
-	"mr.jackpot-backend/utility/util"
 )
 
 
@@ -40,14 +39,22 @@ func (db *BoardDB) GetDinnerList() ([]model.DinnerBoardItem, error) {
 
 	for _, DinnerBoard := range DinnerBoardList {
 
-		menuList32, err := db.q.ReadDinnersMenu(ctx, DinnerBoard.DinnerID)
-		menuList := util.IntAll(menuList32)
+		menuInfoList, err := db.q.ReadDinnersMenu(ctx, DinnerBoard.DinnerID)
+		dinnersMenu := make([]model.DinnersMenu, 0)
+
+		for _, menuInfo := range menuInfoList {
+			dinnersMenu = append(dinnersMenu, model.DinnersMenu{
+				MenuId: int(menuInfo.MenuID),
+				Count: int(menuInfo.DefaultCount),
+			})
+		}
+
 		if err != nil {
 			return nil, err
 		}
 		
 		dinnerBoard := model.DinnerBoardItem{
-			MenuList: menuList,
+			MenuList: dinnersMenu,
 			Id: int(DinnerBoard.DinnerID),
 			Name: DinnerBoard.Name,
 			Price: int(DinnerBoard.Price),
@@ -195,6 +202,7 @@ func (db *BoardDB) GetOrderStateList() ([]model.OrderState, error) {
 			State: state.Name,
 		})
 	}
+
 
 	return Statelist, err
 }

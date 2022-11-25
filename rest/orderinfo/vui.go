@@ -23,6 +23,10 @@ func (h *VUIHandler) HandleVUIStep(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, request)
 	}
 
-	response := h.vui.HandleOrderChoice(request);
+	response, err := h.vui.HandleOrderChoice(request);
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return		
+	}
 	c.JSON(http.StatusOK, response)
 }

@@ -3,25 +3,26 @@ package vui
 import "mr.jackpot-backend/model"
 
 type VUIController interface {
-	HandleOrderChoice(request model.OrderChoiceRequest) (response model.OrderChoiceResponse)
+	HandleOrderChoice(request model.OrderChoiceRequest) (response model.OrderChoiceResponse, err error)
 }
 
 type VUIAccessor struct {
-	Graph VUIGraph
+	Graph *VUIGraph
 	threshold float64
 	startNode int
 }
 
-var VUI *VUIAccessor
+var VUI = &VUIAccessor{
+	startNode: 1,
+	threshold: 0.5,
+}
 
 func NewVUIAccessor() *VUIAccessor {
 	return VUI
 }
 
-func Initialize() {
-	VUI.Graph = *NewVUIGraph()
+func Initialize() error {
+	VUI.Graph = NewVUIGraph()
 
-	if err := VUI.Graph.Initialize(); err != nil {
-		panic(err)
-	}
+	return VUI.Graph.Initialize()
 }

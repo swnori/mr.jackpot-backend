@@ -38,3 +38,12 @@ func IntAll(slice []int32) []int {
 	}
 	return ret
 }
+
+func InSlice(slice []int, v int) bool {
+	for _, item := range slice {
+		if item == v {
+			return true
+		}
+	}
+	return false
+}

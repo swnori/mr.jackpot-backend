@@ -6,8 +6,8 @@ import (
 	"mr.jackpot-backend/database/db"
 	"mr.jackpot-backend/rest"
 	"mr.jackpot-backend/service/board"
-	//"mr.jackpot-backend/service/stock"
-	//"mr.jackpot-backend/service/vui"
+	"mr.jackpot-backend/service/stock"
+	"mr.jackpot-backend/service/vui"
 )
 
 func main() {
@@ -17,8 +17,12 @@ func main() {
 	if err := board.Initialize(); err != nil {
 		panic(err)
 	}
-	//stock.Initialize()
-	//vui.Initialize()
+	if err := stock.Initialize(); err != nil {
+		panic(err)
+	}
+	if err := vui.Initialize(); err != nil {
+		panic(err)
+	}
 
 	log.Fatal(rest.RunAPI("0.0.0.0:8000"))
 }

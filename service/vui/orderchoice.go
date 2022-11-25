@@ -1,20 +1,29 @@
 package vui
 
-import "mr.jackpot-backend/model"
+import (
+	"fmt"
+
+	"mr.jackpot-backend/model"
+)
 
 
 
-func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (response model.OrderChoiceResponse) {
+func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (response model.OrderChoiceResponse, err error) {
 	message, seqStack := request.Message, request.SeqStack
 
 	if len(seqStack) == 0 {
-		questNode := v.Graph.GetQuestInfo(v.startNode)
+		questNode, e := v.Graph.GetQuestInfo(v.startNode)
+		if e != nil {
+			err = e
+			return
+		}
 		seqStack = append(seqStack, questNode.SeqList...)
 
 		response = model.OrderChoiceResponse{
 			Message: []string{questNode.Message},
 			Decoded: "",
-			ActionType: "message",
+			EntityId: 0,
+			EntityType: "message",
 			SeqStack: seqStack,
 		}
 		return
@@ -22,7 +31,13 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 
 	seqStackTop, seqStack := seqStack[len(seqStack)-1], seqStack[:len(seqStack)-1]
 
-	targetList, seqList := v.Graph.GetTargetListBySeqId(seqStackTop)
+	targetList, seqList, err := v.Graph.GetTargetListBySeqId(seqStackTop)
+	if err != nil {
+		return 
+	}
+	for _, t := range targetList {
+		fmt.Println(t)
+	}
 	targetId := v.GetTargetId(message, targetList);
 
 	if targetId == -1 {
@@ -31,21 +46,32 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 		response = model.OrderChoiceResponse{
 			Message: []string{"다시 한 번 선택해주세요"},
 			Decoded: message,
-			ActionType: "message",
+			EntityId: 0,
+			EntityType: "message",
 			SeqStack: seqStack,
 		}
 
 	} else {
 		proOrderChoiceId := seqList[targetId]
-		ansNode := v.Graph.GetAnswerInfo(proOrderChoiceId)
+		ansNode, e := v.Graph.GetAnswerInfo(proOrderChoiceId)
+		if e != nil {
+			err = e
+			return
+		}
+		prelist, e := v.Graph.GetNxtPreList(proOrderChoiceId)
+		if e != nil {
+			err = e
+			return
+		}
 
-		seqStack = append(seqStack, v.Graph.GetNxtPreList(proOrderChoiceId)...)
+		seqStack = append(seqStack, prelist...)
 
 		if len(seqStack) == 0 {
 			response = model.OrderChoiceResponse{
 				Message: []string{ansNode.Message},
 				Decoded: targetList[targetId],
-				ActionType: ansNode.ActionType,
+				EntityId: ansNode.EntityId,
+				EntityType: ansNode.EntityType,
 				SeqStack:  seqStack,
 			}
 
@@ -53,12 +79,17 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 		}
 
 		seqStackTop = seqStack[len(seqStack)-1]
-		questNode := v.Graph.GetQuestInfo(seqStackTop)
+		questNode, e := v.Graph.GetQuestInfo(seqStackTop)
+		if e != nil {
+			err = e
+			return
+		}
 
 		response = model.OrderChoiceResponse{
 			Message: []string{ansNode.Message, questNode.Message},
 			Decoded: targetList[targetId],
-			ActionType: ansNode.ActionType,
+			EntityId: ansNode.EntityId,
+			EntityType: ansNode.EntityType,
 			SeqStack:  seqStack,
 		}
 	}

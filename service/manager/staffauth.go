@@ -9,21 +9,21 @@ import (
 type StafAuthService interface {
 	AuthService
 
-	CheckAuthority(user model.Staff) error
+	CheckAuthority(user model.Staff) (int, error)
 	CreateAccount(staff model.StaffRegister) error
 	RemoveAccount(staffid int) error
 }
 
 
-func (m *StaffManager) CheckAuthority(user model.Staff) error {
-	userid, err := m.db.GetStaffID(user.Code)
+func (m *StaffManager) CheckAuthority(user model.Staff) (userid int, err error) {
+	userid, err = m.db.GetStaffID(user.Code)
 	if err != nil {
-		return err
+		return
 	}
 	if userid == 0 {
-		return errors.New("NO ID")
+		return 0, errors.New("NO ID")
 	}
-	return nil
+	return
 }
 
 func (m *StaffManager) CreateAccount(staff model.StaffRegister) error {

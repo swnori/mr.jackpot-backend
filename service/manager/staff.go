@@ -17,11 +17,10 @@ type StaffManager struct {
 	Member
 }
 
-var Staff = &StaffManager{
-	db: db.NewStaffDB(),
-}
+var Staff = &StaffManager{}
 
 func NewStaffManager() *StaffManager {
-	Customer.Token = DefaultToken
+	Staff.Token = DefaultToken
+	Staff.db = db.NewStaffDB()
 	return Staff
 }

@@ -4,7 +4,7 @@ type DinnerBoardItem struct {
 	Id       int
 	Name     string
 	Price    int
-	MenuList []int
+	MenuList []DinnersMenu
 }
 
 type MenuBoardItem struct {
@@ -13,6 +13,11 @@ type MenuBoardItem struct {
 	Price      int
 	MenuType   string
 	OptionModelList []OptionModel
+}
+
+type DinnersMenu struct {
+	MenuId int
+	Count  int
 }
 
 type OptionModel struct {

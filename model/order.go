@@ -2,18 +2,15 @@ package model
 
 
 
-type DeliveryInfo struct {
-	PersonalInfo
-	Message string
-}
+
 
 type Order struct {
-	Dinner []DinnerOrder
+	DinnerList []DinnerOrder
 }
 
 type OrderRequest struct {
 	Order
-	DeliveryInfo 
+	DeliveryInfo DeliveryInfo
 }
 
 type DinnerOrder struct {

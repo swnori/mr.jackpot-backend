@@ -49,5 +49,6 @@ func (i *StockEntity) DeleteStockItem(id int) error {
 	}
 
 	delete(i.ItemList, id)
+	
 	return nil
 }

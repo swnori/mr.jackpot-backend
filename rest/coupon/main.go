@@ -10,7 +10,7 @@ type CouponService interface {
 }
 
 type CouponHandler struct {
-	c coupon.CouponService
+	c coupon.CouponProvider
 }
 
 func NewCouponHandler() *CouponHandler {

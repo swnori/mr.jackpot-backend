@@ -13,6 +13,6 @@ type OrderHandler struct {
 
 func NewOrderHandler() *OrderHandler {
 	return &OrderHandler{
-		order: order.OrderManagers,
+		order: order.NewOrderManager(),
 	}
 }

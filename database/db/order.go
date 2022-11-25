@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
@@ -32,6 +33,7 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, delivery model.Del
 
 	result, err := db.q.CreateOrderInfo(ctx, orm.CreateOrderInfoParams{
 		UserID: int64(userid),
+		ReservatedAt: time.Now(),
 	})
 	if err != nil {
 		return
@@ -59,7 +61,7 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, delivery model.Del
 		return 0, err
 	}
 
-	for _, dinner := range order.Dinner {
+	for _, dinner := range order.DinnerList {
 		result, err := db.q.CreateOrderedDinner(ctx, orm.CreateOrderedDinnerParams{
 			OrderID: orderID,
 			StyleID: int32(dinner.StyleId),

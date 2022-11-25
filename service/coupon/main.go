@@ -3,9 +3,9 @@ package coupon
 import "mr.jackpot-backend/database/db"
 
 
-type CouponService interface {
-	StaffCouponService
-	CustomerCouponService
+type CouponProvider interface {
+	StaffCouponProvider
+	CustomerCouponProvider
 }
 
 

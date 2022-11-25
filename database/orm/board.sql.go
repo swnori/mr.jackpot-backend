@@ -46,24 +46,29 @@ func (q *Queries) ReadDinnerEntity(ctx context.Context) ([]ReadDinnerEntityRow, 
 }
 
 const readDinnersMenu = `-- name: ReadDinnersMenu :many
-SELECT menu_id
+SELECT menu_id, default_count
 FROM dinners_menu
 WHERE dinner_id = (?)
 `
 
-func (q *Queries) ReadDinnersMenu(ctx context.Context, dinnerID int32) ([]int32, error) {
+type ReadDinnersMenuRow struct {
+	MenuID       int32
+	DefaultCount int32
+}
+
+func (q *Queries) ReadDinnersMenu(ctx context.Context, dinnerID int32) ([]ReadDinnersMenuRow, error) {
 	rows, err := q.db.QueryContext(ctx, readDinnersMenu, dinnerID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	var items []ReadDinnersMenuRow
 	for rows.Next() {
-		var menu_id int32
-		if err := rows.Scan(&menu_id); err != nil {
+		var i ReadDinnersMenuRow
+		if err := rows.Scan(&i.MenuID, &i.DefaultCount); err != nil {
 			return nil, err
 		}
-		items = append(items, menu_id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

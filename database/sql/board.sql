@@ -4,7 +4,7 @@ FROM dinner d, board_entity e
 WHERE d.entity_id = e.entity_id;
 
 -- name: ReadDinnersMenu :many
-SELECT menu_id
+SELECT menu_id, default_count
 FROM dinners_menu
 WHERE dinner_id = (?);
 

@@ -29,7 +29,7 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusOK, "")
+	c.JSON(http.StatusOK, order)
 }
 
 

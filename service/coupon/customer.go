@@ -4,7 +4,7 @@ import "mr.jackpot-backend/model"
 
 
 
-type CustomerCouponService interface {
+type CustomerCouponProvider interface {
 	GainCoupon(userid int, code string) (model.CouponInfo, error)
 	GetCouponList(userid int) ([]model.CouponInfo, error)
 }

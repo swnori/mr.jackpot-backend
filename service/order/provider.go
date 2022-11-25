@@ -8,7 +8,7 @@ import (
 
 
 
-type OrderProviderLayer interface {
+type OrderProvider interface {
 	GetOrderInfo(int) model.Order
 	GetDeliveryInfo(int) model.DeliveryInfo
 	GetAllOrderInfo() []model.Order

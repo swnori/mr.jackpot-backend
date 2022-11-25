@@ -9,7 +9,6 @@ import (
 	"github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
 	"mr.jackpot-backend/model"
-	"mr.jackpot-backend/utility/util"
 )
 
 type TokenService interface {
@@ -25,7 +24,7 @@ type Token struct {
 }
 
 var DefaultToken = &Token{
-	_ACCESS_SECRET: util.GetRandomString(24),
+	_ACCESS_SECRET: "12345678",
 	_AccessTokenExpiredAt: time.Hour * 24,
 }
 

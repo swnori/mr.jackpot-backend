@@ -11,7 +11,7 @@ type CustomerAuthService interface {
 }
 
 type CustomerAuthHandler struct {
-	m manager.CustomerAuthService
+	m manager.CustomerService
 }
 
 func NewCustomerAuthHandler() *CustomerAuthHandler {

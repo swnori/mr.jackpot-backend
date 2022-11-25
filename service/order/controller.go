@@ -8,7 +8,7 @@ import (
 
 
 
-type OrderControllerLayer interface {
+type OrderController interface {
 	CreateOrder(userid int, order model.Order, delivery model.DeliveryInfo) error
 	FinishOrderStep(id int) error
 	CeaseOrder(id int) error

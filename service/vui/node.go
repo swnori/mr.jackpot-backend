@@ -45,7 +45,7 @@ func (n *VUIGraphPreNode) GetNodeInfo() (node model.OrderChoiceTable) {
 type VUIGraphProNode struct {
 	VUIGraphNode
 	target     string
-	ActionType string
+	EntityType string
 	EntityID   int
 }
 
@@ -53,8 +53,9 @@ func (n *VUIGraphProNode) GetNodeInfo() (node model.OrderChoiceTable) {
 	node = model.OrderChoiceTable{
 		Message: n.GetMessage(),
 		Target: n.target,
+		EntityId: n.EntityID,
+		EntityType: n.EntityType,
 	}
-	/* ActionType 을 지웠는데 어떤 영향이 있는지 확인해볼 것 */
 	return
 }
 
@@ -72,7 +73,6 @@ func NewProNode(entity model.ProOrderTable) *VUIGraphProNode {
 	node := VUIGraphProNode{}
 	node.message = entity.Message
 	node.target = entity.Target
-	node.ActionType = entity.ActionType
 	node.nxtSeqList = entity.SeqList
 
 	return &node

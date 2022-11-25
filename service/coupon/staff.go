@@ -7,7 +7,7 @@ import (
 	"mr.jackpot-backend/utility/util"
 )
 
-type StaffCouponService interface {
+type StaffCouponProvider interface {
 	IssueCoupon(coupon model.CouponCreateRequest) (model.CouponInfo, error)
 	GetIssuedCouponList() ([]model.CouponInfo, error)
 	DeleteCoupon(couponid int) error

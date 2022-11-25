@@ -2,6 +2,7 @@ package authority
 
 import (
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/model"
 )
