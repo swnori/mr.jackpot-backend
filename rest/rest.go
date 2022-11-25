@@ -88,8 +88,8 @@ func RunAPI(address string) error {
 		Personal := Customer.Group("/personalinfo")
 		{
 			var h manager.ManagerHandler = *manager.NewManagerHandler()
-			Personal.GET("/", h.GetPersonalInfo)
-			Personal.POST("/", h.UpdatePersonalInfo)
+			Personal.GET("", h.GetPersonalInfo)
+			Personal.POST("", h.UpdatePersonalInfo)
 		}
 	}
 
