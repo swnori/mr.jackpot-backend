@@ -2,6 +2,7 @@ package vui
 
 import (
 	"fmt"
+	"sort"
 
 	"mr.jackpot-backend/model"
 )
@@ -35,6 +36,7 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 	if err != nil {
 		return 
 	}
+
 	for _, t := range targetList {
 		fmt.Println(t)
 	}
@@ -43,8 +45,14 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 	if targetId == -1 {
 		seqStack = append(seqStack, seqStackTop)
 
+		questNode, e := v.Graph.GetQuestInfo(seqStackTop)
+		if err != nil {
+			err = e
+			return
+		}
+
 		response = model.OrderChoiceResponse{
-			Message: []string{"다시 한 번 선택해주세요"},
+			Message: []string{"다시 한 번 선택해주세요", questNode.Message},
 			Decoded: message,
 			EntityId: 0,
 			EntityType: "message",
@@ -53,16 +61,20 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 
 	} else {
 		proOrderChoiceId := seqList[targetId]
+
 		ansNode, e := v.Graph.GetAnswerInfo(proOrderChoiceId)
 		if e != nil {
 			err = e
 			return
 		}
+
 		prelist, e := v.Graph.GetNxtPreList(proOrderChoiceId)
 		if e != nil {
 			err = e
 			return
 		}
+
+		sort.Sort(sort.Reverse(sort.IntSlice(prelist)))
 
 		seqStack = append(seqStack, prelist...)
 

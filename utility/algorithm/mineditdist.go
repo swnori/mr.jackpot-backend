@@ -1,22 +1,19 @@
 package algorithm
 
-import "mr.jackpot-backend/utility/util"
+import (
+	"mr.jackpot-backend/utility/util"
+)
 
 
 
 
 
 type MinEditDist struct {
-	tar, cmp string
-	tarArray, cmpArray []int
+	rarr, carr []int
 	r, c int
 	dp [][]int
 }
 
-
-func (m *MinEditDist) SetString(str1, str2 string) {
-	m.tar, m.cmp = str1, str2
-}
 
 
 func (m *MinEditDist) TransferUnicodeToIntArray(str string) []int {
@@ -43,10 +40,8 @@ func (m *MinEditDist) TransferUnicodeToIntArray(str string) []int {
 
 
 func (m *MinEditDist) InitArray() {
-	m.tarArray = m.TransferUnicodeToIntArray(m.tar)
-	m.cmpArray = m.TransferUnicodeToIntArray(m.cmp)
 
-	m.r, m.c = len(m.tarArray)-1, len(m.cmpArray)-1
+	m.r, m.c = len(m.rarr)-1, len(m.carr)-1
 }
 
 
@@ -63,13 +58,20 @@ func (m *MinEditDist) InitDPTable() {
 func (m *MinEditDist) FillDPTable() {
 	r, c := m.r, m.c
 	dp := m.dp
-	tarArray := m.tarArray
-	cmpArray := m.cmpArray
+	rarr := m.rarr
+	carr := m.carr
+
+	for i := 1; i <= r; i++ {
+		dp[i][0] = i
+	}
+	for j := 1; j <= c; j++ {
+		dp[0][j] = j
+	}
 
 	for i := 1; i <= r; i++ {
 		for j := 1; j <= c; j++ {
 
-			if tarArray[i] == cmpArray[j] {
+			if rarr[i] == carr[j] {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
 				dp[i][j] = util.Min(dp[i-1][j-1], util.Min(dp[i-1][j], dp[i][j-1])) + 1
@@ -88,15 +90,16 @@ type MinEditDistSolution struct {
 	MinEditDist
 }
 
-func (m *MinEditDistSolution) SolveMinEditDist(tar, cmp string) int {
-	m.SetString(tar, cmp)
+func (m *MinEditDistSolution) SolveMinEditDist(rarr, carr []int) int {
+	m.rarr = rarr
+	m.carr = carr
 	m.InitArray()
 	m.InitDPTable()
 	m.FillDPTable()
 	return m.GetMaxValue()
 }
 
-func SolveMinEditDist(tar, cmp string) int {
+func SolveMinEditDist(tar, cmp []int) int {
 	m := MinEditDistSolution{}
 	return m.SolveMinEditDist(tar, cmp)
 }

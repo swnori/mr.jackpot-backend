@@ -57,9 +57,9 @@ CREATE TABLE coupon_issued (
 );
 
 CREATE TABLE coupon_owned (
-    coupon_id  bigint NOT NULL,
-    owner_id   bigint NOT NULL,
-    valid      boolean   NOT NULL DEFAULT FALSE,
+    coupon_id  bigint  NOT NULL,
+    owner_id   bigint  NOT NULL,
+    valid      boolean NOT NULL DEFAULT FALSE,
 
     PRIMARY KEY (coupon_id, owner_id),
     FOREIGN KEY (coupon_id) REFERENCES coupon_issued (coupon_id),
@@ -67,13 +67,23 @@ CREATE TABLE coupon_owned (
 );
 
 
-CREATE TABLE pro_order_choice (
-    seq_id  tinyint     NOT NULL AUTO_INCREMENT,
-    tag     varchar(64) NOT NULL,
-    target  varchar(64) NOT NULL,
-    message varchar(256)  NOT NULL,
 
-    PRIMARY KEY (seq_id)
+CREATE TABLE entity_type (
+    type_id  tinyint     NOT NULL AUTO_INCREMENT,
+    typename varchar(64) NOT NULL,
+
+    PRIMARY KEY (type_id)
+);
+
+CREATE TABLE pro_order_choice (
+    seq_id  tinyint      NOT NULL AUTO_INCREMENT,
+    tag     varchar(64)  NOT NULL,
+    target  varchar(64)  NOT NULL,
+    message varchar(256) NOT NULL,
+    type_id tinyint      NOT NULL,
+
+    PRIMARY KEY (seq_id),
+    FOREIGN KEY (type_id) REFERENCES  entity_type (type_id)
 );
 
 CREATE TABLE pre_order_choice (
@@ -104,24 +114,17 @@ CREATE TABLE pre_order_choice_nxt_seq (
 
 
 
-CREATE TABLE entity_type (
-    type_id  tinyint     NOT NULL AUTO_INCREMENT,
-    typename varchar(64) NOT NULL,
 
-    PRIMARY KEY (type_id)
-);
 
 CREATE TABLE board_entity (
     entity_id tinyint     NOT NULL AUTO_INCREMENT,
-    type_id   tinyint     NOT NULL,
     target_id tinyint     NOT NULL,
     name      varchar(64) NOT NULL,
     tag       varchar(64) NOT NULL,
     price     int         NOT NULL DEFAULT 0,
 
     PRIMARY KEY (entity_id),
-    FOREIGN KEY (target_id) REFERENCES pro_order_choice (seq_id),
-    FOREIGN KEY (type_id)   REFERENCES entity_type (type_id)
+    FOREIGN KEY (target_id) REFERENCES pro_order_choice (seq_id)
 );
 
 CREATE TABLE dinner (
@@ -179,6 +182,17 @@ CREATE TABLE style (
     PRIMARY KEY (style_id),
     FOREIGN KEY (entity_id) REFERENCES board_entity (entity_id)
 );
+
+CREATE TABLE entity_count (
+    count_id  tinyint NOT NULL AUTO_INCREMENT,
+    count     tinyint NOT NULL,
+    target_id tinyint NOT NULL,
+
+    PRIMARY KEY (count_id),
+    FOREIGN KEY (target_id) REFERENCES pro_order_choice (seq_id)
+);
+
+
 
 CREATE TABLE dinners_menu (
     dinner_id     tinyint NOT NULL,

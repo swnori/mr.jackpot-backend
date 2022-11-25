@@ -2,15 +2,15 @@ package db
 
 import (
 	"context"
+	"fmt"
 
+	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
-	"mr.jackpot-backend/utility/util"
 )
 
 type VUILayer interface {
 	ReadAllPreOrderList() ([]model.PreOrderTable, error)
 	ReadAllProOrderList() ([]model.ProOrderTable, error)
-	GetEntityInfoList() ([]model.EntityInfo, error)
 }
 
 type VUIDB struct {
@@ -93,120 +93,63 @@ func (db *VUIDB) ReadAllProOrderList() ([]model.ProOrderTable, error) {
 			Target: ProOrder.Target,
 		}
 
+		proOrder.EntityType = ProOrder.Typename
+		fmt.Println(Id)
+		//fmt.Println(proOrder.EntityType)
+		//fmt.Println(proOrder.Message)
+		switch (proOrder.EntityType) {
+		case "dinner":
+			id, err := db.q.GetDinnerId(ctx, int32(proOrder.Id))
+			if err != nil {
+				return nil, err
+			}
+			proOrder.EntityId = int(id)
+			break
+		
+		case "menu":
+			id, err := db.q.GetMenuId(ctx, int32(proOrder.Id))
+			if err != nil {
+				return nil, err
+			}
+			proOrder.EntityId = int(id)
+			break
+		
+		case "style":
+			id, err := db.q.GetStyleId(ctx, int32(proOrder.Id))
+			if err != nil {
+				return nil, err
+			}
+			proOrder.EntityId = int(id)
+			break
+		
+		case "option":
+			id, err := db.q.GetOptionId(ctx, orm.GetOptionIdParams{
+				SeqID: int32(proOrder.Id),
+				SeqID_2: int32(proOrder.Id),
+			})
+			if err != nil {
+				return nil, err
+			}
+			proOrder.EntityId = int(id)
+			break
+		
+		case "count":
+			id, err := db.q.GetCountId(ctx, int32(proOrder.Id))
+			if err != nil {
+				return nil, err
+			}
+			proOrder.EntityId = int(id)
+			break
+		
+		default:
+			proOrder.EntityId = 0
+			break
+		}
+
+		fmt.Println("found: ", proOrder.EntityId)
+
 		proOrderList = append(proOrderList, proOrder)
 	}
 
 	return proOrderList, nil
-}
-
-
-func (db *VUIDB) GetEntityInfoList() ([]model.EntityInfo, error) {
-	ctx := context.Background()
-
-	entityInfoList := make([]model.EntityInfo, 0)
-
-	all, err := db.q.GetAllEntityIdList(ctx)
-	targetlist := util.IntAll(all)
-	if err != nil {
-		return nil, err
-	}
-
-	dinnerlist, err := db.q.GetDinnerEntity(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	menulist, err := db.q.GetMenuEntity(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	optionlist, err := db.q.GetOptionEntity(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	stylelist, err := db.q.GetStyleEntity(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, entity := range targetlist {
-		var flag bool = true
-
-		for _, dinner := range dinnerlist {
-			if dinner.TargetID == int32(entity) {
-				entityInfoList = append(entityInfoList, model.EntityInfo{
-					TargetId: int(dinner.TargetID),
-					SpecId: int(dinner.DinnerID),
-					EntityType: dinner.Typename,
-				})
-
-				flag = false
-				break
-			}
-		}
-
-		if flag == false {
-			continue
-		}
-
-		for _, menu := range menulist {
-			if menu.TargetID == int32(entity) {
-				entityInfoList = append(entityInfoList, model.EntityInfo{
-					TargetId: int(menu.TargetID),
-					SpecId: int(menu.MenuID),
-					EntityType: menu.Typename,
-				})
-
-				flag = false
-				break
-			}
-		}
-
-		if flag == false {
-			continue
-		}
-
-		for _, option := range optionlist {
-			if option.TargetID == int32(entity) {
-				entityInfoList = append(entityInfoList, model.EntityInfo{
-					TargetId: int(option.TargetID),
-					SpecId: int(option.OptionID),
-					EntityType: option.Typename,
-				})
-
-				flag = false
-				break
-			}
-		}
-
-		if flag == false {
-			continue
-		}
-
-		for _, style := range stylelist {
-			if style.TargetID == int32(entity) {
-				entityInfoList = append(entityInfoList, model.EntityInfo{
-					TargetId: int(style.TargetID),
-					SpecId: int(style.StyleID),
-					EntityType: style.Typename,
-				})
-
-				flag = false
-				break
-			}
-		}
-
-		if flag == false {
-			continue
-		}
-
-		entityInfoList = append(entityInfoList, model.EntityInfo{
-			TargetId: entity,
-			EntityType: "message",
-		})
-	}
-
-	return entityInfoList, nil
 }

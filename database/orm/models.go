@@ -11,7 +11,6 @@ import (
 
 type BoardEntity struct {
 	EntityID int32
-	TypeID   int32
 	TargetID int32
 	Name     string
 	Tag      string
@@ -73,6 +72,12 @@ type DinnersMenu struct {
 type DinnersStyle struct {
 	DinnerID int32
 	StyleID  int32
+}
+
+type EntityCount struct {
+	CountID  int32
+	Count    int32
+	TargetID int32
 }
 
 type EntityType struct {
@@ -159,6 +164,7 @@ type ProOrderChoice struct {
 	Tag     string
 	Target  string
 	Message string
+	TypeID  int32
 }
 
 type ProOrderChoiceNxtSeq struct {

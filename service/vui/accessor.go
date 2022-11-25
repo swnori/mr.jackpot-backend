@@ -1,6 +1,7 @@
 package vui
 
 import (
+	"fmt"
 	"strings"
 
 	"mr.jackpot-backend/utility/algorithm"
@@ -26,16 +27,30 @@ func (v *VUIAccessor) GetTargetCandidate(message string) []string {
 
 func (v *VUIAccessor) GetTargetId(message string, targetList []string) int {
 
+	for i := range targetList {
+		targetList[i] = strings.ReplaceAll(targetList[i], " ", "")
+	}
+
 	sz := len(targetList)
 	point := make([]float64, sz)
 	for _, candidate := range v.GetTargetCandidate(message) {
 		for idx, target := range targetList {
-			p := algorithm.SolveMinEditDist(candidate, target)
-			point[idx] = util.Max(point[idx], v.TransferToFloat(p, sz))
+			candidateArr := util.TransferUnicodeToIntArray(candidate)
+			targetArr := util.TransferUnicodeToIntArray(target)
+			p := algorithm.SolveMinEditDist(candidateArr, targetArr)
+
+			point[idx] = util.Max(point[idx], v.TransferToFloat(p, len(candidateArr) + len(targetArr)))
 		}
 	}
 
+	for _, p := range point {
+		fmt.Print(p, " ")
+	}
+	fmt.Println()
+
+
 	idx := util.MaxIdx(point)
+
 	if point[idx] < v.threshold {
 		return -1
 	} else {

@@ -8,11 +8,11 @@ type OrderChoiceRequest struct {
 }
 
 type OrderChoiceResponse struct {
-	SeqStack   []int
-	Message    []string
-	Decoded    string
-	EntityId   int
-	EntityType string
+	SeqStack   []int    `json:"seqStack"`
+	Message    []string `json:"message"`
+	Decoded    string   `json:"decoded"`
+	EntityId   int      `json:"entityId"`
+	EntityType string   `json:"entityType"`
 }
 
 

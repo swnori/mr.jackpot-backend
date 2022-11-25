@@ -51,15 +51,15 @@ func (g *VUIGraph) GetNxtProList(seqId int) ([]int, error) {
 }
 
 func (g *VUIGraph) GetNxtPreList(seqId int) ([]int, error) {
-	node, exist := g.preNodes[seqId]
+	node, exist := g.proNodes[seqId]
 	if !exist {
-		return nil, errors.New(fmt.Sprintf("seqId %d Not Exist on %s", seqId, "GetHxtPreList"))
+		return nil, errors.New(fmt.Sprintf("seqId %d Not Exist on %s", seqId, "GetNxtPreList"))
 	}
 	return node.GetNxtSeqList(), nil
 }
 
 func (g *VUIGraph) GetAnswerInfo(seqId int) (model.OrderChoiceTable, error) {
-	node, exist := g.preNodes[seqId]
+	node, exist := g.proNodes[seqId]
 	if !exist {
 		return model.OrderChoiceTable{}, errors.New(fmt.Sprintf("seqId %d Not Exist on %s", seqId, "GetAnswerInfo"))
 	}
@@ -82,33 +82,15 @@ func (g *VUIGraph) Initialize() error {
 	if err != nil {
 		return err
 	}
-
 	for _, entity := range preOrderList {
 		g.preNodes[entity.Id] = NewPreNode(entity)
-	}
-
-	entityInfoMap := make(map[int]*model.EntityInfo)
-
-
-	entityInfoList, err := g.db.GetEntityInfoList()
-	if err != nil {
-		return err
-	}
-
-	for _, entityInfo := range entityInfoList {
-		entityInfoMap[entityInfo.TargetId] = &entityInfo
 	}
 
 	proOrderList, err := g.db.ReadAllProOrderList()
 	if err != nil {
 		return err
 	}
-
-
 	for _, entity := range proOrderList {
-		newentity := entityInfoMap[entity.Id]
-		entity.EntityId = newentity.SpecId
-		entity.EntityType = newentity.EntityType
 		g.proNodes[entity.Id] = NewProNode(entity)
 	}
 

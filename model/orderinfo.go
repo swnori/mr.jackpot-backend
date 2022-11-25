@@ -21,5 +21,14 @@ type DeliveryInfo struct {
 }
 
 type ClientInfo struct {
-	
+		
+}
+
+
+type OrderSummery struct {
+	ID         int       `json:"id"`
+	DinnerName string    `json:"dinnerName"`
+	CreatedAt  time.Time `json:"createTime"`
+	ReserveAt  time.Time `json:"reserveTime"`
+	Price      int       `json:"price"`
 }

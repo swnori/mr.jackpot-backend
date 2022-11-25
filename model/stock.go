@@ -1,7 +1,7 @@
 package model
 
 type StockItem struct {
-	ID    int
-	Name  string
-	Count int
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Count int    `json:"count"`
 }

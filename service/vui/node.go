@@ -74,6 +74,8 @@ func NewProNode(entity model.ProOrderTable) *VUIGraphProNode {
 	node.message = entity.Message
 	node.target = entity.Target
 	node.nxtSeqList = entity.SeqList
+	node.EntityID = entity.EntityId
+	node.EntityType = entity.EntityType
 
 	return &node
 }
