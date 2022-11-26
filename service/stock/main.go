@@ -6,7 +6,7 @@ import (
 )
 
 type StockController interface {
-	AddStockItem(name string) error
+	AddStockItem(name, unit string) error
 	UpdateStockItem(id, count int) error
 	DeleteStockItem(id int) error
 	GetAllStockList() []model.StockItem

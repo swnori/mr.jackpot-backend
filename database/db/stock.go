@@ -10,7 +10,7 @@ import (
 type StockLayer interface {
 	GetAllStockList() ([]model.StockItem, error)
 	UpdateStockItem(id int, count int) error
-	AddStockItem(name string) (model.StockItem, error)
+	AddStockItem(name, unit string) (model.StockItem, error)
 	DeleteStockItem(id int) error
 }
 
@@ -36,6 +36,7 @@ func (db *StockDB) GetAllStockList() (stockList []model.StockItem, err error) {
 			ID:    int(item.StockID),
 			Name:  item.Name,
 			Count: int(item.Count),
+			Unit: item.Unit,
 		})
 	}
 
@@ -51,10 +52,13 @@ func (db *StockDB) UpdateStockItem(id int, count int) error {
 	})
 }
 
-func (db *StockDB) AddStockItem(name string) (item model.StockItem, err error) {
+func (db *StockDB) AddStockItem(name, unit string) (item model.StockItem, err error) {
 	ctx := context.Background()
 
-	result, err := db.q.AddStockItem(ctx, name)
+	result, err := db.q.AddStockItem(ctx, orm.AddStockItemParams{
+		Unit: unit,
+		Name: name,
+	})
 	if err != nil {
 		return
 	}
@@ -68,6 +72,7 @@ func (db *StockDB) AddStockItem(name string) (item model.StockItem, err error) {
 		ID:    int(ID),
 		Name:  name,
 		Count: 0,
+		Unit: item.Unit,
 	}, nil
 }
 

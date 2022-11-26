@@ -4,4 +4,5 @@ type StockItem struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Count int    `json:"count"`
+	Unit  string `json:"unit"`
 }

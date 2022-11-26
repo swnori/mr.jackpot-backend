@@ -24,6 +24,7 @@ func (i *StockItem) GetStockItem() model.StockItem {
 		ID:    i.ID,
 		Name:  i.Name,
 		Count: i.Count,
+		Unit:  i.Unit,
 	}
 }
 
@@ -35,6 +36,7 @@ func NewStockItem(item model.StockItem) *StockItem {
 	Item.ID = item.ID
 	Item.Name = item.Name
 	Item.Count = item.Count
+	Item.Unit = item.Unit
 
 	return Item
 }

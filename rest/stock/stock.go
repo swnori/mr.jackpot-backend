@@ -15,7 +15,7 @@ func (h *StockHandler) AddStockItem(c *gin.Context) {
 		return
 	}
 
-	if err := h.stock.AddStockItem(item.Name); err != nil {
+	if err := h.stock.AddStockItem(item.Name, item.Unit); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}

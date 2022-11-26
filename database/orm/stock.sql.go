@@ -11,21 +11,22 @@ import (
 )
 
 const addStockItem = `-- name: AddStockItem :execresult
-INSERT INTO
-    stock (name)
-VALUES
-    (?)
+INSERT INTO stock (name, unit)
+VALUES (?, ?)
 `
 
-func (q *Queries) AddStockItem(ctx context.Context, name string) (sql.Result, error) {
-	return q.db.ExecContext(ctx, addStockItem, name)
+type AddStockItemParams struct {
+	Name string
+	Unit string
+}
+
+func (q *Queries) AddStockItem(ctx context.Context, arg AddStockItemParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, addStockItem, arg.Name, arg.Unit)
 }
 
 const deleteStockItem = `-- name: DeleteStockItem :exec
-DELETE FROM
-    stock
-WHERE
-    stock_id = (?)
+DELETE FROM stock
+WHERE stock_id = (?)
 `
 
 func (q *Queries) DeleteStockItem(ctx context.Context, stockID int64) error {
@@ -34,24 +35,32 @@ func (q *Queries) DeleteStockItem(ctx context.Context, stockID int64) error {
 }
 
 const getAllStockList = `-- name: GetAllStockList :many
-SELECT
-    stock_id,
-    name,
-    count
-FROM
-    stock
+SELECT stock_id, name, count, unit
+FROM stock
 `
 
-func (q *Queries) GetAllStockList(ctx context.Context) ([]Stock, error) {
+type GetAllStockListRow struct {
+	StockID int64
+	Name    string
+	Count   int32
+	Unit    string
+}
+
+func (q *Queries) GetAllStockList(ctx context.Context) ([]GetAllStockListRow, error) {
 	rows, err := q.db.QueryContext(ctx, getAllStockList)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Stock
+	var items []GetAllStockListRow
 	for rows.Next() {
-		var i Stock
-		if err := rows.Scan(&i.StockID, &i.Name, &i.Count); err != nil {
+		var i GetAllStockListRow
+		if err := rows.Scan(
+			&i.StockID,
+			&i.Name,
+			&i.Count,
+			&i.Unit,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -66,12 +75,9 @@ func (q *Queries) GetAllStockList(ctx context.Context) ([]Stock, error) {
 }
 
 const updateStockItem = `-- name: UpdateStockItem :exec
-UPDATE
-    stock
-SET
-    count = (?)
-WHERE
-    stock_id = (?)
+UPDATE stock
+SET count = (?)
+WHERE stock_id = (?)
 `
 
 type UpdateStockItemParams struct {

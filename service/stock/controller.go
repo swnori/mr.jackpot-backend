@@ -16,8 +16,8 @@ func (i *StockEntity) GetAllStockList() []model.StockItem {
 	return list
 }
 
-func (i *StockEntity) AddStockItem(name string) error {
-	item, err := i.db.AddStockItem(name)
+func (i *StockEntity) AddStockItem(name, unit string) error {
+	item, err := i.db.AddStockItem(name, unit)
 	if err != nil {
 		return err
 	}

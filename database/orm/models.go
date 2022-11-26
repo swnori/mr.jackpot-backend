@@ -194,6 +194,7 @@ type State struct {
 type Stock struct {
 	StockID int64
 	Name    string
+	Unit    string
 	Count   int32
 }
 

@@ -321,6 +321,7 @@ CREATE TABLE staff_auth (
 CREATE TABLE stock (
     stock_id bigint      NOT NULL AUTO_INCREMENT,
     name     varchar(64) NOT NULL,
+    unit     varchar(64) NOT NULL,
     count    int         NOT NULL DEFAULT 0,
 
     PRIMARY KEY (stock_id),
