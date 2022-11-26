@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"mr.jackpot-backend/database/orm"
@@ -79,10 +80,16 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 			}
 
 			if len(menu.OptionId) >= 1 {
-				menuStruct.Option1ID = int32(menu.OptionId[0])
+				menuStruct.Option1ID = sql.NullInt32{
+					Int32: int32(menu.OptionId[0]),
+					Valid: true,
+				}
 			}
 			if len(menu.OptionId) >= 2 {
-				menuStruct.Option2ID = int32(menu.OptionId[1])
+				menuStruct.Option2ID = sql.NullInt32{
+					Int32: int32(menu.OptionId[1]),
+					Valid: true,
+				}
 			}
 
 			if err := db.q.CreateOrderedMenu(ctx, menuStruct); err != nil {

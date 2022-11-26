@@ -77,8 +77,8 @@ type CreateOrderedMenuParams struct {
 	DinnerID   int64
 	MenutypeID int32
 	MenuID     int32
-	Option1ID  int32
-	Option2ID  int32
+	Option1ID  sql.NullInt32
+	Option2ID  sql.NullInt32
 	Count      int32
 	Price      sql.NullInt32
 }

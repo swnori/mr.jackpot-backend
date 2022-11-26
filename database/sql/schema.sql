@@ -265,8 +265,8 @@ CREATE TABLE ordered_menu (
     dinner_id   bigint  NOT NULL,
     menutype_id tinyint NOT NULL,
     menu_id     tinyint NOT NULL,
-    option1_id  tinyint NOT NULL,
-    option2_id  tinyint NOT NULL,
+    option1_id  tinyint,
+    option2_id  tinyint,
     count       tinyint NOT NULL DEFAULT 0,
     price       int,
 

@@ -52,8 +52,8 @@ func (o *OrderManager) GetOrderInfo(userid int) (model.OrderResponse, error) {
 			CouponPrice: info.CouponPrice,
 			CouponName: info.CouponName,
 
-			ReserveAt: info.ReserveAt.Format(model.TimeMinuteFormat),
-			CreatedAt: info.CreatedAt.Format(model.TimeMinuteFormat),
+			ReserveAt: info.ReserveAt.Format(model.TimeSecondFormat),
+			CreatedAt: info.CreatedAt.Format(model.TimeSecondFormat),
 		},
 	}, nil
 }
