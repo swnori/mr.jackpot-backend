@@ -24,7 +24,7 @@ func (q *Queries) DeleteCoupon(ctx context.Context, couponID int64) error {
 }
 
 const getCouponAvailable = `-- name: GetCouponAvailable :many
-SELECT issued.coupon_id, code, amount, title, description, created_at, expires_at
+SELECT issued.coupon_id, code, amount, title, description, expires_at
 FROM coupon_owned owned, coupon_issued issued
 WHERE owned.owner_id = (?)
 AND owned.coupon_id = issued.coupon_id
@@ -46,7 +46,6 @@ func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]Coup
 			&i.Amount,
 			&i.Title,
 			&i.Description,
-			&i.CreatedAt,
 			&i.ExpiresAt,
 		); err != nil {
 			return nil, err
@@ -63,7 +62,7 @@ func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]Coup
 }
 
 const getCouponInfo = `-- name: GetCouponInfo :one
-SELECT coupon_id, code, amount, title, description, created_at, expires_at
+SELECT coupon_id, code, amount, title, description, expires_at
 FROM coupon_issued
 WHERE coupon_id = (?)
 `
@@ -77,14 +76,13 @@ func (q *Queries) GetCouponInfo(ctx context.Context, couponID int64) (CouponIssu
 		&i.Amount,
 		&i.Title,
 		&i.Description,
-		&i.CreatedAt,
 		&i.ExpiresAt,
 	)
 	return i, err
 }
 
 const getCouponIssued = `-- name: GetCouponIssued :many
-SELECT coupon_id, code, amount, title, description, created_at, expires_at
+SELECT coupon_id, code, amount, title, description, expires_at
 FROM coupon_issued
 `
 
@@ -103,7 +101,6 @@ func (q *Queries) GetCouponIssued(ctx context.Context) ([]CouponIssued, error) {
 			&i.Amount,
 			&i.Title,
 			&i.Description,
-			&i.CreatedAt,
 			&i.ExpiresAt,
 		); err != nil {
 			return nil, err
@@ -133,8 +130,8 @@ func (q *Queries) GetCouponMatched(ctx context.Context, code string) (int64, err
 }
 
 const issueCoupon = `-- name: IssueCoupon :execresult
-INSERT INTO coupon_issued (code, amount, title, description, created_at, expires_at)
-VALUES (?, ?, ?, ?, ?, ?)
+INSERT INTO coupon_issued (code, amount, title, description, expires_at)
+VALUES (?, ?, ?, ?, ?)
 `
 
 type IssueCouponParams struct {
@@ -142,7 +139,6 @@ type IssueCouponParams struct {
 	Amount      int32
 	Title       sql.NullString
 	Description sql.NullString
-	CreatedAt   time.Time
 	ExpiresAt   time.Time
 }
 
@@ -152,7 +148,6 @@ func (q *Queries) IssueCoupon(ctx context.Context, arg IssueCouponParams) (sql.R
 		arg.Amount,
 		arg.Title,
 		arg.Description,
-		arg.CreatedAt,
 		arg.ExpiresAt,
 	)
 }

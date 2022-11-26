@@ -50,7 +50,7 @@ AND pro_order_choice.seq_id = board_entity.target_id
 AND board_entity.entity_id = style.entity_id;
 
 -- name: GetCountId :one
-SELECT count_id
+SELECT count
 FROM pro_order_choice, entity_count
 WHERE pro_order_choice.seq_id = entity_count.target_id
 AND pro_order_choice.seq_id = (?);

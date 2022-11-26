@@ -24,7 +24,7 @@ func (h *OrderHandler) GetOrderInfo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"orderinfo": order.AllOrderInfo,
+		"orderinfo": order.AllOrderInfoResponse,
 		"order": order.Order,
 	})
 
@@ -43,7 +43,7 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	request.Info.OwnerID = userid
 
 	if err := h.order.CreateOrder(userid, request.Info, request.Order); err != nil {
-		c.JSON(http.StatusInternalServerError, request)
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 

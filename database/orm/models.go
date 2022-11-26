@@ -23,7 +23,6 @@ type CouponIssued struct {
 	Amount      int32
 	Title       sql.NullString
 	Description sql.NullString
-	CreatedAt   time.Time
 	ExpiresAt   time.Time
 }
 

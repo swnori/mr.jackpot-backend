@@ -8,7 +8,7 @@ import (
 
 type CustomerCouponProvider interface {
 	GainCoupon(userid int, code string) (model.CouponString, error)
-	GetCouponList(userid int) ([]model.CouponInfo, error)
+	GetCouponList(userid int) ([]model.CouponString, error)
 }
 
 
@@ -32,14 +32,23 @@ func (c *CouponManager) GainCoupon(userid int, code string) (model.CouponString,
 		Title: coupon.Title,
 		Amount: coupon.Amount,
 		Message: coupon.Message,
-		CreatedAt: coupon.CreatedAt.Format("2020-07-30"),
-		ExpiresAt: coupon.ExpiresAt.Format("2020-07-30"),
+		ExpiresAt: coupon.ExpiresAt.Format(model.TimeDayFormat),
 	}, nil
 }
 
-func (c *CouponManager) GetCouponList(userid int) ([]model.CouponInfo, error) {
-	coupon, err := c.db.GetCouponListByID(userid)
-	return coupon, err
+func (c *CouponManager) GetCouponList(userid int) ([]model.CouponString, error) {
+	couponlist, err := c.db.GetCouponListByID(userid)
+	Couponlist := make([]model.CouponString, 0)
+	for _, coupon := range couponlist {
+		Couponlist = append(Couponlist, model.CouponString{
+			ID: coupon.ID,
+			Title: coupon.Title,
+			Amount: coupon.Amount,
+			Message: coupon.Message,
+			ExpiresAt: coupon.ExpiresAt.Format(model.TimeDayFormat),
+		})
+	}
+	return Couponlist, err
 }
 
 

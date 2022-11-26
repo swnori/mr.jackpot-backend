@@ -1,7 +1,6 @@
 package vui
 
 import (
-	"fmt"
 	"sort"
 
 	"mr.jackpot-backend/model"
@@ -37,9 +36,6 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 		return 
 	}
 
-	for _, t := range targetList {
-		fmt.Println(t)
-	}
 	targetId := v.GetTargetId(message, targetList);
 
 	if targetId == -1 {

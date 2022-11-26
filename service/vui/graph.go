@@ -94,8 +94,6 @@ func (g *VUIGraph) Initialize() error {
 		g.proNodes[entity.Id] = NewProNode(entity)
 	}
 
-	fmt.Println("prenode: ", len(g.preNodes))
-	fmt.Println("pronode: ", len(g.proNodes))
 
 	return nil
 }

@@ -1,7 +1,6 @@
 package coupon
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +19,6 @@ func (h *CouponHandler) GetIssuedCouponList(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	fmt.Println(len(couponlist))
 	c.JSON(http.StatusOK, couponlist)
 }
 

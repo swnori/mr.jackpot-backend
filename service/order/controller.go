@@ -15,7 +15,7 @@ type OrderController interface {
 
 func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, order model.Order) error {
 	
-	reserveTime, err := time.Parse(time.RFC1123, info.ReserveAt)
+	reserveTime, err := time.Parse(model.TimeSecondFormat, info.ReserveAt)
 	if err != nil {
 		return err
 	}
@@ -26,8 +26,8 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 		Address: info.Address,
 		Phone: info.Phone,
 		Message: info.Message,
-		ReserveAt: reserveTime,
 		CreatedAt: time.Now(),
+		ReserveAt: reserveTime,
 		Price: info.Price,
 	}
 

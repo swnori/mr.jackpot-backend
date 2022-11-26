@@ -4,10 +4,6 @@ type Order struct {
 	DinnerList []DinnerOrder `json:"dinnerList"`
 }
 
-type OrderResponse struct {
-	Order
-	AllOrderInfo 
-}
 
 type DinnerOrder struct {
 	DinnerId int         `json:"dinnerId"`

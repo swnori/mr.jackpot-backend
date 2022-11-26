@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	"mr.jackpot-backend/database/orm"
@@ -16,7 +15,7 @@ type CouponLayer interface {
 	GetCouponInfo(couponid int) (model.CouponInfo, error)
 	GetCouponListByID(userid int) ([]model.CouponInfo, error)
 
-	CreateCoupon(model.CouponInfo) (model.CouponInfo, error)
+	CreateCoupon(model.CouponInfo) (int, error)
 	GetIssuedCouponList() ([]model.CouponInfo, error)
 	DeleteCoupon(int) error
 	UseCoupon(userid, couponid int) error
@@ -60,7 +59,6 @@ func (db *CouponDB) GetCouponInfo(couponid int) (model.CouponInfo, error) {
 		ID:        int(coupon.CouponID),
 		Title:     coupon.Title.String,
 		Message:   coupon.Description.String,
-		CreatedAt: coupon.CreatedAt,
 		ExpiresAt: coupon.ExpiresAt,
 	}, err
 }
@@ -69,8 +67,6 @@ func (db *CouponDB) GetCouponListByID(userid int) ([]model.CouponInfo, error) {
 	ctx := context.Background()
 
 	couponList, err := db.q.GetCouponAvailable(ctx, int64(userid))
-	fmt.Println(userid)
-	fmt.Println(len(couponList))
 
 	CouponList := make([]model.CouponInfo, 0);
 	for _, coupon := range couponList {
@@ -91,7 +87,7 @@ func (db *CouponDB) GetCouponListByID(userid int) ([]model.CouponInfo, error) {
 	return CouponList, err
 }
 
-func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (model.CouponInfo, error) {
+func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (int, error) {
 	ctx := context.Background()
 
 	result, err := db.q.IssueCoupon(ctx, orm.IssueCouponParams{
@@ -105,29 +101,15 @@ func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (model.CouponInfo, err
 			String: coupon.Message,
 			Valid:  true,
 		},
-		CreatedAt: coupon.CreatedAt,
 		ExpiresAt: coupon.ExpiresAt,
 	})
 
 	if err != nil {
-		return model.CouponInfo{}, err
+		return 0, err
 	}
 
 	couponID, err := result.LastInsertId()
-	if err != nil {
-		return model.CouponInfo{}, err
-	}
-
-	couponIssued, err := db.q.GetCouponInfo(ctx, couponID)
-
-	return model.CouponInfo{
-		ID: int(couponID),
-		Amount: int(couponIssued.Amount),
-		Code: couponIssued.Code,
-		Title: couponIssued.Title.String,
-		Message: couponIssued.Description.String,
-		ExpiresAt: couponIssued.ExpiresAt,
-	}, err
+	return int(couponID), err
 }
 
 func (db *CouponDB) GetIssuedCouponList() ([]model.CouponInfo, error) {
@@ -146,7 +128,6 @@ func (db *CouponDB) GetIssuedCouponList() ([]model.CouponInfo, error) {
 			Code:      coupon.Code,
 			Title:     coupon.Title.String,
 			Message:   coupon.Description.String,
-			CreatedAt: coupon.CreatedAt,
 			ExpiresAt: coupon.ExpiresAt,
 		})
 	}

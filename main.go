@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"time"
 
 	"mr.jackpot-backend/database/db"
 	"mr.jackpot-backend/rest"
@@ -27,8 +25,7 @@ func main() {
 	}
 
 
-	loc, _ := time.LoadLocation("Asia/Seoul")
-	fmt.Println(time.Now().In(loc))
+
 
 	log.Fatal(rest.RunAPI("0.0.0.0:8000"))
 }

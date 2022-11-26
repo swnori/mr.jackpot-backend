@@ -10,7 +10,7 @@ import (
 )
 
 const getCountId = `-- name: GetCountId :one
-SELECT count_id
+SELECT count
 FROM pro_order_choice, entity_count
 WHERE pro_order_choice.seq_id = entity_count.target_id
 AND pro_order_choice.seq_id = (?)
@@ -18,9 +18,9 @@ AND pro_order_choice.seq_id = (?)
 
 func (q *Queries) GetCountId(ctx context.Context, seqID int32) (int32, error) {
 	row := q.db.QueryRowContext(ctx, getCountId, seqID)
-	var count_id int32
-	err := row.Scan(&count_id)
-	return count_id, err
+	var count int32
+	err := row.Scan(&count)
+	return count, err
 }
 
 const getDinnerId = `-- name: GetDinnerId :one

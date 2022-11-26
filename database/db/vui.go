@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 
 	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
@@ -93,7 +92,7 @@ func (db *VUIDB) ReadAllProOrderList() ([]model.ProOrderTable, error) {
 		}
 
 		proOrder.EntityType = ProOrder.Typename
-		fmt.Println(Id)
+
 		switch (proOrder.EntityType) {
 		case "dinner":
 			id, err := db.q.GetDinnerId(ctx, int32(proOrder.Id))
@@ -142,8 +141,6 @@ func (db *VUIDB) ReadAllProOrderList() ([]model.ProOrderTable, error) {
 			proOrder.EntityId = 0
 			break
 		}
-
-		fmt.Println("found: ", proOrder.EntityId)
 
 		proOrderList = append(proOrderList, proOrder)
 	}

@@ -49,7 +49,6 @@ CREATE TABLE coupon_issued (
     amount      int         NOT NULL DEFAULT 0,
     title       varchar(256),
     description varchar(256),
-    created_at  timestamp NOT NULL,
     expires_at  timestamp NOT NULL,
 
     PRIMARY KEY (coupon_id),

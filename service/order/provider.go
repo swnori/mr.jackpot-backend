@@ -2,7 +2,6 @@ package order
 
 import (
 	"errors"
-	"fmt"
 
 	"mr.jackpot-backend/model"
 )
@@ -25,7 +24,6 @@ func (o *OrderManager) GetOrderInfo(userid int) (model.OrderResponse, error) {
 	)
 
 	for id, order := range o.Orders {
-		fmt.Println(order.GetOrderInfo().OwnerID)
 		if order.GetOrderInfo().OwnerID == userid {
 			orderid = id
 			exist = true
@@ -39,9 +37,24 @@ func (o *OrderManager) GetOrderInfo(userid int) (model.OrderResponse, error) {
 
 	order := o.Orders[orderid]
 
+	info := order.GetOrderInfo()
+
 	return model.OrderResponse{
 		Order: order.GetOrder(),
-		AllOrderInfo: order.GetOrderInfo(),
+		AllOrderInfoResponse: model.AllOrderInfoResponse{
+			ID: info.ID,
+			StateID: info.StateID,
+			Name: info.Name,
+			Address: info.Address,
+			Phone: info.Phone,
+			Message: info.Message,
+			Price: info.Price,
+			CouponPrice: info.CouponPrice,
+			CouponName: info.CouponName,
+
+			ReserveAt: info.ReserveAt.Format(model.TimeMinuteFormat),
+			CreatedAt: info.CreatedAt.Format(model.TimeMinuteFormat),
+		},
 	}, nil
 }
 
@@ -50,7 +63,7 @@ func (o *OrderManager) GetAllOrderInfo() []model.OrderResponse {
 	for _, order := range o.Orders {
 		orders = append(orders, model.OrderResponse{
 			Order: order.GetOrder(),
-			AllOrderInfo: order.GetOrderInfo(),
+			//AllOrderInfoResponse: order.GetOrderInfo(),
 		})
 	}
 	return orders

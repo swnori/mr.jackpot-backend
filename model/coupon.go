@@ -12,14 +12,14 @@ type CouponInfo struct {
 	Amount    int
 	Title     string
 	Message   string
-	CreatedAt time.Time
 	ExpiresAt time.Time
 }
 
 type CouponString struct {
+	ID        int
+	Code      string
 	Title     string
 	Amount    int
 	Message   string
-	CreatedAt string
 	ExpiresAt string
 }

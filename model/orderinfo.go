@@ -73,3 +73,27 @@ type AllOrderInfo struct {
 	CouponPrice int    `json:"couponPrice"`
 	CouponName  string `json:"couponName"`
 }
+
+type OrderResponse struct {
+	Order
+	AllOrderInfoResponse
+}
+
+
+type AllOrderInfoResponse struct {
+	ID        int    `json:"orderId"`
+	OwnerID   int    `json:"-"`
+	StateID   int    `json:"stateId"`
+
+	Name      string `json:"reserveName"`
+	Phone     string `json:"contact"`
+	Address   string `json:"address"`
+	Message   string `json:"requestDetail"`
+
+	ReserveAt string `json:"reserveDate"`
+	CreatedAt string `json:"createTime"`
+
+	Price       int    `json:"price"`
+	CouponPrice int    `json:"couponPrice"`
+	CouponName  string `json:"couponName"`	
+}
