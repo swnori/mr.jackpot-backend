@@ -18,3 +18,4 @@ type MenuFormed struct {
 type OptionFormed struct {
 	Name string
 }
+

@@ -24,9 +24,6 @@ func (o *OrderManager) GetOrderInfo(userid int) (model.OrderResponse, error) {
 		exist bool
 	)
 
-	fmt.Println(userid)
-	fmt.Println(len(o.Orders))
-
 	for id, order := range o.Orders {
 		fmt.Println(order.GetOrderInfo().OwnerID)
 		if order.GetOrderInfo().OwnerID == userid {

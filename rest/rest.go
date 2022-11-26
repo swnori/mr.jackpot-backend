@@ -89,7 +89,7 @@ func RunAPI(address string) error {
 			var h coupon.CouponService = coupon.NewCouponHandler()
 
 			Coupon.GET("/list", h.GetCouponList)
-			Coupon.POST("/asdf", h.GainCoupon)
+			Coupon.POST("/gain", h.GainCoupon)
 		}
 
 		Personal := Customer.Group("/personalinfo")

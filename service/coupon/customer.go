@@ -1,32 +1,45 @@
 package coupon
 
-import "mr.jackpot-backend/model"
+import (
+	"mr.jackpot-backend/model"
+)
 
 
 
 type CustomerCouponProvider interface {
-	GainCoupon(userid int, code string) (model.CouponInfo, error)
+	GainCoupon(userid int, code string) (model.CouponString, error)
 	GetCouponList(userid int) ([]model.CouponInfo, error)
 }
 
 
-func (c *CouponManager) GainCoupon(userid int, code string) (model.CouponInfo, error) {
-	coupon := model.CouponInfo{}
+func (c *CouponManager) GainCoupon(userid int, code string) (model.CouponString, error) {
 
 	couponid, err := c.db.CheckCouponCodeMatch(code)
 	if err != nil {
-		return coupon, err
+		return model.CouponString{}, err
 	}
 
 	if err := c.db.OwnCoupon(userid, couponid); err != nil {
-		return coupon, err
+		return model.CouponString{}, err
 	}
 
-	return c.db.GetCouponInfo(couponid)
+	coupon, err := c.db.GetCouponInfo(couponid)
+	if err != nil {
+		return model.CouponString{}, err
+	}
+
+	return model.CouponString{
+		Title: coupon.Title,
+		Amount: coupon.Amount,
+		Message: coupon.Message,
+		CreatedAt: coupon.CreatedAt.Format("2020-07-30"),
+		ExpiresAt: coupon.ExpiresAt.Format("2020-07-30"),
+	}, nil
 }
 
 func (c *CouponManager) GetCouponList(userid int) ([]model.CouponInfo, error) {
-	return c.db.GetCouponListByID(userid)
+	coupon, err := c.db.GetCouponListByID(userid)
+	return coupon, err
 }
 
 

@@ -2,7 +2,6 @@ package order
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"mr.jackpot-backend/model"
@@ -15,10 +14,7 @@ type OrderController interface {
 }
 
 func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, order model.Order) error {
-
-	fmt.Println(info.ReserveAt)
 	
-
 	reserveTime, err := time.Parse(time.RFC1123, info.ReserveAt)
 	if err != nil {
 		return err

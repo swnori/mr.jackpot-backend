@@ -12,10 +12,12 @@ import (
 )
 
 const deleteCoupon = `-- name: DeleteCoupon :exec
+
 DELETE FROM coupon_issued
 WHERE coupon_id = (?)
 `
 
+// AND issued.expires_at <= NOW();
 func (q *Queries) DeleteCoupon(ctx context.Context, couponID int64) error {
 	_, err := q.db.ExecContext(ctx, deleteCoupon, couponID)
 	return err
@@ -27,7 +29,6 @@ FROM coupon_owned owned, coupon_issued issued
 WHERE owned.owner_id = (?)
 AND owned.coupon_id = issued.coupon_id
 AND owned.valid IS TRUE
-AND coupon_issued.expires_at <= GETDATE
 `
 
 func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]CouponIssued, error) {
@@ -173,7 +174,7 @@ func (q *Queries) OwnCoupon(ctx context.Context, arg OwnCouponParams) error {
 
 const useCoupon = `-- name: UseCoupon :exec
 UPDATE coupon_owned
-SET valid = TRUE
+SET valid = FALSE
 WHERE coupon_id = (?)
 AND owner_id = (?)
 `

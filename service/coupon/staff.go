@@ -8,20 +8,25 @@ import (
 )
 
 type StaffCouponProvider interface {
-	IssueCoupon(coupon model.CouponCreateRequest) (model.CouponInfo, error)
+	IssueCoupon(coupon model.CouponString) (model.CouponInfo, error)
 	GetIssuedCouponList() ([]model.CouponInfo, error)
 	DeleteCoupon(couponid int) error
 }
 
-func (c *CouponManager) IssueCoupon(coupon model.CouponCreateRequest) (model.CouponInfo, error) {
+func (c *CouponManager) IssueCoupon(coupon model.CouponString) (model.CouponInfo, error) {
 	code := util.GetRandomString(16)
 
+	expireTime, err := util.TimeParsor(coupon.ExpiresAt)
+	if err != nil {
+		return model.CouponInfo{}, err
+	}
 	return c.db.CreateCoupon(model.CouponInfo{
 		Code:      code,
+		Amount:    coupon.Amount,
 		Title:     coupon.Title,
 		Message:   coupon.Message,
 		CreatedAt: time.Now(),
-		ExpiresAt: coupon.ExpiresAt,
+		ExpiresAt: expireTime,
 	})
 }
 

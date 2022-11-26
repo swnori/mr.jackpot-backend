@@ -59,7 +59,7 @@ CREATE TABLE coupon_issued (
 CREATE TABLE coupon_owned (
     coupon_id  bigint  NOT NULL,
     owner_id   bigint  NOT NULL,
-    valid      boolean NOT NULL DEFAULT FALSE,
+    valid      boolean NOT NULL DEFAULT TRUE,
 
     PRIMARY KEY (coupon_id, owner_id),
     FOREIGN KEY (coupon_id) REFERENCES coupon_issued (coupon_id),

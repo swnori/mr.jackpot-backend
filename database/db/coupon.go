@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 
 	"mr.jackpot-backend/database/orm"
@@ -68,9 +69,15 @@ func (db *CouponDB) GetCouponListByID(userid int) ([]model.CouponInfo, error) {
 	ctx := context.Background()
 
 	couponList, err := db.q.GetCouponAvailable(ctx, int64(userid))
+	fmt.Println(userid)
+	fmt.Println(len(couponList))
 
 	CouponList := make([]model.CouponInfo, 0);
 	for _, coupon := range couponList {
+		if time := time.Now().Sub(coupon.ExpiresAt).Seconds(); time > 0 {
+			continue
+		}
+
 		CouponList = append(CouponList, model.CouponInfo{
 			ID: int(coupon.CouponID),
 			Code: coupon.Code,
@@ -98,7 +105,8 @@ func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (model.CouponInfo, err
 			String: coupon.Message,
 			Valid:  true,
 		},
-		CreatedAt: time.Now(),
+		CreatedAt: coupon.CreatedAt,
+		ExpiresAt: coupon.ExpiresAt,
 	})
 
 	if err != nil {
@@ -114,6 +122,7 @@ func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (model.CouponInfo, err
 
 	return model.CouponInfo{
 		ID: int(couponID),
+		Amount: int(couponIssued.Amount),
 		Code: couponIssued.Code,
 		Title: couponIssued.Title.String,
 		Message: couponIssued.Description.String,
@@ -133,6 +142,8 @@ func (db *CouponDB) GetIssuedCouponList() ([]model.CouponInfo, error) {
 	for _, coupon := range couponList {
 		CouponList = append(CouponList, model.CouponInfo{
 			ID:        int(coupon.CouponID),
+			Amount:    int(coupon.Amount),
+			Code:      coupon.Code,
 			Title:     coupon.Title.String,
 			Message:   coupon.Description.String,
 			CreatedAt: coupon.CreatedAt,

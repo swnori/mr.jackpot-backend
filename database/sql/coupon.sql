@@ -22,7 +22,7 @@ VALUES (?, ?);
 
 -- name: UseCoupon :exec
 UPDATE coupon_owned
-SET valid = TRUE
+SET valid = FALSE
 WHERE coupon_id = (?)
 AND owner_id = (?);
 
@@ -31,9 +31,11 @@ SELECT issued.coupon_id, code, amount, title, description, created_at, expires_a
 FROM coupon_owned owned, coupon_issued issued
 WHERE owned.owner_id = (?)
 AND owned.coupon_id = issued.coupon_id
-AND owned.valid IS TRUE
-AND coupon_issued.expires_at <= GETDATE;
+AND owned.valid IS TRUE;
+/*AND issued.expires_at <= NOW();*/
 
 -- name: DeleteCoupon :exec
 DELETE FROM coupon_issued
 WHERE coupon_id = (?);
+
+
