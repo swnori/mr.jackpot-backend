@@ -43,5 +43,3 @@ type OrderState struct {
 	State string
 }
 
-
-

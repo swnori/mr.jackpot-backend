@@ -18,5 +18,5 @@ type DinnerOrder struct {
 type MenuOrder struct {
 	MenuId   int   `json:"menuId"`
 	Count    int   `json:"count"`
-	OptionId []int `json:"optionId"`
+	OptionId []int `json:"option"`
 }

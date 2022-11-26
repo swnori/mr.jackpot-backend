@@ -19,9 +19,9 @@ func RunAPI(address string) error {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{
 			"http://localhost:3000",
-			"https://mr-jackpot.run.goorm.io/",
+			"https://mr-jackpot.run.goorm.io",
 			"https://mr-jackpot.run.goorm.io:5173",
-			"http://mr-jackpot.run.goorm.io/",
+			"http://mr-jackpot.run.goorm.io",
 			"http://mr-jackpot.run.goorm.io:5173",
 		},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE", "OPTIONS"},
