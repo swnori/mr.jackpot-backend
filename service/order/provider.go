@@ -2,6 +2,7 @@ package order
 
 import (
 	"errors"
+	"fmt"
 
 	"mr.jackpot-backend/model"
 )
@@ -17,11 +18,29 @@ type OrderProvider interface {
 
 
 
-func (o *OrderManager) GetOrderInfo(orderid int) (model.OrderResponse, error) {
-	order, exist := o.Orders[orderid]
+func (o *OrderManager) GetOrderInfo(userid int) (model.OrderResponse, error) {
+	var (
+		orderid int
+		exist bool
+	)
+
+	fmt.Println(userid)
+	fmt.Println(len(o.Orders))
+
+	for id, order := range o.Orders {
+		fmt.Println(order.GetOrderInfo().OwnerID)
+		if order.GetOrderInfo().OwnerID == userid {
+			orderid = id
+			exist = true
+			break			
+		}
+	}
+
 	if !exist {
 		return model.OrderResponse{}, errors.New("NNO ORDER")
 	}
+
+	order := o.Orders[orderid]
 
 	return model.OrderResponse{
 		Order: order.GetOrder(),

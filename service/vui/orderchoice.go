@@ -21,7 +21,7 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 		seqStack = append(seqStack, questNode.SeqList...)
 
 		response = model.OrderChoiceResponse{
-			Message: []string{questNode.Message},
+			Message: []string{"미스터 대박 음성 인식 서비스입니다.", questNode.Message},
 			Decoded: "",
 			EntityId: 0,
 			EntityType: "message",

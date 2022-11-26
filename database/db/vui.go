@@ -60,7 +60,6 @@ func (db *VUIDB) ReadAllPreOrderList() ([]model.PreOrderTable, error) {
 	}
 
 	return preOrderList, nil
-
 }
 
 func (db *VUIDB) ReadAllProOrderList() ([]model.ProOrderTable, error) {
@@ -95,8 +94,6 @@ func (db *VUIDB) ReadAllProOrderList() ([]model.ProOrderTable, error) {
 
 		proOrder.EntityType = ProOrder.Typename
 		fmt.Println(Id)
-		//fmt.Println(proOrder.EntityType)
-		//fmt.Println(proOrder.Message)
 		switch (proOrder.EntityType) {
 		case "dinner":
 			id, err := db.q.GetDinnerId(ctx, int32(proOrder.Id))

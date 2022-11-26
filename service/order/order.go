@@ -94,6 +94,7 @@ func NewOrder(id int) *Order {
 
 func (o *Order) CreateOrder(order model.Order, info model.AllOrderInfo) {
 	o.OrderInfo = info
+	o.Order = order
 }
 
 func (o *Order) GetOrderInfo() model.AllOrderInfo {

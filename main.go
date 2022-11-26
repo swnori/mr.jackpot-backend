@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-	fmt.Print(time.Now())
 	if err := db.ConnectDB("127.0.0.1:3306", "mr.jackpot", "?parseTime=true"); err != nil {
 		panic(err)
 	}
@@ -26,6 +25,10 @@ func main() {
 	if err := vui.Initialize(); err != nil {
 		panic(err)
 	}
+
+
+	loc, _ := time.LoadLocation("Asia/Seoul")
+	fmt.Println(time.Now().In(loc))
 
 	log.Fatal(rest.RunAPI("0.0.0.0:8000"))
 }

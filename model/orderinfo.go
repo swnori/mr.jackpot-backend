@@ -38,19 +38,27 @@ type OrderInfo struct {
 }
 
 */
+
+type OrderRequest struct {
+	Order
+	Info OrderRequestInfo `json:"orderInfo"`
+}
+
 type OrderRequestInfo struct {
-	Name      string    `json:"name"`
-	Phone     string    `json:"phone"`
-	Address   string    `json:"address"`
-	Message   string    `json:"requestDetail"`
-	ReserveAt time.Time `json:"reserveDate"`
-	CouponID  int       `json:"couponId"`
-	Price     int       `json:"price"`
+	OwnerID   int    `json:"-"`
+	Name      string `json:"reserveName"`
+	Phone     string `json:"call"`
+	Address   string `json:"address"`
+	Message   string `json:"requestDetail"`
+	ReserveAt string `json:"reserveDate"`
+	CouponID  int    `json:"couponId"`
+	Price     int    `json:"price"`
 }
 
 
 type AllOrderInfo struct {
 	ID        int    `json:"orderId"`
+	OwnerID   int    `json:"-"`
 	StateID   int    `json:"stateId"`
 
 	Name      string `json:"reserveName"`

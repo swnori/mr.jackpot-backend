@@ -2,6 +2,7 @@ package order
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"mr.jackpot-backend/model"
@@ -15,15 +16,25 @@ type OrderController interface {
 
 func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, order model.Order) error {
 
+	fmt.Println(info.ReserveAt)
+	
+
+	reserveTime, err := time.Parse(time.RFC1123, info.ReserveAt)
+	if err != nil {
+		return err
+	}
+
 	orderinfo := model.AllOrderInfo{
+		OwnerID: info.OwnerID,
 		Name: info.Name,
 		Address: info.Address,
 		Phone: info.Phone,
 		Message: info.Message,
-		ReserveAt: info.ReserveAt,
+		ReserveAt: reserveTime,
 		CreatedAt: time.Now(),
 		Price: info.Price,
 	}
+
 	//var couponid = order.CouponID
 	//이후로 요청하는 로직이 있을거야
 
@@ -34,6 +45,7 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 
 	o.Orders[orderid] = NewOrder(orderid)
 	o.Orders[orderid].CreateOrder(order, orderinfo)
+
 	return nil
 }
 

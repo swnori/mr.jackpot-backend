@@ -22,7 +22,7 @@ func RunAPI(address string) error {
 			"https://mr-jackpot.run.goorm.io/",
 			"https://mr-jackpot.run.goorm.io:5173",
 			"http://mr-jackpot.run.goorm.io/",
-			"http://mr-jackpot.run.goorm.io:5173",			
+			"http://mr-jackpot.run.goorm.io:5173",
 		},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding","Authorization" , "Authorization,X-CSRF-Token"},
@@ -78,7 +78,7 @@ func RunAPI(address string) error {
 		{
 			var h order.CustomerOrderService = order.NewOrderHandler()
 
-			Order.GET("/info", )
+			Order.GET("/info", h.GetOrderInfo)
 			Order.POST("/create", h.CreateOrder)
 			Order.POST("/cancle", h.CancleOrder)
 			Order.POST("/requestcollecting", h.RequestCollecting)

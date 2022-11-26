@@ -1,27 +1,22 @@
 package model
 
 type Order struct {
-	DinnerList []DinnerOrder
-}
-
-type OrderRequest struct {
-	Order
-	Info OrderRequestInfo
+	DinnerList []DinnerOrder `json:"dinnerList"`
 }
 
 type OrderResponse struct {
 	Order
-	AllOrderInfo
+	AllOrderInfo 
 }
 
 type DinnerOrder struct {
-	DinnerId int
-	StyleId  int
-	MenuList []MenuOrder
+	DinnerId int         `json:"dinnerId"`
+	StyleId  int         `json:"styleId"`
+	MenuList []MenuOrder `json:"menuList"`
 }
 
 type MenuOrder struct {
-	MenuId   int
-	Count    int
-	OptionId []int
+	MenuId   int   `json:"menuId"`
+	Count    int   `json:"count"`
+	OptionId []int `json:"optionId"`
 }
