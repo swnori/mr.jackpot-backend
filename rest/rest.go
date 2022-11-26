@@ -71,7 +71,7 @@ func RunAPI(address string) error {
 			Orderinfo.GET("/orderboard", h.GetOrderBoard)
 			Orderinfo.GET("/statelist", h.GetStateList)
 			Orderinfo.POST("/vuistep", h.HandleVUIStep)
-			Orderinfo.GET("/history", h.GetOrderHistory)
+			Orderinfo.GET("/history", mh.CheckCustomerOnly, h.GetOrderHistory)
 		}
 
 		Order := Customer.Group("/order")
@@ -88,15 +88,15 @@ func RunAPI(address string) error {
 		{
 			var h coupon.CouponService = coupon.NewCouponHandler()
 
-			Coupon.GET("/list", h.GetCouponList)
-			Coupon.POST("/gain", h.GainCoupon)
+			Coupon.GET("/list", mh.CheckCustomerOnly, h.GetCouponList)
+			Coupon.POST("/gain", mh.CheckCustomerOnly, h.GainCoupon)
 		}
 
 		Personal := Customer.Group("/personalinfo")
 		{
 			var h manager.ManagerHandler = *manager.NewManagerHandler()
-			Personal.GET("", h.GetPersonalInfo)
-			Personal.POST("", h.UpdatePersonalInfo)
+			Personal.GET("",  mh.CheckCustomerOnly, h.GetPersonalInfo)
+			Personal.POST("", mh.CheckCustomerOnly, h.UpdatePersonalInfo)
 		}
 	}
 
