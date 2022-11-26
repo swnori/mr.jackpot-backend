@@ -11,50 +11,34 @@ import (
 	"time"
 )
 
-const createDeliveryInfo = `-- name: CreateDeliveryInfo :exec
-INSERT INTO delivery_info (order_id, name, address, phone, message)
-VALUES (?, ?, ?, ?, ?)
-`
-
-type CreateDeliveryInfoParams struct {
-	OrderID int64
-	Name    string
-	Address string
-	Phone   string
-	Message sql.NullString
-}
-
-func (q *Queries) CreateDeliveryInfo(ctx context.Context, arg CreateDeliveryInfoParams) error {
-	_, err := q.db.ExecContext(ctx, createDeliveryInfo,
-		arg.OrderID,
-		arg.Name,
-		arg.Address,
-		arg.Phone,
-		arg.Message,
-	)
-	return err
-}
-
 const createOrderInfo = `-- name: CreateOrderInfo :execresult
-INSERT INTO ` + "`" + `order` + "`" + ` (user_id, price, deposit, discount, reservated_at)
-VALUES (?, ?, ?, ?, ?)
+INSERT INTO ` + "`" + `order` + "`" + ` (user_id, price, discount, reserve_at, created_at, name, address, phone, message)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 type CreateOrderInfoParams struct {
-	UserID       int64
-	Price        int32
-	Deposit      int32
-	Discount     int32
-	ReservatedAt time.Time
+	UserID    int64
+	Price     int32
+	Discount  int32
+	ReserveAt time.Time
+	CreatedAt time.Time
+	Name      string
+	Address   string
+	Phone     string
+	Message   string
 }
 
 func (q *Queries) CreateOrderInfo(ctx context.Context, arg CreateOrderInfoParams) (sql.Result, error) {
 	return q.db.ExecContext(ctx, createOrderInfo,
 		arg.UserID,
 		arg.Price,
-		arg.Deposit,
 		arg.Discount,
-		arg.ReservatedAt,
+		arg.ReserveAt,
+		arg.CreatedAt,
+		arg.Name,
+		arg.Address,
+		arg.Phone,
+		arg.Message,
 	)
 }
 

@@ -7,7 +7,7 @@ WHERE name = (?))
 WHERE order_id = (?);
 
 -- name: GetOrderInfo :exec
-SELECT order.order_id, order.price, order.deposit, order.discount, order.reservated_at
+SELECT order.order_id, order.price, order.discount, order.reserve_at
 FROM `order`, order_state
 WHERE order.user_id = (?)
 AND order.order_id = order_state.order_id
@@ -18,6 +18,6 @@ AND order_state.state_id = (
 );
 
 -- name: GetOrderHistory :many
-SELECT order_id, price, deposit, discount, reservated_at
+SELECT order_id, price, discount, reserve_at
 FROM `order`
 WHERE user_id = (?);

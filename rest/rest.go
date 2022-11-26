@@ -17,7 +17,13 @@ func RunAPI(address string) error {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "https://mr-jackpot.run.goorm.io/", "https://mr-jackpot.run.goorm.io:5173"},
+		AllowOrigins:     []string{
+			"http://localhost:3000",
+			"https://mr-jackpot.run.goorm.io/",
+			"https://mr-jackpot.run.goorm.io:5173",
+			"http://mr-jackpot.run.goorm.io/",
+			"http://mr-jackpot.run.goorm.io:5173",			
+		},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding","Authorization" , "Authorization,X-CSRF-Token"},
 		AllowCredentials: true,
@@ -58,23 +64,24 @@ func RunAPI(address string) error {
 	Customer := r.Group("/customer")
 	Customer.Use(mh.CheckCustomer)
 	{
-		Order := Customer.Group("/orderinfo")
+		Orderinfo := Customer.Group("/orderinfo")
 		{
 			var h orderinfo.OrderInfoService = orderinfo.NewOrderInfoHandler()
 
-			Order.GET("/orderboard", h.GetOrderBoard)
-			Order.GET("/statelist", h.GetStateList)
-			Order.POST("/vuistep", h.HandleVUIStep)
-			Order.GET("/history", h.GetOrderHistory)
+			Orderinfo.GET("/orderboard", h.GetOrderBoard)
+			Orderinfo.GET("/statelist", h.GetStateList)
+			Orderinfo.POST("/vuistep", h.HandleVUIStep)
+			Orderinfo.GET("/history", h.GetOrderHistory)
 		}
 
-		Orderstep := Customer.Group("/order")
+		Order := Customer.Group("/order")
 		{
 			var h order.CustomerOrderService = order.NewOrderHandler()
 
-			Orderstep.POST("/create", h.CreateOrder)
-			Orderstep.POST("/cancle", h.CancleOrder)
-			Orderstep.POST("/requestcollecting", h.RequestCollecting)
+			Order.GET("/info", )
+			Order.POST("/create", h.CreateOrder)
+			Order.POST("/cancle", h.CancleOrder)
+			Order.POST("/requestcollecting", h.RequestCollecting)
 		}
 
 		Coupon := Customer.Group("/coupon")

@@ -116,7 +116,7 @@ func (db *CustomerDB) UpdateUserInfo(userid int, personal model.PersonalInfo) er
 	ctx := context.Background()
 
 	return db.q.UpdatePersonalInfo(ctx, orm.UpdatePersonalInfoParams{
-		CustomerID: int64(personal.ID),
+		CustomerID: int64(userid),
 		Name: personal.Name,
 		Phone: sql.NullString{
 			String: personal.Phone,

@@ -2,29 +2,38 @@ package order
 
 import (
 	"errors"
+	"time"
 
 	"mr.jackpot-backend/model"
 )
 
-
-
 type OrderController interface {
-	CreateOrder(userid int, order model.Order, delivery model.DeliveryInfo) error
+	CreateOrder(userid int, info model.OrderRequestInfo, order model.Order) error
 	FinishOrderStep(id int) error
 	CeaseOrder(id int) error
 }
 
+func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, order model.Order) error {
 
+	orderinfo := model.AllOrderInfo{
+		Name: info.Name,
+		Address: info.Address,
+		Phone: info.Phone,
+		Message: info.Message,
+		ReserveAt: info.ReserveAt,
+		CreatedAt: time.Now(),
+		Price: info.Price,
+	}
+	//var couponid = order.CouponID
+	//이후로 요청하는 로직이 있을거야
 
-func (o *OrderManager) CreateOrder(userid int, order model.Order, delivery model.DeliveryInfo) error {
-
-	orderid, err := o.db.CreateOrder(userid, order, delivery)
+	orderid, err := o.db.CreateOrder(userid, order, orderinfo)
 	if err != nil {
 		return err
 	}
 
 	o.Orders[orderid] = NewOrder(orderid)
-	o.Orders[orderid].CreaetOrder(order, delivery)
+	o.Orders[orderid].CreateOrder(order, orderinfo)
 	return nil
 }
 

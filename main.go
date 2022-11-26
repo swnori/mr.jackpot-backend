@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"time"
 
 	"mr.jackpot-backend/database/db"
 	"mr.jackpot-backend/rest"
@@ -11,6 +13,7 @@ import (
 )
 
 func main() {
+	fmt.Print(time.Now())
 	if err := db.ConnectDB("127.0.0.1:3306", "mr.jackpot", "?parseTime=true"); err != nil {
 		panic(err)
 	}

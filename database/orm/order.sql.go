@@ -11,17 +11,16 @@ import (
 )
 
 const getOrderHistory = `-- name: GetOrderHistory :many
-SELECT order_id, price, deposit, discount, reservated_at
+SELECT order_id, price, discount, reserve_at
 FROM ` + "`" + `order` + "`" + `
 WHERE user_id = (?)
 `
 
 type GetOrderHistoryRow struct {
-	OrderID      int64
-	Price        int32
-	Deposit      int32
-	Discount     int32
-	ReservatedAt time.Time
+	OrderID   int64
+	Price     int32
+	Discount  int32
+	ReserveAt time.Time
 }
 
 func (q *Queries) GetOrderHistory(ctx context.Context, userID int64) ([]GetOrderHistoryRow, error) {
@@ -36,9 +35,8 @@ func (q *Queries) GetOrderHistory(ctx context.Context, userID int64) ([]GetOrder
 		if err := rows.Scan(
 			&i.OrderID,
 			&i.Price,
-			&i.Deposit,
 			&i.Discount,
-			&i.ReservatedAt,
+			&i.ReserveAt,
 		); err != nil {
 			return nil, err
 		}
@@ -54,7 +52,7 @@ func (q *Queries) GetOrderHistory(ctx context.Context, userID int64) ([]GetOrder
 }
 
 const getOrderInfo = `-- name: GetOrderInfo :exec
-SELECT order.order_id, order.price, order.deposit, order.discount, order.reservated_at
+SELECT order.order_id, order.price, order.discount, order.reserve_at
 FROM ` + "`" + `order` + "`" + `, order_state
 WHERE order.user_id = (?)
 AND order.order_id = order_state.order_id
@@ -66,11 +64,10 @@ AND order_state.state_id = (
 `
 
 type GetOrderInfoRow struct {
-	OrderID      int64
-	Price        int32
-	Deposit      int32
-	Discount     int32
-	ReservatedAt time.Time
+	OrderID   int64
+	Price     int32
+	Discount  int32
+	ReserveAt time.Time
 }
 
 func (q *Queries) GetOrderInfo(ctx context.Context, userID int64) error {

@@ -6,9 +6,9 @@ import (
 )
 
 type Order struct {
-	ID           int
-	DeliveryInfo model.DeliveryInfo
-	OrderInfo    model.Order
+	ID        int
+	OrderInfo model.AllOrderInfo
+	Order     model.Order
 
 	TaskList map[int][]int
 
@@ -92,9 +92,16 @@ func NewOrder(id int) *Order {
 
 
 
-func (o *Order) CreaetOrder(order model.Order, delivery model.DeliveryInfo) {
-	o.DeliveryInfo = delivery
-	o.OrderInfo = order
+func (o *Order) CreateOrder(order model.Order, info model.AllOrderInfo) {
+	o.OrderInfo = info
+}
+
+func (o *Order) GetOrderInfo() model.AllOrderInfo {
+	return o.OrderInfo
+}
+
+func (o *Order) GetOrder() model.Order {
+	return o.Order
 }
 
 func (o *Order) CeaseOrder() error {
@@ -111,14 +118,6 @@ func (o *Order) SetState(step state.OrderState) {
 
 func (o *Order) GetNextStep() *state.OrderState {
 	return o.currentState.GetNextStep()
-}
-
-func (o *Order) GetOrderInfo() model.Order {
-	return o.OrderInfo
-}
-
-func (o *Order) GetDeliveryInfo() model.DeliveryInfo {
-	return o.DeliveryInfo
 }
 
 func (o *Order) GetOrderState() string {

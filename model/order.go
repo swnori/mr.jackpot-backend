@@ -1,16 +1,17 @@
 package model
 
-
-
-
-
 type Order struct {
 	DinnerList []DinnerOrder
 }
 
 type OrderRequest struct {
 	Order
-	DeliveryInfo DeliveryInfo
+	Info OrderRequestInfo
+}
+
+type OrderResponse struct {
+	Order
+	AllOrderInfo
 }
 
 type DinnerOrder struct {

@@ -216,16 +216,22 @@ CREATE TABLE dinners_style (
 
 
 CREATE TABLE `order` (
-    order_id      bigint    NOT NULL AUTO_INCREMENT,
-    user_id       bigint    NOT NULL,
-    price         int       NOT NULL DEFAULT 0,
-    deposit       int       NOT NULL DEFAULT 0,
-    discount      int       NOT NULL DEFAULT 0,
-    reservated_at timestamp NOT NULL,
+    order_id   bigint       NOT NULL AUTO_INCREMENT,
+    user_id    bigint       NOT NULL,
+    price      int          NOT NULL DEFAULT 0,
+    discount   int          NOT NULL DEFAULT 0,
+    reserve_at timestamp    NOT NULL,
+    created_at timestamp    NOT NULL,
+    name       varchar(16)  NOT NULL,
+    address    varchar(256) NOT NULL,
+    phone      varchar(16)  NOT NULL,
+    message    varchar(512) NOT NULL,
 
     PRIMARY KEY (order_id),
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
+
+
 
 CREATE TABLE state (
     state_id tinyint     NOT NULL AUTO_INCREMENT,
@@ -271,17 +277,6 @@ CREATE TABLE ordered_menu (
     FOREIGN KEY (menu_id)    REFERENCES menu (menu_id),
     FOREIGN KEY (option1_id) REFERENCES menu_option1 (option_id),
     FOREIGN KEY (option2_id) REFERENCES menu_option2 (option_id)
-);
-
-CREATE TABLE delivery_info (
-    order_id bigint      NOT NULL,
-    name     varchar(16) NOT NULL,
-    address  varchar(256) NOT NULL,
-    phone    varchar(16) NOT NULL,
-    message  varchar(512),
-
-    PRIMARY KEY (order_id),
-    FOREIGN KEY (order_id) REFERENCES `order` (order_id)
 );
 
 

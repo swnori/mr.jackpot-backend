@@ -2,17 +2,14 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
 )
 
-
-
 type OrderLayer interface {
-	CreateOrder(userid int, order model.Order, delivery model.DeliveryInfo) (id int, err error)
+	CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, err error)
 	UpdateOrderState(orderid int, orderstate string) error
 }
 
@@ -27,14 +24,23 @@ func NewOrderDB() *OrderDB {
 	return db
 }
 
-
-func (db *OrderDB) CreateOrder(userid int, order model.Order, delivery model.DeliveryInfo) (id int, err error) {
+func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, err error) {
 	ctx := context.Background()
 
 	result, err := db.q.CreateOrderInfo(ctx, orm.CreateOrderInfoParams{
-		UserID: int64(userid),
-		ReservatedAt: time.Now(),
+		UserID:    int64(userid),
+		Price:     int32(info.Price),
+		Discount:  int32(info.CouponPrice),
+
+		ReserveAt: info.ReserveAt,
+		CreatedAt: time.Now(),
+
+		Name:    info.Name,
+		Address: info.Address,
+		Phone:   info.Phone,
+		Message: info.Message,
 	})
+
 	if err != nil {
 		return
 	}
@@ -46,18 +52,6 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, delivery model.Del
 	}
 
 	if err := db.q.CreateOrderState(ctx, orderID); err != nil {
-		return 0, err
-	}
-
-	if err := db.q.CreateDeliveryInfo(ctx, orm.CreateDeliveryInfoParams{
-		OrderID: orderID,
-		Address: delivery.Address,
-		Phone: delivery.Phone,
-		Message: sql.NullString{
-			String: delivery.Message,
-			Valid: true,
-		},
-	}); err != nil {
 		return 0, err
 	}
 
@@ -78,10 +72,10 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, delivery model.Del
 		for _, menu := range dinner.MenuList {
 
 			menuStruct := orm.CreateOrderedMenuParams{
-				OrderID: orderID,
+				OrderID:  orderID,
 				DinnerID: dinnerID,
-				MenuID: int32(menu.MenuId),
-				Count: int32(menu.Count),
+				MenuID:   int32(menu.MenuId),
+				Count:    int32(menu.Count),
 			}
 
 			if len(menu.OptionId) >= 1 {
@@ -100,13 +94,11 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, delivery model.Del
 	return id, nil
 }
 
-
-
 func (db *OrderDB) UpdateOrderState(orderid int, orderstate string) error {
 	ctx := context.Background()
 
 	return db.q.UpdateOrderState(ctx, orm.UpdateOrderStateParams{
-		Name: orderstate,
+		Name:    orderstate,
 		OrderID: int64(orderid),
 	})
 }

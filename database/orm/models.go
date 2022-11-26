@@ -50,14 +50,6 @@ type CustomerAuth struct {
 	CustomerID int64
 }
 
-type DeliveryInfo struct {
-	OrderID int64
-	Name    string
-	Address string
-	Phone   string
-	Message sql.NullString
-}
-
 type Dinner struct {
 	DinnerID int32
 	EntityID int32
@@ -116,12 +108,16 @@ type MenuType struct {
 }
 
 type Order struct {
-	OrderID      int64
-	UserID       int64
-	Price        int32
-	Deposit      int32
-	Discount     int32
-	ReservatedAt time.Time
+	OrderID   int64
+	UserID    int64
+	Price     int32
+	Discount  int32
+	ReserveAt time.Time
+	CreatedAt time.Time
+	Name      string
+	Address   string
+	Phone     string
+	Message   string
 }
 
 type OrderState struct {

@@ -9,38 +9,35 @@ import (
 
 
 type OrderProvider interface {
-	GetOrderInfo(int) model.Order
-	GetDeliveryInfo(int) model.DeliveryInfo
-	GetAllOrderInfo() []model.Order
-	GetAllDeliveryInfo() []model.DeliveryInfo
+	GetOrderInfo(int) (model.OrderResponse, error)
 	GetOrderState(int) (string, error)
+	GetAllOrderInfo() []model.OrderResponse
 	CheckOrderOwner(orderid, userid int) error
 }
 
 
 
-func (o *OrderManager) GetOrderInfo(orderid int) model.Order {
-	return o.Orders[orderid].GetOrderInfo()
+func (o *OrderManager) GetOrderInfo(orderid int) (model.OrderResponse, error) {
+	order, exist := o.Orders[orderid]
+	if !exist {
+		return model.OrderResponse{}, errors.New("NNO ORDER")
+	}
+
+	return model.OrderResponse{
+		Order: order.GetOrder(),
+		AllOrderInfo: order.GetOrderInfo(),
+	}, nil
 }
 
-func (o *OrderManager) GetAllOrderInfo() []model.Order {
-	orders := make([]model.Order, 0)
+func (o *OrderManager) GetAllOrderInfo() []model.OrderResponse {
+	orders := make([]model.OrderResponse, 0)
 	for _, order := range o.Orders {
-		orders = append(orders, order.GetOrderInfo())
+		orders = append(orders, model.OrderResponse{
+			Order: order.GetOrder(),
+			AllOrderInfo: order.GetOrderInfo(),
+		})
 	}
 	return orders
-}
-
-func (o *OrderManager) GetDeliveryInfo(orderid int) model.DeliveryInfo {
-	return o.Orders[orderid].GetDeliveryInfo()
-}
-
-func (o *OrderManager) GetAllDeliveryInfo() []model.DeliveryInfo {
-	deliveries := make([]model.DeliveryInfo, 0)
-	for _, order := range o.Orders {
-		deliveries = append(deliveries, order.GetDeliveryInfo())
-	}
-	return deliveries
 }
 
 func (o *OrderManager) GetOrderState(orderid int) (string, error) {
