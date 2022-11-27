@@ -40,7 +40,7 @@ func (m *StaffManager) CreateAccount(staff model.StaffRegister) (string, error) 
 		return "", errors.New("unexpected roleId")
 	}
 
-	staff.Code = prefix + util.GetRandomString(8)
+	staff.Code = prefix + util.GetRandomNumber(8)
 	return staff.Code, m.db.CreateAccount(staff)
 }
 
