@@ -10,6 +10,6 @@ type CouponInfo struct {
 	Title     string `json:"title"`
 	Amount    int    `json:"amount"`
 	Message   string `json:"message"`
-	CreatedAt string `json:"createdat"`
-	ExpiresAt string `json:"expiresat"`
+	CreatedAt string `json:"createdAt"`
+	ExpiresAt string `json:"expiresAt"`
 }

@@ -13,7 +13,8 @@ import (
 
 const deleteCoupon = `-- name: DeleteCoupon :exec
 
-DELETE FROM coupon_issued
+UPDATE coupon_issued
+SET code = ""
 WHERE coupon_id = (?)
 `
 
@@ -74,6 +75,7 @@ const getCouponInfo = `-- name: GetCouponInfo :one
 SELECT coupon_id, code, amount, title, description, created_at, expires_at
 FROM coupon_issued
 WHERE coupon_id = (?)
+AND code != ""
 `
 
 func (q *Queries) GetCouponInfo(ctx context.Context, couponID int64) (CouponIssued, error) {

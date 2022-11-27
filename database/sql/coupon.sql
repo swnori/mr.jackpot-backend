@@ -14,7 +14,8 @@ WHERE code = (?);
 -- name: GetCouponInfo :one
 SELECT *
 FROM coupon_issued
-WHERE coupon_id = (?);
+WHERE coupon_id = (?)
+AND code != "";
 
 -- name: OwnCoupon :exec
 INSERT INTO coupon_owned (coupon_id, owner_id)
@@ -35,7 +36,6 @@ AND owned.valid IS TRUE;
 /*AND issued.expires_at <= NOW();*/
 
 -- name: DeleteCoupon :exec
-DELETE FROM coupon_issued
+UPDATE coupon_issued
+SET code = ""
 WHERE coupon_id = (?);
-
-
