@@ -47,6 +47,7 @@ func (c *CouponManager) GetIssuedCouponList() ([]model.CouponString, error) {
 	for _, coupon := range couponlist {
 		couponList = append(couponList, model.CouponString{
 			ID: coupon.ID,
+			Code: coupon.Code,
 			Amount: coupon.Amount,
 			Title: coupon.Title,
 			Message: coupon.Message,

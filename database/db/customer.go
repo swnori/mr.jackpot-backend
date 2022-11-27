@@ -94,6 +94,10 @@ func (db *CustomerDB) GetAllCustomerInfo() ([]model.CustomerInfo, error) {
 	for _, customer := range customerList {
 		CustomerList = append(CustomerList, model.CustomerInfo{
 			ID: int(customer.CustomerID),
+			Name: customer.Name,
+			Phone: customer.Phone.String,
+			Address: customer.Address.String,
+			CreatedAt: customer.CreatedAt.Format(model.TimeSecondFormat),
 		})
 	}
 

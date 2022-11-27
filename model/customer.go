@@ -1,7 +1,5 @@
 package model
 
-import "time"
-
 
 
 type User struct {
@@ -26,7 +24,7 @@ type UserInfo struct {
 }
 
 type CustomerRegister struct {
-	ID      int
+	ID       int
 	UserID   string `json:"userID"`
 	Password string `json:"password"`
 	Name     string `json:"name"`
@@ -35,14 +33,14 @@ type CustomerRegister struct {
 }
 
 type CustomerInfo struct {
-	ID      int
-	UserID  string
-	Name    string
-	Phone   string
-	Address string
+	ID      int    `json:"id"`
+	Name    string `json:"name"`
+	UserID  string `json:"-"`
+	Phone   string `json:"phone"`
+	Address string `json:"address"`
 
-	CreatedAt  time.Time
-	Rating     int
-	OrderCount int
-	Paid       int
+	CreatedAt  string `json:"registeredAt"`
+	Rating     int    `json:"rating"`
+	OrderCount int    `json:"orders"`
+	Paid       int    `json:"paid"`
 }

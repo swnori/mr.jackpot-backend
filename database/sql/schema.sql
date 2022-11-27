@@ -17,8 +17,9 @@ CREATE TABLE visitor (
 );
 
 CREATE TABLE customer (
-    customer_id bigint    NOT NULL,
-    status    boolean     NOT NULL DEFAULT TRUE,
+    customer_id bigint   NOT NULL,
+    status    boolean    NOT NULL DEFAULT TRUE,
+    created_at timestamp NOT NULL DEFAULT NOW(),
 
     name    varchar(16) NOT NULL,
     address varchar(256),
@@ -220,7 +221,7 @@ CREATE TABLE `order` (
     price      int          NOT NULL DEFAULT 0,
     discount   int          NOT NULL DEFAULT 0,
     reserve_at timestamp    NOT NULL,
-    created_at timestamp    NOT NULL,
+    created_at timestamp    NOT NULL DEFAULT NOW(),
     name       varchar(16)  NOT NULL,
     address    varchar(256) NOT NULL,
     phone      varchar(16)  NOT NULL,

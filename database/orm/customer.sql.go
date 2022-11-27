@@ -8,6 +8,7 @@ package orm
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const checkCustomerID = `-- name: CheckCustomerID :one
@@ -62,7 +63,7 @@ func (q *Queries) CreateCustomerAuth(ctx context.Context, arg CreateCustomerAuth
 }
 
 const getAllCustomerInfo = `-- name: GetAllCustomerInfo :many
-SELECT customer_id, name, address, phone, orders, rating, paid
+SELECT customer_id, name, address, phone, orders, rating, paid, created_at
 FROM customer
 WHERE status = TRUE
 `
@@ -75,6 +76,7 @@ type GetAllCustomerInfoRow struct {
 	Orders     int32
 	Rating     int32
 	Paid       int32
+	CreatedAt  time.Time
 }
 
 func (q *Queries) GetAllCustomerInfo(ctx context.Context) ([]GetAllCustomerInfoRow, error) {
@@ -94,6 +96,7 @@ func (q *Queries) GetAllCustomerInfo(ctx context.Context) ([]GetAllCustomerInfoR
 			&i.Orders,
 			&i.Rating,
 			&i.Paid,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}

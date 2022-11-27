@@ -35,6 +35,7 @@ type CouponOwned struct {
 type Customer struct {
 	CustomerID int64
 	Status     bool
+	CreatedAt  time.Time
 	Name       string
 	Address    sql.NullString
 	Phone      sql.NullString

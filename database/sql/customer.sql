@@ -29,7 +29,7 @@ SET name = (?),
 WHERE customer_id = (?);
 
 -- name: GetAllCustomerInfo :many
-SELECT customer_id, name, address, phone, orders, rating, paid
+SELECT customer_id, name, address, phone, orders, rating, paid, created_at
 FROM customer
 WHERE status = TRUE;
 
