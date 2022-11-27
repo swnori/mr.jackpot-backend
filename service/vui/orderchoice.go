@@ -1,6 +1,7 @@
 package vui
 
 import (
+	"fmt"
 	"sort"
 
 	"mr.jackpot-backend/model"
@@ -50,7 +51,7 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 		response = model.OrderChoiceResponse{
 			Message: []string{"다시 한 번 말씀해주세요.", questNode.Message},
 			Decoded: message,
-			EntityId: 0,
+			EntityId: 1,
 			EntityType: "message",
 			SeqStack: seqStack,
 		}
@@ -78,7 +79,7 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 			response = model.OrderChoiceResponse{
 				Message: []string{ansNode.Message},
 				Decoded: targetList[targetId],
-				EntityId: ansNode.EntityId,
+				EntityId: 3,
 				EntityType: ansNode.EntityType,
 				SeqStack:  seqStack,
 			}
@@ -92,6 +93,7 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 			err = e
 			return
 		}
+		fmt.Println(seqStackTop)
 
 		response = model.OrderChoiceResponse{
 			Message: []string{ansNode.Message, questNode.Message},
@@ -99,6 +101,10 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 			EntityId: ansNode.EntityId,
 			EntityType: ansNode.EntityType,
 			SeqStack:  seqStack,
+		}
+
+		if proOrderChoiceId == 29 {
+			response.EntityId = 2
 		}
 	}
 

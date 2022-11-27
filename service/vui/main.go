@@ -14,7 +14,7 @@ type VUIAccessor struct {
 
 var VUI = &VUIAccessor{
 	startNode: 1,
-	threshold: 0.8,
+	threshold: 0.75,
 }
 
 func NewVUIAccessor() *VUIAccessor {
