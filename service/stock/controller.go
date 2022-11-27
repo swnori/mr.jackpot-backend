@@ -2,6 +2,7 @@ package stock
 
 import (
 	"errors"
+	"sort"
 
 	"mr.jackpot-backend/model"
 )
@@ -12,6 +13,9 @@ func (i *StockEntity) GetAllStockList() []model.StockItem {
 	for _, item := range i.ItemList {
 		list = append(list, item.GetStockItem())
 	}
+	sort.Slice(list, func(i, j int) bool {
+        return list[i].ID < list[j].ID
+    })
 
 	return list
 }
@@ -48,7 +52,8 @@ func (i *StockEntity) DeleteStockItem(id int) error {
 		return errors.New("")
 	}
 
+	err := i.db.DeleteStockItem(id)
 	delete(i.ItemList, id)
 	
-	return nil
+	return err
 }
