@@ -10,7 +10,7 @@ import (
 )
 
 type OrderLayer interface {
-	CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, err error)
+	CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, rorder model.Order, err error)
 	UpdateOrderState(orderid int, orderstate string) error
 	GetOrderHisory(userid int) ([]model.OrderFormed, error)
 }
@@ -26,7 +26,7 @@ func NewOrderDB() *OrderDB {
 	return db
 }
 
-func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, err error) {
+func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, null model.Order, err error) {
 	ctx := context.Background()
 
 	result, err := db.q.CreateOrderInfo(ctx, orm.CreateOrderInfoParams{
@@ -54,25 +54,29 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 	}
 
 	if err := db.q.CreateOrderState(ctx, orderID); err != nil {
-		return 0, err
+		return 0, null, err
 	}
 
-	for _, dinner := range order.DinnerList {
+
+	for didx, dinner := range order.DinnerList {
 		result, err := db.q.CreateOrderedDinner(ctx, orm.CreateOrderedDinnerParams{
 			OrderID: orderID,
 			StyleID: int32(dinner.StyleId),
 			DinnerID: int32(dinner.DinnerId),
 		})
+
 		if err != nil {
-			return id, err
+			return id, null, err
 		}
 
 		dinnerID, err := result.LastInsertId()
 		if err != nil {
-			return id, err
+			return id, null, err
 		}
 
-		for _, menu := range dinner.MenuList {
+		order.DinnerList[didx].OrderedDinnerId = int(dinnerID)
+
+		for midx, menu := range dinner.MenuList {
 
 			menuStruct := orm.CreateOrderedMenuParams{
 				OrderID:  orderID,
@@ -80,6 +84,7 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 				MenuID:   int32(menu.MenuId),
 				Count:    int32(menu.Count),
 			}
+
 
 			if len(menu.OptionId) >= 1 {
 				menuStruct.Option1ID = sql.NullInt32{
@@ -94,13 +99,20 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 				}
 			}
 
-			if err := db.q.CreateOrderedMenu(ctx, menuStruct); err != nil {
-				return id, err
+			result, err := db.q.CreateOrderedMenu(ctx, menuStruct)
+			if err != nil {
+				return 0, order, err
 			}
+			menuid, err := result.LastInsertId()
+			if err != nil {
+				return 0, order, err
+			}
+
+			order.DinnerList[didx].MenuList[midx].OrderedMenuId = int(menuid)
 		}
 	}
 
-	return id, nil
+	return id, order, nil
 }
 
 func (db *OrderDB) UpdateOrderState(orderid int, orderstate string) error {

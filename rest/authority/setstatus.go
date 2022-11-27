@@ -18,7 +18,7 @@ func (h *AuthMiddlewareHandler) SetAuthority(c *gin.Context) {
 	tokenString, err := c.Cookie("access-token")
 	if err != nil {
 		bareToken := c.Request.Header["Authorization"]
-		if len(bareToken) != 1{
+		if len(bareToken) != 1 {
 			c.Set("status", model.UserStatusUnauthorized)
 			c.Set("userid", 0)
 			c.Next()

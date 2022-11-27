@@ -73,7 +73,7 @@ func (q *Queries) CreateOrderedDinner(ctx context.Context, arg CreateOrderedDinn
 	)
 }
 
-const createOrderedMenu = `-- name: CreateOrderedMenu :exec
+const createOrderedMenu = `-- name: CreateOrderedMenu :execresult
 INSERT INTO ordered_menu (order_id, dinner_id, menutype_id, menu_id, option1_id, option2_id, count, price)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `
@@ -89,8 +89,8 @@ type CreateOrderedMenuParams struct {
 	Price      sql.NullInt32
 }
 
-func (q *Queries) CreateOrderedMenu(ctx context.Context, arg CreateOrderedMenuParams) error {
-	_, err := q.db.ExecContext(ctx, createOrderedMenu,
+func (q *Queries) CreateOrderedMenu(ctx context.Context, arg CreateOrderedMenuParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, createOrderedMenu,
 		arg.OrderID,
 		arg.DinnerID,
 		arg.MenutypeID,
@@ -100,5 +100,4 @@ func (q *Queries) CreateOrderedMenu(ctx context.Context, arg CreateOrderedMenuPa
 		arg.Count,
 		arg.Price,
 	)
-	return err
 }

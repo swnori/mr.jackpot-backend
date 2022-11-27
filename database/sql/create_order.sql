@@ -10,6 +10,6 @@ VALUES (?);
 INSERT INTO ordered_dinner (order_id, style_id, amount, dinner_id)
 VALUES (?, ?, ?, ?);
 
--- name: CreateOrderedMenu :exec
+-- name: CreateOrderedMenu :execresult
 INSERT INTO ordered_menu (order_id, dinner_id, menutype_id, menu_id, option1_id, option2_id, count, price)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?);

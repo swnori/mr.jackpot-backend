@@ -1,15 +1,9 @@
 package model
 
-type Order struct {
-	DinnerList []DinnerOrder `json:"dinnerList"`
-}
-
-type OrderID struct {
-	OrdrID int `json:"orderId"`
-}
 
 
-type DinnerOrder struct {
+
+type DinnerStaff struct {
 	DinnerId        int  `json:"dinnerId"`
 	OrderedDinnerId int  `json:"id"`
 	StateId         int  `json:"stateId"`
@@ -18,11 +12,12 @@ type DinnerOrder struct {
 	MenuList []MenuOrder `json:"menuList"`
 }
 
-type MenuOrder struct {
+type MenuStaff struct {
 	MenuId   int   `json:"menuId"`
 	Count    int   `json:"count"`
 
 	OrderedMenuId int  `json:"id"`
-	StateId         int  `json:"stateId"`
+	StateId       int  `json:"stateId"`
 	OptionId []int `json:"option"`
 }
+

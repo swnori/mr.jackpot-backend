@@ -78,6 +78,12 @@ type EntityType struct {
 	Typename string
 }
 
+type Job struct {
+	JobID int32
+	Tag   string
+	Name  string
+}
+
 type Menu struct {
 	MenuID      int32
 	EntityID    int32
@@ -180,6 +186,7 @@ type Staff struct {
 	StaffID   int64
 	Status    bool
 	RoleID    int32
+	JobID     sql.NullInt32
 	Name      string
 	Score     int32
 	CreatedAt time.Time

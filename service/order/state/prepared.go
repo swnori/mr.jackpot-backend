@@ -2,6 +2,8 @@ package state
 
 import (
 	"errors"
+
+	//"mr.jackpot-backend/service/order"
 )
 
 type PreparedState struct {
@@ -13,6 +15,13 @@ type PreparedState struct {
 }
 
 func (o *PreparedState) ProcessStep() error {
+	//order := order.OrderManagers.Orders[o.ID]
+	//for i := range order.Order.DinnerList {
+	//	order.Order.DinnerList[i].StateId = 3
+	//}
+
+	
+
 	return nil
 }
 func (o *PreparedState) CeaseStep() error {

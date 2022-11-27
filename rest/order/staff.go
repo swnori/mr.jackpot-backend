@@ -37,13 +37,14 @@ func (h *OrderHandler) AcceptOrder(c *gin.Context) {
 
 func (h *OrderHandler) RejectOrder(c *gin.Context) {
 
-	var orderid int
-	if err := c.ShouldBindJSON(&orderid); err != nil {
+	var order model.OrderID
+
+	if err := c.ShouldBindJSON(&order); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	if err := h.order.CeaseOrder(orderid); err != nil {
+	if err := h.order.CeaseOrder(order.OrdrID); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}

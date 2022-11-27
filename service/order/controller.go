@@ -31,19 +31,13 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 		Price: info.Price,
 	}
 
-	orderid, err := o.db.CreateOrder(userid, order, orderinfo)
+	orderid, neworder, err := o.db.CreateOrder(userid, order, orderinfo)
 	if err != nil {
 		return err
 	}
-	
-	for i := range order.DinnerList {
-		dinner := order.DinnerList[i]
-		dinner.DinnerId = i*2;
-		dinner.OrderedDinnerId = 1
-	}
 
 	o.Orders[orderid] = NewOrder(orderid)
-	o.Orders[orderid].CreateOrder(order, orderinfo)
+	o.Orders[orderid].CreateOrder(neworder, orderinfo)
 
 	return nil
 }
@@ -67,11 +61,18 @@ func (o *OrderManager) FinishOrderStep(id int) error {
 	if exist == false {
 		return errors.New("no id")
 	}
-	if order.GetOrderState() == 4 {
-		order.SetState(order.started)
+	state := order.GetOrderState()
+	switch (state) {
+	case 4:
+		order.SetState(order.accepted)
+		break
+	case 5:
+		order.SetState(order.prepared)
+		break
+	default:
+		return errors.New("unexpected order state")
 	}
-	//fmt.Println(*order.GetNextStep())
-	//order.SetState()
+
 	order.ProcessStep()
 	return nil
 }

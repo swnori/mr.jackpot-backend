@@ -37,7 +37,7 @@ func NewOrder(id int) *Order {
 		TaskList: make(map[int][]int),
 	}
 
-	order.created = &state.AcceptedState{
+	order.created = &state.CreatedState{
 		ID: id,
 		StateID: 4,
 		Order: order,
