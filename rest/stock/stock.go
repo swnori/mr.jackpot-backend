@@ -16,7 +16,7 @@ func (h *StockHandler) AddStockItem(c *gin.Context) {
 	}
 
 	if err := h.stock.AddStockItem(item.Name, item.Unit); err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusBadRequest, "stock already exists")
 		return
 	}
 

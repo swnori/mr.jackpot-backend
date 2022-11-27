@@ -249,14 +249,16 @@ CREATE TABLE order_state (
 );
 
 CREATE TABLE ordered_dinner (
-    id       bigint  NOT NULL AUTO_INCREMENT,
-    order_id bigint  NOT NULL,
-    style_id tinyint NOT NULL,
-    amount   int     NOT NULL,
+    id        bigint  NOT NULL AUTO_INCREMENT,
+    order_id  bigint  NOT NULL,
+    dinner_id tinyint NOT NULL,
+    style_id  tinyint NOT NULL,
+    amount    int     NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (order_id) REFERENCES `order` (order_id),
-    FOREIGN KEY (style_id) REFERENCES style (style_id)
+    FOREIGN KEY (order_id)  REFERENCES `order` (order_id),
+    FOREIGN KEY (dinner_id) REFERENCES style (style_id),
+    FOREIGN KEY (style_id)  REFERENCES style (style_id)
 );
 
 CREATE TABLE ordered_menu (

@@ -72,7 +72,7 @@ func (db *StockDB) AddStockItem(name, unit string) (item model.StockItem, err er
 		ID:    int(ID),
 		Name:  name,
 		Count: 0,
-		Unit: item.Unit,
+		Unit: unit,
 	}, nil
 }
 

@@ -7,73 +7,7 @@ package orm
 
 import (
 	"context"
-	"time"
 )
-
-const getOrderHistory = `-- name: GetOrderHistory :many
-SELECT order_id, price, discount, reserve_at
-FROM ` + "`" + `order` + "`" + `
-WHERE user_id = (?)
-`
-
-type GetOrderHistoryRow struct {
-	OrderID   int64
-	Price     int32
-	Discount  int32
-	ReserveAt time.Time
-}
-
-func (q *Queries) GetOrderHistory(ctx context.Context, userID int64) ([]GetOrderHistoryRow, error) {
-	rows, err := q.db.QueryContext(ctx, getOrderHistory, userID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetOrderHistoryRow
-	for rows.Next() {
-		var i GetOrderHistoryRow
-		if err := rows.Scan(
-			&i.OrderID,
-			&i.Price,
-			&i.Discount,
-			&i.ReserveAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getOrderInfo = `-- name: GetOrderInfo :exec
-SELECT order.order_id, order.price, order.discount, order.reserve_at
-FROM ` + "`" + `order` + "`" + `, order_state
-WHERE order.user_id = (?)
-AND order.order_id = order_state.order_id
-AND order_state.state_id = (
-    SELECT state_id 
-    FROM state
-    WHERE name = "Finished"
-)
-`
-
-type GetOrderInfoRow struct {
-	OrderID   int64
-	Price     int32
-	Discount  int32
-	ReserveAt time.Time
-}
-
-func (q *Queries) GetOrderInfo(ctx context.Context, userID int64) error {
-	_, err := q.db.ExecContext(ctx, getOrderInfo, userID)
-	return err
-}
 
 const updateOrderState = `-- name: UpdateOrderState :exec
 UPDATE order_state

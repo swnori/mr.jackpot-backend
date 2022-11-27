@@ -19,3 +19,10 @@ type OptionFormed struct {
 	Name string
 }
 
+type OrderFormed struct {
+	OrderID   int
+	CreatedAt string
+	ReserveAt string
+	Price     int
+	DinnerList []string
+}

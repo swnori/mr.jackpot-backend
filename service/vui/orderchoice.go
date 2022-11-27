@@ -1,7 +1,6 @@
 package vui
 
 import (
-	"fmt"
 	"sort"
 
 	"mr.jackpot-backend/model"
@@ -93,7 +92,6 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 			err = e
 			return
 		}
-		fmt.Println(seqStackTop)
 
 		response = model.OrderChoiceResponse{
 			Message: []string{ansNode.Message, questNode.Message},

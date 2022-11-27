@@ -125,10 +125,11 @@ type OrderState struct {
 }
 
 type OrderedDinner struct {
-	ID      int64
-	OrderID int64
-	StyleID int32
-	Amount  int32
+	ID       int64
+	OrderID  int64
+	DinnerID int32
+	StyleID  int32
+	Amount   int32
 }
 
 type OrderedMenu struct {

@@ -4,5 +4,5 @@ packages:
     name: "orm"
     engine: "mysql"
     schema: "database/sql/schema.sql"
-    queries: [ "database/sql/board.sql", "database/sql/coupon.sql", "database/sql/create_order.sql",  "database/sql/customer.sql", "database/sql/order.sql", "database/sql/staff.sql", "database/sql/stock.sql", "database/sql/visitor.sql", "database/sql/vui.sql" ]
+    queries: [ "database/sql/board.sql", "database/sql/coupon.sql", "database/sql/create_order.sql",  "database/sql/customer.sql", "database/sql/history.sql", "database/sql/order.sql", "database/sql/staff.sql", "database/sql/stock.sql", "database/sql/visitor.sql", "database/sql/vui.sql" ]
 

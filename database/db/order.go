@@ -12,6 +12,7 @@ import (
 type OrderLayer interface {
 	CreateOrder(userid int, order model.Order, info model.AllOrderInfo) (id int, err error)
 	UpdateOrderState(orderid int, orderstate string) error
+	GetOrderHisory(userid int) ([]model.OrderFormed, error)
 }
 
 type OrderDB struct {
@@ -108,4 +109,30 @@ func (db *OrderDB) UpdateOrderState(orderid int, orderstate string) error {
 		Name:    orderstate,
 		OrderID: int64(orderid),
 	})
+}
+
+
+func (db *OrderDB) GetOrderHisory(userid int) ([]model.OrderFormed, error) {
+	ctx := context.Background()
+
+	orderlist, err := db.q.GetOrderHistory(ctx, int64(userid))
+
+	orderList := make([]model.OrderFormed, 0)
+	for _, order := range orderlist {
+		orderitem := model.OrderFormed{
+			OrderID: int(order.OrderID),
+			Price: int(order.Price) - int(order.Discount),
+			CreatedAt: order.CreatedAt.Format(model.TimeSecondFormat),
+			ReserveAt: order.ReserveAt.Format(model.TimeSecondFormat),
+		}
+		dinnerlist, err := db.q.GetDinnerListHistory(ctx, order.OrderID)
+		orderitem.DinnerList = dinnerlist
+
+		if err != nil {
+			return nil, err
+		}
+		orderList = append(orderList, orderitem)
+	}
+
+	return orderList, err
 }
