@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 
 	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
@@ -58,8 +57,12 @@ func (db *StaffDB) CreateAccount(staff model.StaffRegister) (model.StaffInfo, er
 	if err != nil {
 		return model.StaffInfo{}, err
 	}
-
-	fmt.Println(staffid)
+	if err := db.q.CreateStaffAuth(ctx, orm.CreateStaffAuthParams{
+		StaffID: staffid,
+		Code: staff.Code,
+	}); err != nil {
+		return model.StaffInfo{}, err
+	}
 
 	staffs, err := db.q.GetStaffInfo(ctx, staffid)
 	return model.StaffInfo{
