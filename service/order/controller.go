@@ -31,12 +31,15 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 		Price: info.Price,
 	}
 
-	//var couponid = order.CouponID
-	//이후로 요청하는 로직이 있을거야
-
 	orderid, err := o.db.CreateOrder(userid, order, orderinfo)
 	if err != nil {
 		return err
+	}
+	
+	for i := range order.DinnerList {
+		dinner := order.DinnerList[i]
+		dinner.DinnerId = i*2;
+		dinner.OrderedDinnerId = 1
 	}
 
 	o.Orders[orderid] = NewOrder(orderid)
@@ -62,10 +65,13 @@ func (o *OrderManager) CeaseOrder(id int) error {
 func (o *OrderManager) FinishOrderStep(id int) error {
 	order, exist := o.Orders[id]
 	if exist == false {
-		return errors.New("")
+		return errors.New("no id")
 	}
-
-	order.SetState(*order.GetNextStep())
+	if order.GetOrderState() == 4 {
+		order.SetState(order.started)
+	}
+	//fmt.Println(*order.GetNextStep())
+	//order.SetState()
 	order.ProcessStep()
 	return nil
 }

@@ -63,8 +63,8 @@ func (o *OrderManager) GetOrderInfo(orderid int) (model.OrderResponse, error) {
 	return model.OrderResponse{
 		Order: order.GetOrder(),
 		AllOrderInfoResponse: model.AllOrderInfoResponse{
-			ID: info.ID,
-			StateID: info.StateID,
+			ID: orderid,
+			StateID: order.GetOrderState(),
 			Name: info.Name,
 			Address: info.Address,
 			Phone: info.Phone,

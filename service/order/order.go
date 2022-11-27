@@ -1,8 +1,10 @@
 package order
 
 import (
-	"mr.jackpot-backend/service/order/state"
+	"fmt"
+
 	"mr.jackpot-backend/model"
+	"mr.jackpot-backend/service/order/state"
 )
 
 type Order struct {
@@ -25,7 +27,7 @@ type Order struct {
 	collected  state.OrderState
 
 	rejected   state.OrderState
-	canceled  state.OrderState
+	canceled   state.OrderState
 	finished   state.OrderState	
 }
 
@@ -50,6 +52,7 @@ func NewOrder(id int) *Order {
 		NextStep: &order.started,
 		CeasedStep: &order.canceled,
 	}
+	fmt.Println(order.created)
 
 	order.started = &state.StartedState{
 		ID: id,
@@ -107,11 +110,13 @@ func NewOrder(id int) *Order {
 
 	order.finished = &state.FinishedState{
 		ID: id,
-		StateID: 14,
+		StateID: 11,
 		Order: order,
 	}
 
 	order.currentState = order.created
+
+	fmt.Println(order.GetNextStep())
 
 	return order
 }
