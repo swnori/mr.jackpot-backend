@@ -75,9 +75,13 @@ func (db *StaffDB) GetStaffInfo(staffid int) (model.StaffInfo, error) {
 
 	staff, err := db.q.GetStaffInfo(ctx, int64(staffid))
 	return model.StaffInfo{
+		ID: int(staff.StaffID),
 		Name: staff.Name,
+		Status: staff.Status,
 		Role: staff.Tag,
 		Score: int(staff.Score),
+		Code: staff.Code,
+		CreatedAt: staff.CreatedAt.Format(model.TimeDayFormat),
 	}, err
 }
 
@@ -88,12 +92,17 @@ func (db *StaffDB) GetAllStaffInfo() ([]model.StaffInfo, error) {
 	StaffList := make([]model.StaffInfo, 0)
 
 	for _, staff := range staffList {
-		StaffList = append(StaffList, model.StaffInfo{
-			ID: int(staff.StaffID),
-			Name: staff.Name,
-			Role: staff.Tag,
-			Score: int(staff.Score),
-		})
+		if staff.Status == true {
+			StaffList = append(StaffList, model.StaffInfo{
+				ID: int(staff.StaffID),
+				Name: staff.Name,
+				Status: staff.Status,
+				Role: staff.Tag,
+				Score: int(staff.Score),
+				Code: staff.Code,
+				CreatedAt: staff.CreatedAt.Format(model.TimeDayFormat),
+			})
+		}
 	}
 
 	return StaffList, err

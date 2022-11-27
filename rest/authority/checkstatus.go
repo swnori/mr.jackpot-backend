@@ -14,6 +14,7 @@ type CheckAuthMiddlewareService interface {
 	CheckCustomer(c *gin.Context)
 	CheckCustomerOnly(c *gin.Context)
 	CheckStaff(c *gin.Context)
+	CheckCient(c *gin.Context)
 }
 
 
@@ -53,10 +54,27 @@ func (h *AuthMiddlewareHandler) CheckCustomerOnly(c *gin.Context) {
 	c.JSON(http.StatusUnauthorized, "Not a Customer")
 	c.Abort()
 }
+
 func (h *AuthMiddlewareHandler) CheckStaff(c *gin.Context) {
 	status := c.Keys["status"].(string)
 
 	if status == model.UserStatusStaff || status == model.UserStatusCEO {
+		c.Next()
+		return
+	}
+
+	c.JSON(http.StatusUnauthorized, "Not a Staff")
+	c.Abort()
+}
+
+func (h *AuthMiddlewareHandler) CheckCient(c *gin.Context) {
+	status := c.Keys["status"].(string)
+
+	if
+	    status == model.UserStatusStaff ||
+	    status == model.UserStatusCEO ||
+	    status == model.UserStatusCustomer ||
+	    status == model.UserStatusVisitor {
 		c.Next()
 		return
 	}

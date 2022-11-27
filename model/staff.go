@@ -1,7 +1,5 @@
 package model
 
-import "time"
-
 
 
 
@@ -25,12 +23,13 @@ type StaffResponse struct {
 
 type StaffInfo struct {
 	ID        int   
+	Status    bool
 	Code      string
 	Name      string
 	Role      string
 	Part      string
 	Score     int   
-	CreatedAt time.Time
+	CreatedAt string
 }
 
 type StaffRegister struct {

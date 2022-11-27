@@ -61,12 +61,17 @@ func RunAPI(address string) error {
 		}
 	}
 
-	Public := r.Group("/public")
-	{
-		var h orderinfo.OrderInfoService = orderinfo.NewOrderInfoHandler()
 
-		Public.GET("/orderboard", h.GetOrderBoard)
-		Public.GET("/statelist", h.GetStateList)
+	Public := r.Group("/public")
+	Public.Use(mh.CheckCient)
+	{
+		Orderinfo := Public.Group("/orderinfo")
+		{
+			var h orderinfo.OrderInfoService = orderinfo.NewOrderInfoHandler()
+
+			Orderinfo.GET("/orderboard", h.GetOrderBoard)
+			Orderinfo.GET("/statelist", h.GetStateList)
+		}
 	}
 
 	Customer := r.Group("/customer")

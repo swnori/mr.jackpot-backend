@@ -8,6 +8,7 @@ package orm
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const createStaffAccount = `-- name: CreateStaffAccount :execresult
@@ -40,18 +41,21 @@ func (q *Queries) CreateStaffAuth(ctx context.Context, arg CreateStaffAuthParams
 }
 
 const getAllStaffInfo = `-- name: GetAllStaffInfo :many
-SELECT staff_id, status, role.tag, staff.name, score
-FROM staff, role
+SELECT staff.staff_id, status, role.tag, staff.name, score, created_at, code
+FROM staff, role, staff_auth
 WHERE staff.role_id = role.role_id
 AND staff.status = TRUE
+AND staff.staff_id = staff_auth.staff_id
 `
 
 type GetAllStaffInfoRow struct {
-	StaffID int64
-	Status  bool
-	Tag     string
-	Name    string
-	Score   int32
+	StaffID   int64
+	Status    bool
+	Tag       string
+	Name      string
+	Score     int32
+	CreatedAt time.Time
+	Code      string
 }
 
 func (q *Queries) GetAllStaffInfo(ctx context.Context) ([]GetAllStaffInfoRow, error) {
@@ -69,6 +73,8 @@ func (q *Queries) GetAllStaffInfo(ctx context.Context) ([]GetAllStaffInfoRow, er
 			&i.Tag,
 			&i.Name,
 			&i.Score,
+			&i.CreatedAt,
+			&i.Code,
 		); err != nil {
 			return nil, err
 		}
@@ -97,18 +103,22 @@ func (q *Queries) GetStaffID(ctx context.Context, code string) (int64, error) {
 }
 
 const getStaffInfo = `-- name: GetStaffInfo :one
-SELECT status, role.tag, staff.name, score
-FROM staff, role
-WHERE staff.role_id = role.role_id
+SELECT status, role.tag, staff.name, score, created_at, code, staff.staff_id
+FROM staff, role, staff_auth
+WHERE staff.staff_id = (?)
+AND staff.role_id = role.role_id
 AND staff.status = TRUE
-AND staff_id = (?)
+AND staff.staff_id = staff_auth.staff_id
 `
 
 type GetStaffInfoRow struct {
-	Status bool
-	Tag    string
-	Name   string
-	Score  int32
+	Status    bool
+	Tag       string
+	Name      string
+	Score     int32
+	CreatedAt time.Time
+	Code      string
+	StaffID   int64
 }
 
 func (q *Queries) GetStaffInfo(ctx context.Context, staffID int64) (GetStaffInfoRow, error) {
@@ -119,6 +129,9 @@ func (q *Queries) GetStaffInfo(ctx context.Context, staffID int64) (GetStaffInfo
 		&i.Tag,
 		&i.Name,
 		&i.Score,
+		&i.CreatedAt,
+		&i.Code,
+		&i.StaffID,
 	)
 	return i, err
 }

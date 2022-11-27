@@ -23,14 +23,16 @@ SET status = FALSE
 WHERE staff_id = (?);
 
 -- name: GetStaffInfo :one
-SELECT status, role.tag, staff.name, score
-FROM staff, role
-WHERE staff.role_id = role.role_id
+SELECT status, role.tag, staff.name, score, created_at, code, staff.staff_id
+FROM staff, role, staff_auth
+WHERE staff.staff_id = (?)
+AND staff.role_id = role.role_id
 AND staff.status = TRUE
-AND staff_id = (?);
+AND staff.staff_id = staff_auth.staff_id;
 
 -- name: GetAllStaffInfo :many
-SELECT staff_id, status, role.tag, staff.name, score
-FROM staff, role
+SELECT staff.staff_id, status, role.tag, staff.name, score, created_at, code
+FROM staff, role, staff_auth
 WHERE staff.role_id = role.role_id
-AND staff.status = TRUE;
+AND staff.status = TRUE
+AND staff.staff_id = staff_auth.staff_id;

@@ -223,6 +223,7 @@ CREATE TABLE `order` (
     discount   int          NOT NULL DEFAULT 0,
     reserve_at timestamp    NOT NULL,
     created_at timestamp    NOT NULL DEFAULT NOW(),
+
     name       varchar(16)  NOT NULL,
     address    varchar(256) NOT NULL,
     phone      varchar(16)  NOT NULL,
@@ -302,11 +303,12 @@ CREATE TABLE menu_role (
 );
 
 CREATE TABLE staff (
-    staff_id  bigint      NOT NULL AUTO_INCREMENT,
-    status    boolean     NOT NULL DEFAULT TRUE,
-    role_id   tinyint     NOT NULL,
-    name      varchar(16) NOT NULL,
-    score     tinyint     NOT NULL DEFAULT 0,
+    staff_id   bigint      NOT NULL AUTO_INCREMENT,
+    status     boolean     NOT NULL DEFAULT TRUE,
+    role_id    tinyint     NOT NULL,
+    name       varchar(16) NOT NULL,
+    score      tinyint     NOT NULL DEFAULT 0,
+    created_at timestamp   NOT NULL DEFAULT NOW(),
 
     PRIMARY KEY (staff_id),
     FOREIGN KEY (role_id) REFERENCES role (role_id)

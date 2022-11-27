@@ -177,11 +177,12 @@ type Role struct {
 }
 
 type Staff struct {
-	StaffID int64
-	Status  bool
-	RoleID  int32
-	Name    string
-	Score   int32
+	StaffID   int64
+	Status    bool
+	RoleID    int32
+	Name      string
+	Score     int32
+	CreatedAt time.Time
 }
 
 type StaffAuth struct {
