@@ -3,21 +3,21 @@ package model
 
 
 type DinnerFormed struct {
-	StateID   int
-	OrderedID int
-	ID        int
-	DinnerID  int
-	StyleID   int
-	MenuList  []int
+	StateID   int   `json:"stateId"`
+	OrderedID int   `json:"orderId"`
+	ID        int   `json:"id"`
+	DinnerID  int   `json:"dinnerId"`
+	StyleID   int   `json:"styleId"`
+	MenuList  []int `json:"menuList"`
 }
 
 type MenuFormed struct {
-	StateID    int
-	OrderedID  int
-	DinnerID   int
-	ID         int
-	MenuID     int
-	OptionList []int
+	StateID    int   `json:"stateId"`
+	OrderedID  int   `json:"orderId"`
+	DinnerID   int   `json:"dinnerId"`
+	ID         int   `json:"id"`
+	MenuID     int   `json:"menuId"`
+	OptionList []int `json:"optionList"`
 }
 
 type OptionFormed struct {

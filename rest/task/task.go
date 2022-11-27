@@ -38,8 +38,12 @@ func (h *TaskHandler) SetTaskNextStatus(c *gin.Context) {
 		break
 
 	default:
-		order.OrderManagers.FinishOrderStep(task.ID)
-		c.JSON(http.StatusOK, "")
+		state := order.OrderManagers.Orders[task.ID].GetOrderState()
+		if state == 4 || state == 5 {
+			order.OrderManagers.FinishOrderStep(task.ID)
+		} else {
+			c.JSON(400, "")
+		}
 		break
 	}
 }
