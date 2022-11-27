@@ -2,6 +2,7 @@ package order
 
 import (
 	"errors"
+	"sort"
 	"time"
 
 	"mr.jackpot-backend/model"
@@ -34,6 +35,17 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 	orderid, neworder, err := o.db.CreateOrder(userid, order, orderinfo)
 	if err != nil {
 		return err
+	}
+
+
+	sort.Slice(neworder.DinnerList, func(i, j int) bool {
+        return neworder.DinnerList[i].OrderedDinnerId < neworder.DinnerList[j].OrderedDinnerId
+    })
+
+	for _, dinner := range neworder.DinnerList {
+		sort.Slice(dinner.MenuList, func(i, j int) bool {
+			return dinner.MenuList[i].OrderedMenuId < dinner.MenuList[j].OrderedMenuId
+		})	
 	}
 
 	o.Orders[orderid] = NewOrder(orderid)

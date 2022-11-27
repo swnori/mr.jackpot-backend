@@ -85,7 +85,6 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 				Count:    int32(menu.Count),
 			}
 
-
 			if len(menu.OptionId) >= 1 {
 				menuStruct.Option1ID = sql.NullInt32{
 					Int32: int32(menu.OptionId[0]),

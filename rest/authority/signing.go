@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/model"
+	"mr.jackpot-backend/service/worker"
 )
 
 
@@ -78,6 +79,11 @@ func (h *StaffAuthHandler) Signin(c *gin.Context) {
 		return
 	}
 
+	switch (staffinfo.Role) {
+	case "delivery":
+		worker.
+	}
+
 	if staffinfo.Role == "CEO" {
 		status = model.UserStatusCEO
 	} else {
@@ -89,6 +95,7 @@ func (h *StaffAuthHandler) Signin(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
+
 
 	c.SetCookie("access-token", token, int(h.m.GetAccessExpireTime().Seconds()), "/", "http://127.0.0.1:3000", false, true)
 	c.JSON(http.StatusOK, gin.H{
