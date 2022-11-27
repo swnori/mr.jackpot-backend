@@ -53,18 +53,24 @@ func (q *Queries) CreateOrderState(ctx context.Context, orderID int64) error {
 }
 
 const createOrderedDinner = `-- name: CreateOrderedDinner :execresult
-INSERT INTO ordered_dinner (order_id, style_id, amount)
-VALUES (?, ?, ?)
+INSERT INTO ordered_dinner (order_id, style_id, amount, dinner_id)
+VALUES (?, ?, ?, ?)
 `
 
 type CreateOrderedDinnerParams struct {
-	OrderID int64
-	StyleID int32
-	Amount  int32
+	OrderID  int64
+	StyleID  int32
+	Amount   int32
+	DinnerID int32
 }
 
 func (q *Queries) CreateOrderedDinner(ctx context.Context, arg CreateOrderedDinnerParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createOrderedDinner, arg.OrderID, arg.StyleID, arg.Amount)
+	return q.db.ExecContext(ctx, createOrderedDinner,
+		arg.OrderID,
+		arg.StyleID,
+		arg.Amount,
+		arg.DinnerID,
+	)
 }
 
 const createOrderedMenu = `-- name: CreateOrderedMenu :exec

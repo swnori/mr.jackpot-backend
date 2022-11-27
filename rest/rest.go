@@ -61,16 +61,24 @@ func RunAPI(address string) error {
 		}
 	}
 
+	Public := r.Group("/public")
+	{
+		var h orderinfo.OrderInfoService = orderinfo.NewOrderInfoHandler()
+
+		Public.GET("/orderboard", h.GetOrderBoard)
+		Public.GET("/statelist", h.GetStateList)
+	}
+
 	Customer := r.Group("/customer")
 	Customer.Use(mh.CheckCustomer)
 	{
 		Orderinfo := Customer.Group("/orderinfo")
 		{
 			var h orderinfo.OrderInfoService = orderinfo.NewOrderInfoHandler()
-
-			Orderinfo.GET("/orderboard", h.GetOrderBoard)
-			Orderinfo.GET("/statelist", h.GetStateList)
 			Orderinfo.POST("/vuistep", h.HandleVUIStep)
+		}
+		{
+			var h orderinfo.OrderHistoryHandler = *orderinfo.NewOrderHistoryHandler()
 			Orderinfo.GET("/history", mh.CheckCustomerOnly, h.GetOrderHistory)
 		}
 
@@ -94,7 +102,8 @@ func RunAPI(address string) error {
 
 		Personal := Customer.Group("/personalinfo")
 		{
-			var h manager.ManagerHandler = *manager.NewManagerHandler()
+			var h manager.ManagerService = manager.NewManagerHandler()
+
 			Personal.GET("",  mh.CheckCustomerOnly, h.GetPersonalInfo)
 			Personal.POST("", mh.CheckCustomerOnly, h.UpdatePersonalInfo)
 		}

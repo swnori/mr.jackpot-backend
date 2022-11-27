@@ -1,6 +1,7 @@
 package vui
 
 import (
+	"fmt"
 	"sort"
 
 	"mr.jackpot-backend/model"
@@ -100,6 +101,8 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 			EntityType: ansNode.EntityType,
 			SeqStack:  seqStack,
 		}
+
+		fmt.Println(ansNode.Message, response.Decoded)
 
 		if proOrderChoiceId == 29 {
 			response.EntityId = 2

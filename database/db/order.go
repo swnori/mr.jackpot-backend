@@ -61,6 +61,7 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 		result, err := db.q.CreateOrderedDinner(ctx, orm.CreateOrderedDinnerParams{
 			OrderID: orderID,
 			StyleID: int32(dinner.StyleId),
+			DinnerID: int32(dinner.DinnerId),
 		})
 		if err != nil {
 			return id, err

@@ -20,9 +20,9 @@ type OptionFormed struct {
 }
 
 type OrderFormed struct {
-	OrderID   int
-	CreatedAt string
-	ReserveAt string
-	Price     int
-	DinnerList []string
+	OrderID   int    `json:"orderId"`
+	CreatedAt string `json:"createdAt"`
+	ReserveAt string `json:"reserveAt"`
+	Price     int    `json:"price"`
+	DinnerList []string `json:"dinnerList"`
 }
