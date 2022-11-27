@@ -90,8 +90,7 @@ func (h *StaffAuthHandler) Signin(c *gin.Context) {
 		worker.Delivery.AddWorker(staffid)
 		break
 	default:
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
-		return
+		break
 	}
 
 	if staffinfo.Role == "CEO" {

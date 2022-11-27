@@ -134,6 +134,10 @@ func RunAPI(address string) error {
 			Order.GET("/list", h.GetAllOrderSummary)
 			Order.GET("/info", h.GetOrderInfo)
 		}
+		{
+			//Order.GET("/menulist", h.GetCookTask)
+			//Order.GET("/dinnerlist", h.GetStylerTask)
+		}
 
 		Task := Staff.Group("/task")
 		{
