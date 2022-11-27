@@ -17,10 +17,10 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 			err = e
 			return
 		}
-		seqStack = append(seqStack, questNode.SeqList...)
+		seqStack = append(seqStack, v.startNode)
 
 		response = model.OrderChoiceResponse{
-			Message: []string{"미스터 대박 음성 인식 서비스입니다.", questNode.Message},
+			Message: []string{questNode.Message},
 			Decoded: "",
 			EntityId: 0,
 			EntityType: "message",
@@ -48,7 +48,7 @@ func (v *VUIAccessor) HandleOrderChoice(request model.OrderChoiceRequest) (respo
 		}
 
 		response = model.OrderChoiceResponse{
-			Message: []string{"다시 한 번 선택해주세요", questNode.Message},
+			Message: []string{"다시 한 번 말씀해주세요.", questNode.Message},
 			Decoded: message,
 			EntityId: 0,
 			EntityType: "message",
