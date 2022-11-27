@@ -33,7 +33,7 @@ type StaffInfo struct {
 }
 
 type StaffRegister struct {
-	Code string
-	Name string
-	RoleID int
+	Code string `json:"code"`
+	Name string `json:"name"`
+	RoleID int  `json:"roleId"`
 }

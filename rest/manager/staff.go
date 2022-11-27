@@ -28,12 +28,15 @@ func (h *ManagerHandler) RegisterStaff(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-
-	if err := h.sm.CreateAccount(request); err != nil {
+	
+	code, err := h.sm.CreateAccount(request);
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, "")
+
+	request.Code = code
+	c.JSON(http.StatusOK, request)
 }
 
 func (h *ManagerHandler) UpdateStaffInfo(c *gin.Context) {
