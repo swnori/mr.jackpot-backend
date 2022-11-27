@@ -9,34 +9,19 @@ import (
 
 
 type OrderProvider interface {
-	GetOrderInfo(int) (model.OrderResponse, error)
+	GetOrderInfo(orderid int) (model.OrderResponse, error)
 	GetOrderState(int) (string, error)
 	GetAllOrderInfo() []model.OrderResponse
 	CheckOrderOwner(orderid, userid int) error
 }
 
 
+func (o *OrderManager) GetOrderInfo(orderid int) (model.OrderResponse, error) {
 
-func (o *OrderManager) GetOrderInfo(userid int) (model.OrderResponse, error) {
-	var (
-		orderid int
-		exist bool
-	)
-
-	for id, order := range o.Orders {
-		if order.GetOrderInfo().OwnerID == userid {
-			orderid = id
-			exist = true
-			break			
-		}
-	}
-
+	order, exist := o.Orders[orderid]
 	if !exist {
-		return model.OrderResponse{}, errors.New("NNO ORDER")
+		return model.OrderResponse{}, errors.New("orderid not match with order")
 	}
-
-	order := o.Orders[orderid]
-
 	info := order.GetOrderInfo()
 
 	return model.OrderResponse{

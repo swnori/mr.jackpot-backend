@@ -2,6 +2,7 @@ package order
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"mr.jackpot-backend/model"
@@ -15,9 +16,15 @@ type CustomerOrderService interface {
 }
 
 func (h *OrderHandler) GetOrderInfo(c *gin.Context) {
-	userid := c.Keys["userid"].(int)
 
-	order, err := h.order.GetOrderInfo(userid);
+	orderidString := c.Query("orderid")
+	orderid, err := strconv.Atoi(orderidString)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	order, err := h.order.GetOrderInfo(orderid);
 	if err != nil {
 		c.JSON(http.StatusOK, err.Error())
 		return
@@ -27,7 +34,6 @@ func (h *OrderHandler) GetOrderInfo(c *gin.Context) {
 		"orderinfo": order.AllOrderInfoResponse,
 		"order": order.Order,
 	})
-
 }
 
 func (h *OrderHandler) CreateOrder(c *gin.Context) {

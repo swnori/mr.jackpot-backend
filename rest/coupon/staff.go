@@ -42,7 +42,7 @@ func (h *CouponHandler) IssueCoupon(c *gin.Context) {
 
 func (h *CouponHandler) DeleteCoupon(c *gin.Context) {
 	c.JSON(http.StatusBadGateway, "not yet recovered")
-	return
+/*
 	var coupon model.CouponInfo
 
 	if err := c.ShouldBindJSON(&coupon); err != nil {
@@ -56,4 +56,5 @@ func (h *CouponHandler) DeleteCoupon(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, "")
+*/
 }
