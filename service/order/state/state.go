@@ -15,6 +15,7 @@ type OrderInterface interface {
 
 type State struct {
 	ID int
+	StateID int
 	Order OrderInterface
 	NextStep *OrderState
 	CeasedStep *OrderState

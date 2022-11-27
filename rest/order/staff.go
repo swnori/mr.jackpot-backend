@@ -53,6 +53,10 @@ func (h *OrderHandler) RejectOrder(c *gin.Context) {
 
 
 func (h *OrderHandler) GetAllOrderList(c *gin.Context) {
-	orderlist := h.order.GetAllOrderInfo()
+	orderlist, err := h.order.GetAllOrderSummary()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
 	c.JSON(http.StatusOK, orderlist)
 }

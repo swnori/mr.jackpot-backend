@@ -41,7 +41,7 @@ func (q *Queries) CreateStaffAuth(ctx context.Context, arg CreateStaffAuthParams
 }
 
 const getAllStaffInfo = `-- name: GetAllStaffInfo :many
-SELECT staff.staff_id, status, role.tag, staff.name, score, created_at, code
+SELECT status, role.tag, staff.name, score, created_at, code, staff.staff_id
 FROM staff, role, staff_auth
 WHERE staff.role_id = role.role_id
 AND staff.status = TRUE
@@ -49,13 +49,13 @@ AND staff.staff_id = staff_auth.staff_id
 `
 
 type GetAllStaffInfoRow struct {
-	StaffID   int64
 	Status    bool
 	Tag       string
 	Name      string
 	Score     int32
 	CreatedAt time.Time
 	Code      string
+	StaffID   int64
 }
 
 func (q *Queries) GetAllStaffInfo(ctx context.Context) ([]GetAllStaffInfoRow, error) {
@@ -68,13 +68,13 @@ func (q *Queries) GetAllStaffInfo(ctx context.Context) ([]GetAllStaffInfoRow, er
 	for rows.Next() {
 		var i GetAllStaffInfoRow
 		if err := rows.Scan(
-			&i.StaffID,
 			&i.Status,
 			&i.Tag,
 			&i.Name,
 			&i.Score,
 			&i.CreatedAt,
 			&i.Code,
+			&i.StaffID,
 		); err != nil {
 			return nil, err
 		}

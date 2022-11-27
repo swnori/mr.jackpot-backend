@@ -26,3 +26,11 @@ type OrderFormed struct {
 	Price     int    `json:"price"`
 	DinnerList []string `json:"dinnerList"`
 }
+
+type OrderSummary struct {
+	OrderID   int    `json:"orderId"`
+	StateID   int    `json:"stateId"`
+	ReserveAt string `json:"reserveAt"`
+	Price     int    `json:"price"`
+	DinnerList []string `json:"dinnerList"`
+}

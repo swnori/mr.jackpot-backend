@@ -12,10 +12,28 @@ type OrderProvider interface {
 	GetOrderInfo(orderid int) (model.OrderResponse, error)
 	GetOrderState(int) (string, error)
 	GetAllOrderInfo() []model.OrderResponse
-	CheckOrderOwner(orderid, userid int) error
 	GetOrderIdByUserId(userid int) (int, error)
-	//GetAllOrderInfoSummary()
+	GetAllOrderSummary() ([]model.OrderSummary, error)
 }
+
+func (o *OrderManager) GetAllOrderSummary() ([]model.OrderSummary, error) {
+	orderlist := make([]model.OrderSummary, 0)
+	
+	for id, order := range o.Orders {
+		orderinfo := order.GetOrderInfo()
+
+		orderlist = append(orderlist, model.OrderSummary{
+			OrderID: id,
+			StateID: orderinfo.ID,
+			ReserveAt: orderinfo.CreatedAt.Format(model.TimeSecondFormat),
+			Price: orderinfo.Price,
+			DinnerList: []string{"not yet :("},
+		})
+	}
+
+	return orderlist, nil
+}
+
 
 
 func (o *OrderManager) GetOrderIdByUserId(userid int) (int, error) {

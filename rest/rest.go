@@ -132,6 +132,7 @@ func RunAPI(address string) error {
 			var h order.StaffOrderService = order.NewOrderHandler()
 
 			Order.GET("/list", h.GetAllOrderList)
+			
 		}
 
 		Task := Staff.Group("/task")
