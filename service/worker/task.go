@@ -1,7 +1,7 @@
 package worker
 
 
-
+/*
 type Task struct {
 	OrderID int
 	TaskID  int
@@ -20,3 +20,4 @@ func (t *Task) GetTaskOrderID() int {
 func (t *Task) GetTaskStatus() string {
 	return t.Status
 }
+*/

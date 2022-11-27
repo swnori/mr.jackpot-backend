@@ -2,21 +2,19 @@ package worker
 
 import (
 	"errors"
-
-	"mr.jackpot-backend/model"
 )
 
 
 
 type Worker struct {
 	Role     string
-	TaskList map[int]*Task
+	TaskList map[int][]int
 }
 
 func NewWorker(role string) *Worker {
 	return &Worker{
 		Role: role,
-		TaskList: make(map[int]*Task),
+		TaskList: make(map[int][]int),
 	}
 }
 
@@ -26,7 +24,7 @@ func (w *Worker) AssignTask(taskid int) error {
 		return errors.New("")
 	}
 
-	w.TaskList[taskid].SetTaskStatus(model.TaskStatusWaiting)
+	//w.TaskList[taskid].SetTaskStatus(model.TaskStatusWaiting)
 	return nil
 }
 
@@ -36,7 +34,7 @@ func (w *Worker) StartTask(taskid int) error {
 		return errors.New("")
 	}
 
-	w.TaskList[taskid].SetTaskStatus(model.TaskStatusWorking)
+	//w.TaskList[taskid].SetTaskStatus(model.TaskStatusWorking)
 	return nil
 }
 
@@ -49,9 +47,9 @@ func (w *Worker) RemoveTask(taskid int) error {
 	delete(w.TaskList, taskid);
 	return nil
 }
-
-func (w *Worker) GetTaskList() []Task {
-	tasklist := make([]Task, 0)
+/*
+func (w *Worker) GetTaskList() []int {
+	tasklist := make([]int, 0)
 	
 	for taskid, task := range w.TaskList {
 		var status string
@@ -60,11 +58,8 @@ func (w *Worker) GetTaskList() []Task {
 		} else {
 			status = model.TaskStatusWorking
 		}
-		tasklist = append(tasklist, Task{
-			TaskID: taskid,
-			Status: status,
-		})
+		tasklist = append(tasklist,)
 	}
 
 	return tasklist
-}
+}*/

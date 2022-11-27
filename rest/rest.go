@@ -136,7 +136,7 @@ func RunAPI(address string) error {
 		}
 		{
 			//Order.GET("/menulist", h.GetCookTask)
-			//Order.GET("/dinnerlist", h.GetStylerTask)
+			//Order.GET("/dinnerlist", h.GetDeliveryTask)
 		}
 
 		Task := Staff.Group("/task")
@@ -146,6 +146,8 @@ func RunAPI(address string) error {
 			Task.GET("/list", h.GetAllTaskList)
 			Task.POST("/nextstep", h.SetTaskNextStatus)
 			Task.POST("/previoustep", h.SetTaskPreviousStatus)
+
+			Task.GET("/tasklist", h.GetTaskListByRole)
 		}
 	}
 

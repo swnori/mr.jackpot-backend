@@ -14,6 +14,7 @@ type StartedState struct {
 }
 
 func (o *StartedState) ProcessStep() error {
+
 	/*
 		taskList := o.Order.GetAllTaskList()
 

@@ -79,6 +79,8 @@ func (h *StaffAuthHandler) Signin(c *gin.Context) {
 		return
 	}
 
+	c.Set("role", staffinfo.Role)
+
 	switch (staffinfo.Role) {
 	case "cook":
 		worker.Cook.AddWorker(staffid)

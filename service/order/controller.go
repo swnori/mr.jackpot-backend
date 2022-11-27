@@ -79,6 +79,9 @@ func (o *OrderManager) FinishOrderStep(id int) error {
 		order.SetState(order.accepted)
 		break
 	case 5:
+		order.SetState(order.started)
+		break
+	case 6:
 		order.SetState(order.prepared)
 		break
 	default:

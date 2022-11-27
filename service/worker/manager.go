@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"mr.jackpot-backend/database/db"
-	"mr.jackpot-backend/model"
 )
 
 
@@ -12,7 +11,7 @@ import (
 type WorkerController interface {
 	AddWorker(workerid int) error
 	RemoveWorker(workerid int) error
-	GetSubtaskList(workerid int) ([]Task, error)
+	GetSubtaskList(workerid int) ([]int, error)
 
 	StartTaskProcess(taskid int, subtask []int) error
 	FinishTaskProcess(taskid int) error
@@ -24,7 +23,7 @@ type WorkerController interface {
 type WorkerManager struct {
 	db db.StaffLayer
 	Workers map[int]*Worker
-	Tasklist map[int][]*Task
+	Tasklist map[int][]int
 }
 
 
@@ -45,7 +44,7 @@ func (w *WorkerManager) AddWorker(workerid int) error {
 	if len(w.Workers) == 1 {
 		for _, subtastlist := range w.Tasklist {
 			for _, subtask := range subtastlist {
-				if err := w.AssignSubTask(workerid, subtask); err != nil {
+				if err := w.AssignSubTask(workerid, []int{subtask}); err != nil {
 					return err
 				}
 			}
@@ -67,18 +66,16 @@ func (w *WorkerManager) RemoveWorker(workerid int) error {
 	}
 
 	delete(w.Workers, workerid);
-
+/*
 	for taskid := range tasklist {
 		workerid, err := w.GetLeastWorker()
 		if err != nil {
 			return nil
 		}
 
-		w.AssignSubTask(workerid, &Task{
-			TaskID: taskid, // ????
-		})
+		w.AssignSubTask(workerid, tasklist)
 	}
-
+*/
 	return nil
 }
 
@@ -97,7 +94,7 @@ func (w *WorkerManager) GetLeastWorker() (workerid int, err error) {
 	return
 }
 
-func (w *WorkerManager) AssignSubTask(workerid int, task *Task) error {
+func (w *WorkerManager) AssignSubTask(workerid int, task []int) error {
 	/*
 	worker, exist :=  w.Workers[workerid]
 	if exist {
@@ -155,11 +152,7 @@ func (w *WorkerManager) StartTaskProcess(orderid, taskid int, subtasklist []int)
 	}
 
 	for _, subtask := range subtasklist {
-		w.Tasklist[taskid] = append(w.Tasklist[taskid], &Task{
-			OrderID: orderid,
-			TaskID: subtask,
-			Status: model.TaskStatusWaiting,
-		})
+		w.Tasklist[taskid] = append(w.Tasklist[taskid], subtask)
 	}
 
 	return nil
@@ -170,10 +163,12 @@ func (w *WorkerManager) FinishTaskProcess(taskid int) error {
 	return errors.New("")
 }
 
-func (w *WorkerManager) GetSubtaskList(workerid int) ([]Task, error) {
-	worker, exist := w.Workers[workerid]
-	if !exist {
-		return nil, errors.New("")
-	}
-	return worker.GetTaskList(), nil
+func (w *WorkerManager) GetSubtaskList(workerid int) ([]int, error) {
+	return []int{}, nil
+
+	//worker, exist := w.Workers[workerid]
+	//if !exist {
+	//	return nil, errors.New("")
+	//}
+	//return worker.GetTaskList(), nil
 }

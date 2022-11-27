@@ -6,6 +6,7 @@ type TaskService interface {
 	GetAllTaskList(c *gin.Context)
 	SetTaskNextStatus(c *gin.Context)
 	SetTaskPreviousStatus(c *gin.Context)
+	GetTaskListByRole(c *gin.Context)
 }
 
 type TaskHandler struct {
