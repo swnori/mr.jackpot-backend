@@ -11,7 +11,7 @@ type StafAuthService interface {
 	AuthService
 
 	CheckAuthority(user model.Staff) (int, error)
-	CreateAccount(staff model.StaffRegister) (string, error)
+	CreateAccount(staff model.StaffRegister) (model.StaffInfo, error)
 	RemoveAccount(staffid int) error
 }
 
@@ -27,7 +27,7 @@ func (m *StaffManager) CheckAuthority(user model.Staff) (userid int, err error) 
 	return
 }
 
-func (m *StaffManager) CreateAccount(staff model.StaffRegister) (string, error) {
+func (m *StaffManager) CreateAccount(staff model.StaffRegister) (model.StaffInfo, error) {
 
 	var prefix string
 	if staff.RoleID == 1 {
@@ -37,11 +37,11 @@ func (m *StaffManager) CreateAccount(staff model.StaffRegister) (string, error) 
 	} else if staff.RoleID == 3 {
 		prefix = "D-"
 	} else {
-		return "", errors.New("unexpected roleId")
+		return model.StaffInfo{}, errors.New("unexpected roleId")
 	}
 
 	staff.Code = prefix + util.GetRandomNumber(8)
-	return staff.Code, m.db.CreateAccount(staff)
+	return m.db.CreateAccount(staff)
 }
 
 func (m *StaffManager) RemoveAccount(staffid int) error {

@@ -29,14 +29,13 @@ func (h *ManagerHandler) RegisterStaff(c *gin.Context) {
 		return
 	}
 	
-	code, err := h.sm.CreateAccount(request);
+	staff, err := h.sm.CreateAccount(request);
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	request.Code = code
-	c.JSON(http.StatusOK, request)
+	c.JSON(http.StatusOK, staff)
 }
 
 func (h *ManagerHandler) UpdateStaffInfo(c *gin.Context) {

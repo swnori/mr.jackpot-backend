@@ -23,7 +23,7 @@ func GetRandomNumber(length int) string {
 
 	b := make([]byte, length)
 	for i := range b {
-		b[i] = numset[seededRand.Intn(len(charset))]
+		b[i] = numset[seededRand.Intn(len(numset))]
 	}
 	return string(b)
 }

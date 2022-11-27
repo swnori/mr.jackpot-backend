@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 
 	"mr.jackpot-backend/database/orm"
 	"mr.jackpot-backend/model"
@@ -12,7 +13,7 @@ import (
 
 type StaffLayer interface {
 	GetStaffID(code string) (int, error)
-	CreateAccount(staff model.StaffRegister) error
+	CreateAccount(staff model.StaffRegister) (model.StaffInfo, error)
 	SetAccounQuit(staffid int) error
 
 	GetStaffRole(staffid int) (string, error)
@@ -43,7 +44,7 @@ func (db *StaffDB) GetStaffID(code string) (int, error) {
 	return int(staffid), err
 }
 
-func (db *StaffDB) CreateAccount(staff model.StaffRegister) error {
+func (db *StaffDB) CreateAccount(staff model.StaffRegister) (model.StaffInfo, error) {
 	ctx := context.Background()
 
 	result, err :=db.q.CreateStaffAccount(ctx, orm.CreateStaffAccountParams{
@@ -51,18 +52,25 @@ func (db *StaffDB) CreateAccount(staff model.StaffRegister) error {
 		RoleID: int32(staff.RoleID),
 	})
 	if err != nil {
-		return err
+		return model.StaffInfo{}, err
 	}
-
 	staffid, err := result.LastInsertId()
 	if err != nil {
-		return err
+		return model.StaffInfo{}, err
 	}
 
-	return db.q.CreateStaffAuth(ctx, orm.CreateStaffAuthParams{
-		StaffID: staffid,
+	fmt.Println(staffid)
+
+	staffs, err := db.q.GetStaffInfo(ctx, staffid)
+	return model.StaffInfo{
+		ID: int(staffid),
+		Name: staff.Name,
+		Status: staffs.Status,
+		Role: staffs.Tag,
+		Score: int(staffs.Score),
 		Code: staff.Code,
-	})
+		CreatedAt: staffs.CreatedAt.Format(model.TimeDayFormat),
+	}, err
 }
 
 func (db *StaffDB) SetAccounQuit(staffid int) error {

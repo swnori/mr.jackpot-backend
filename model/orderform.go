@@ -32,5 +32,5 @@ type OrderSummary struct {
 	StateID   int       `json:"stateId"`
 	ReserveAt string    `json:"reserveAt"`
 	Price     int       `json:"price"`
-	DinnerList []string `json:"dinnerList"`
+	DinnerList []int    `json:"dinnerList"`
 }

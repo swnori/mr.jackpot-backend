@@ -22,12 +22,17 @@ func (o *OrderManager) GetAllOrderSummary() ([]model.OrderSummary, error) {
 	for id, order := range o.Orders {
 		orderinfo := order.GetOrderInfo()
 
+		dinnerlist := make([]int, 0)
+		for _, dinner := range order.Order.DinnerList {
+			dinnerlist = append(dinnerlist, dinner.DinnerId)
+		}
+
 		orderlist = append(orderlist, model.OrderSummary{
 			OrderID: id,
 			StateID: orderinfo.ID,
 			ReserveAt: orderinfo.CreatedAt.Format(model.TimeSecondFormat),
 			Price: orderinfo.Price,
-			DinnerList: []string{"not yet :("},
+			DinnerList: dinnerlist,
 		})
 	}
 
