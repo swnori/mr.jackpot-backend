@@ -15,7 +15,7 @@ type CouponLayer interface {
 	GetCouponInfo(couponid int) (model.CouponInfo, error)
 	GetCouponListByID(userid int) ([]model.CouponInfo, error)
 
-	CreateCoupon(model.CouponInfo) (int, error)
+	CreateCoupon(model.CouponInfo) (model.CouponInfo, error)
 	GetIssuedCouponList() ([]model.CouponInfo, error)
 	DeleteCoupon(int) error
 	UseCoupon(userid, couponid int) error
@@ -59,7 +59,7 @@ func (db *CouponDB) GetCouponInfo(couponid int) (model.CouponInfo, error) {
 		ID:        int(coupon.CouponID),
 		Title:     coupon.Title.String,
 		Message:   coupon.Description.String,
-		ExpiresAt: coupon.ExpiresAt,
+		ExpiresAt: coupon.ExpiresAt.Format(model.TimeDayFormat),
 	}, err
 }
 
@@ -80,15 +80,20 @@ func (db *CouponDB) GetCouponListByID(userid int) ([]model.CouponInfo, error) {
 			Amount: int(coupon.Amount),
 			Title: coupon.Title.String,
 			Message: coupon.Description.String,
-			ExpiresAt: coupon.ExpiresAt,
+			ExpiresAt: coupon.ExpiresAt.Format(model.TimeDayFormat),
 		})
 	}
 
 	return CouponList, err
 }
 
-func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (int, error) {
+func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (model.CouponInfo, error) {
 	ctx := context.Background()
+
+	expireTime, err := time.Parse(model.TimeSecondFormat, coupon.ExpiresAt)
+	if err != nil {
+		return model.CouponInfo{}, err
+	}
 
 	result, err := db.q.IssueCoupon(ctx, orm.IssueCouponParams{
 		Code:   coupon.Code,
@@ -101,15 +106,12 @@ func (db *CouponDB) CreateCoupon(coupon model.CouponInfo) (int, error) {
 			String: coupon.Message,
 			Valid:  true,
 		},
-		ExpiresAt: coupon.ExpiresAt,
+		ExpiresAt: expireTime,
 	})
 
-	if err != nil {
-		return 0, err
-	}
-
 	couponID, err := result.LastInsertId()
-	return int(couponID), err
+	coupon.ID = int(couponID)
+	return coupon, err
 }
 
 func (db *CouponDB) GetIssuedCouponList() ([]model.CouponInfo, error) {
@@ -128,7 +130,8 @@ func (db *CouponDB) GetIssuedCouponList() ([]model.CouponInfo, error) {
 			Code:      coupon.Code,
 			Title:     coupon.Title.String,
 			Message:   coupon.Description.String,
-			ExpiresAt: coupon.ExpiresAt,
+			CreatedAt: coupon.CreatedAt.Format(model.TimeDayFormat),
+			ExpiresAt: coupon.ExpiresAt.Format(model.TimeDayFormat),
 		})
 	}
 

@@ -31,15 +31,24 @@ AND owned.coupon_id = issued.coupon_id
 AND owned.valid IS TRUE
 `
 
-func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]CouponIssued, error) {
+type GetCouponAvailableRow struct {
+	CouponID    int64
+	Code        string
+	Amount      int32
+	Title       sql.NullString
+	Description sql.NullString
+	ExpiresAt   time.Time
+}
+
+func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]GetCouponAvailableRow, error) {
 	rows, err := q.db.QueryContext(ctx, getCouponAvailable, ownerID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []CouponIssued
+	var items []GetCouponAvailableRow
 	for rows.Next() {
-		var i CouponIssued
+		var i GetCouponAvailableRow
 		if err := rows.Scan(
 			&i.CouponID,
 			&i.Code,
@@ -62,7 +71,7 @@ func (q *Queries) GetCouponAvailable(ctx context.Context, ownerID int64) ([]Coup
 }
 
 const getCouponInfo = `-- name: GetCouponInfo :one
-SELECT coupon_id, code, amount, title, description, expires_at
+SELECT coupon_id, code, amount, title, description, created_at, expires_at
 FROM coupon_issued
 WHERE coupon_id = (?)
 `
@@ -76,13 +85,14 @@ func (q *Queries) GetCouponInfo(ctx context.Context, couponID int64) (CouponIssu
 		&i.Amount,
 		&i.Title,
 		&i.Description,
+		&i.CreatedAt,
 		&i.ExpiresAt,
 	)
 	return i, err
 }
 
 const getCouponIssued = `-- name: GetCouponIssued :many
-SELECT coupon_id, code, amount, title, description, expires_at
+SELECT coupon_id, code, amount, title, description, created_at, expires_at
 FROM coupon_issued
 `
 
@@ -101,6 +111,7 @@ func (q *Queries) GetCouponIssued(ctx context.Context) ([]CouponIssued, error) {
 			&i.Amount,
 			&i.Title,
 			&i.Description,
+			&i.CreatedAt,
 			&i.ExpiresAt,
 		); err != nil {
 			return nil, err
