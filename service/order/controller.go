@@ -101,6 +101,10 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 	}
 	o.Menu = menulist
 
+	sort.Slice(menulist, func(i, j int) bool {
+		return menulist[i].ID < menulist[j].ID
+	})
+
 	dinnerlist := make([]model.DinnerFormed, 0)
 	for _, dinner := range neworder.DinnerList {
 		menulist := make([]int, 0)
@@ -117,6 +121,11 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 			MenuList: menulist,
 		})
 	}
+
+	sort.Slice(dinnerlist, func(i, j int) bool {
+		return dinnerlist[i].ID < dinnerlist[j].ID
+	})
+
 	o.Dinner = dinnerlist
 
 	return nil
