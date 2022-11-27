@@ -80,8 +80,18 @@ func (h *StaffAuthHandler) Signin(c *gin.Context) {
 	}
 
 	switch (staffinfo.Role) {
+	case "cook":
+		worker.Cook.AddWorker(staffid)
+		break
+	case "styler":
+		worker.Styler.AddWorker(staffid)
+		break
 	case "delivery":
-		worker.
+		worker.Delivery.AddWorker(staffid)
+		break
+	default:
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
 	}
 
 	if staffinfo.Role == "CEO" {

@@ -17,7 +17,7 @@ func (w *StylerManager) FinishTaskProcess(orderid int) error {
 	return w.o.FinishOrderStep(orderid);
 }
 
-var Styler *StylerManager
+var Styler = StylerManager{}
 
 
 func init() {
