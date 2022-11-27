@@ -13,6 +13,18 @@ type OrderProvider interface {
 	GetOrderState(int) (string, error)
 	GetAllOrderInfo() []model.OrderResponse
 	CheckOrderOwner(orderid, userid int) error
+	GetOrderIdByUserId(userid int) (int, error)
+}
+
+
+func (o *OrderManager) GetOrderIdByUserId(userid int) (int, error) {
+	for orderid, order := range o.Orders {
+		if order.GetOrderInfo().OwnerID == userid {
+			return orderid, nil
+		}
+	}
+
+	return 0, errors.New("no order match")
 }
 
 

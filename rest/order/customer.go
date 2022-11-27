@@ -17,11 +17,26 @@ type CustomerOrderService interface {
 
 func (h *OrderHandler) GetOrderInfo(c *gin.Context) {
 
+	var (
+		orderid int
+		userid int
+		err error
+	)
 	orderidString := c.Query("orderid")
-	orderid, err := strconv.Atoi(orderidString)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
-		return
+	if orderidString != "" {
+		orderid, err = strconv.Atoi(orderidString)
+
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, err.Error())
+			return
+		}
+	} else {
+		userid = c.Keys["userid"].(int)
+		orderid, err = h.order.GetOrderIdByUserId(userid)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, err.Error())
+			return
+		}
 	}
 
 	order, err := h.order.GetOrderInfo(orderid);
