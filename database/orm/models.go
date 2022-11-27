@@ -192,6 +192,7 @@ type StaffAuth struct {
 
 type State struct {
 	StateID int32
+	Tag     string
 	Name    string
 }
 

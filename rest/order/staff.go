@@ -11,6 +11,7 @@ type StaffOrderService interface {
 	GetAllOrderList(c *gin.Context)
 	AcceptOrder(c *gin.Context)
 	RejectOrder(c *gin.Context)
+	StartOrder(c *gin.Context)
 }
 
 
@@ -60,3 +61,8 @@ func (h *OrderHandler) GetAllOrderList(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, orderlist)
 }
+
+func (h *OrderHandler) StartOrder(c *gin.Context) {
+	c.JSON(http.StatusOK, "preparing...")
+}
+

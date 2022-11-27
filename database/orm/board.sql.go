@@ -202,15 +202,20 @@ SELECT state_id, name
 FROM state
 `
 
-func (q *Queries) ReadOrderState(ctx context.Context) ([]State, error) {
+type ReadOrderStateRow struct {
+	StateID int32
+	Name    string
+}
+
+func (q *Queries) ReadOrderState(ctx context.Context) ([]ReadOrderStateRow, error) {
 	rows, err := q.db.QueryContext(ctx, readOrderState)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []State
+	var items []ReadOrderStateRow
 	for rows.Next() {
-		var i State
+		var i ReadOrderStateRow
 		if err := rows.Scan(&i.StateID, &i.Name); err != nil {
 			return nil, err
 		}

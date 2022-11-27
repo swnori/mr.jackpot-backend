@@ -132,7 +132,6 @@ func RunAPI(address string) error {
 			var h order.StaffOrderService = order.NewOrderHandler()
 
 			Order.GET("/list", h.GetAllOrderList)
-			
 		}
 
 		Task := Staff.Group("/task")
@@ -140,8 +139,8 @@ func RunAPI(address string) error {
 			var h task.TaskService = task.NewTaskHandler()
 
 			Task.GET("/list", h.GetAllTaskList)
-			Task.POST("/nextstatus")
-			Task.POST("/previousstatus")
+			Task.POST("/nextstep", h.SetTaskNextStatus)
+			Task.POST("/previoustep", h.SetTaskPreviousStatus)
 		}
 	}
 
@@ -154,6 +153,7 @@ func RunAPI(address string) error {
 
 			Order.POST("/accept", h.AcceptOrder)
 			Order.POST("/reject", h.RejectOrder)
+			Order.POST("/start", h.StartOrder)
 		}
 
 		Staff := Ceo.Group("/staff")

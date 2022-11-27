@@ -37,9 +37,3 @@ type StyleBoardItem struct {
 	Price int    `json:"price"`
 	Desc  string `json:"desc"`
 }
-
-type OrderState struct {
-	Id int
-	State string
-}
-

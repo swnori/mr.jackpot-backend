@@ -17,7 +17,7 @@ var (
 )
 
 
-var StateList []string = []string{
+var StateList = []string{
 	StateCreated,
 	StateAccepted,
 	StateStarted,
@@ -31,4 +31,9 @@ var StateList []string = []string{
 	StateCeased,
 	StateCanceled,
 	StateFinished,
+}
+
+type OrderState struct {
+	Id int       `json:"id"`
+	State string `json:"state"`
 }

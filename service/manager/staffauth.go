@@ -28,7 +28,20 @@ func (m *StaffManager) CheckAuthority(user model.Staff) (userid int, err error) 
 }
 
 func (m *StaffManager) CreateAccount(staff model.StaffRegister) error {
-	staff.Code = util.GetRandomString(8)
+
+	var prefix string
+	if staff.RoleID == 1 {
+		prefix = "C-"
+	} else if staff.RoleID == 2 {
+		prefix = "S-"
+	} else if staff.RoleID == 3 {
+		prefix = "D-"
+	} else {
+		return errors.New("unexpected roleId")
+	}
+
+	staff.Code = prefix + util.GetRandomString(8)
+
 	return m.db.CreateAccount(staff)
 }
 

@@ -237,6 +237,7 @@ CREATE TABLE `order` (
 
 CREATE TABLE state (
     state_id tinyint     NOT NULL AUTO_INCREMENT,
+    tag      varchar(64) NOT NULL,
     name     varchar(64) NOT NULL,
 
     PRIMARY KEY (state_id)
@@ -293,6 +294,14 @@ CREATE TABLE role (
     PRIMARY KEY (role_id)
 );
 
+CREATE TABLE job (
+    job_id  tinyint     NOT NULL AUTO_INCREMENT,
+    tag     varchar(64) NOT NULL,
+    name    varchar(64) NOT NULL,
+
+    PRIMARY KEY (role_id)
+);
+
 CREATE TABLE menu_role (
     menu_id tinyint NOT NULL,
     role_id tinyint NOT NULL,
@@ -306,6 +315,7 @@ CREATE TABLE staff (
     staff_id   bigint      NOT NULL AUTO_INCREMENT,
     status     boolean     NOT NULL DEFAULT TRUE,
     role_id    tinyint     NOT NULL,
+    job_id     tinyint,
     name       varchar(16) NOT NULL,
     score      tinyint     NOT NULL DEFAULT 0,
     created_at timestamp   NOT NULL DEFAULT NOW(),
