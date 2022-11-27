@@ -260,7 +260,7 @@ CREATE TABLE ordered_dinner (
 
     PRIMARY KEY (id),
     FOREIGN KEY (order_id)  REFERENCES `order` (order_id),
-    FOREIGN KEY (dinner_id) REFERENCES style (style_id),
+    FOREIGN KEY (dinner_id) REFERENCES dinnner (dinner_id),
     FOREIGN KEY (style_id)  REFERENCES style (style_id)
 );
 

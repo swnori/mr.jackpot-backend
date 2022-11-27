@@ -14,6 +14,7 @@ type OrderProvider interface {
 	GetAllOrderInfo() []model.OrderResponse
 	CheckOrderOwner(orderid, userid int) error
 	GetOrderIdByUserId(userid int) (int, error)
+	//GetAllOrderInfoSummary()
 }
 
 
