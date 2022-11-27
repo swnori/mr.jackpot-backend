@@ -10,7 +10,7 @@ import (
 
 type OrderProvider interface {
 	GetOrderInfo(orderid int) (model.OrderResponse, error)
-	GetOrderState(int) (string, error)
+	GetOrderState(int) (int, error)
 	GetAllOrderInfo() []model.OrderResponse
 	GetOrderIdByUserId(userid int) (int, error)
 	GetAllOrderSummary() ([]model.OrderSummary, error)
@@ -29,7 +29,7 @@ func (o *OrderManager) GetAllOrderSummary() ([]model.OrderSummary, error) {
 
 		orderlist = append(orderlist, model.OrderSummary{
 			OrderID: id,
-			StateID: orderinfo.ID,
+			StateID: order.GetOrderState(),
 			ReserveAt: orderinfo.CreatedAt.Format(model.TimeSecondFormat),
 			Price: orderinfo.Price,
 			DinnerList: dinnerlist,
@@ -90,10 +90,10 @@ func (o *OrderManager) GetAllOrderInfo() []model.OrderResponse {
 	return orders
 }
 
-func (o *OrderManager) GetOrderState(orderid int) (string, error) {
+func (o *OrderManager) GetOrderState(orderid int) (int, error) {
 	order, exist := o.Orders[orderid]
 	if !exist {
-		return "", errors.New("")
+		return 0, errors.New("")
 	}
 
 	return order.GetOrderState(), nil

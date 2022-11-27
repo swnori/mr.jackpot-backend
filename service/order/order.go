@@ -37,6 +37,7 @@ func NewOrder(id int) *Order {
 
 	order.created = &state.AcceptedState{
 		ID: id,
+		StateID: 4,
 		Order: order,
 		NextStep: &order.accepted,
 		CeasedStep: &order.rejected,
@@ -44,6 +45,7 @@ func NewOrder(id int) *Order {
 
 	order.accepted = &state.AcceptedState{
 		ID: id,
+		StateID: 5,
 		Order: order,
 		NextStep: &order.started,
 		CeasedStep: &order.canceled,
@@ -51,38 +53,62 @@ func NewOrder(id int) *Order {
 
 	order.started = &state.StartedState{
 		ID: id,
+		StateID: 6,
 		Order: order,
 		NextStep: &order.prepared,
 	}
 
 	order.prepared = &state.PreparedState{
 		ID: id,
+		StateID: 7,
 		Order: order,
 		NextStep: &order.delivered,
 	}
 
 	order.delivering = &state.DeliveringState{
 		ID: id,
+		StateID: 8,
 		Order: order,
 		NextStep: &order.accepted,
 	}
 
 	order.delivered = &state.DeliveredState{
 		ID: id,
+		StateID: 9,
 		Order: order,
 		NextStep: &order.requested,
 	}
 
 	order.requested = &state.RequestedState{
 		ID: id,
+		StateID: 10,
 		Order: order,
 		NextStep: &order.collected,
 	}
 
 	order.collected = &state.CollectedState{
 		ID: id,
+		StateID: 11,
 		Order: order,
 		NextStep: &order.finished,
+	}
+
+	order.rejected = &state.RejectedState{
+		ID: id,
+		StateID: 12,
+		Order: order,
+	}
+
+	order.canceled = &state.CanceledState{
+		ID: id,
+		StateID: 13,
+		Order: order,
+	}
+
+	order.finished = &state.FinishedState{
+		ID: id,
+		StateID: 14,
+		Order: order,
 	}
 
 	order.currentState = order.created
@@ -121,8 +147,8 @@ func (o *Order) GetNextStep() *state.OrderState {
 	return o.currentState.GetNextStep()
 }
 
-func (o *Order) GetOrderState() string {
-	return o.currentState.GetStateName()
+func (o *Order) GetOrderState() int {
+	return o.currentState.GetStateId()
 }
 
 func (o *Order) GetAllTaskList() map[int][]int {

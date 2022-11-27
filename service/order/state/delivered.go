@@ -3,15 +3,13 @@ package state
 import (
 	"errors"
 
-	"mr.jackpot-backend/model"
 )
-
-
 
 type DeliveredState struct {
 	State
-	ID int
-	Order OrderInterface
+	ID       int
+	StateID  int
+	Order    OrderInterface
 	NextStep *OrderState
 }
 
@@ -22,6 +20,6 @@ func (o *DeliveredState) CeaseStep() error {
 	return errors.New("")
 }
 
-func (o *DeliveredState) GetStateName() string {
-	return model.StateDelivered
+func (o *DeliveredState) GetStateId() int {
+	return o.StateID
 }

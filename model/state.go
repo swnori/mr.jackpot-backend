@@ -1,23 +1,23 @@
 package model
 
 var (
-	StateCreated    string = "Created"
-	StateAccepted   string = "Accepted"
-	StateStarted   string = "Started"
-	StateCooking    string = "Cooking"
-	StatePrepared   string = "Prepared"
-	StateDelivering string = "Delivering"
-	StateDelivered  string = "Delivered"
-	StateRequested  string = "Requested"
-	StateCollected  string = "Collected"
+	StateCreated    int = 4
+	StateAccepted   int = 5
+	StateStarted    int = 6
+	StateCooking    int = 7
+	StatePrepared   int = 8
+	StateDelivering int = 9
+	StateDelivered  int = 10
+	StateRequested  int = 11
+	StateCollected  int = 12
 	
-	StateCeased   string = "Ceased"
-	StateCanceled string = "Canceled"
-	StateFinished string = "Finished"
+	StateCeased   int = 13
+	StateCanceled int = 14
+	StateFinished int = 15
 )
 
 
-var StateList = []string{
+var StateList = []int{
 	StateCreated,
 	StateAccepted,
 	StateStarted,

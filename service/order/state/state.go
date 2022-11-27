@@ -1,12 +1,10 @@
 package state
 
- 
-
 type OrderState interface {
 	ProcessStep() error
 	CeaseStep() error
 	GetNextStep() *OrderState
-	GetStateName() string
+	GetStateId() int
 }
 
 type OrderInterface interface {
@@ -14,37 +12,13 @@ type OrderInterface interface {
 }
 
 type State struct {
-	ID int
-	StateID int
-	Order OrderInterface
-	NextStep *OrderState
+	ID         int
+	OrderID    int
+	Order      OrderInterface
+	NextStep   *OrderState
 	CeasedStep *OrderState
 }
 
 func (s *State) GetNextStep() *OrderState {
 	return s.NextStep
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
