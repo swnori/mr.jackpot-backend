@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"mr.jackpot-backend/model"
+	"mr.jackpot-backend/utility/util"
 )
 
 type StafAuthService interface {
@@ -27,6 +28,7 @@ func (m *StaffManager) CheckAuthority(user model.Staff) (userid int, err error) 
 }
 
 func (m *StaffManager) CreateAccount(staff model.StaffRegister) error {
+	staff.Code = util.GetRandomString(8)
 	return m.db.CreateAccount(staff)
 }
 

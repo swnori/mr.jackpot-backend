@@ -22,14 +22,14 @@ type StaffResponse struct {
 }
 
 type StaffInfo struct {
-	ID        int   
-	Status    bool
-	Code      string
-	Name      string
-	Role      string
-	Part      string
-	Score     int   
-	CreatedAt string
+	ID        int    `json:"id"`
+	Status    bool   `json:"-"`
+	Code      string `json:"code"`
+	Name      string `json:"name"`
+	Role      string `json:"role"`
+	Part      string `json:"part"`
+	Score     int    `json:"score"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type StaffRegister struct {

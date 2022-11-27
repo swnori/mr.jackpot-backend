@@ -31,7 +31,7 @@ AND staff.status = TRUE
 AND staff.staff_id = staff_auth.staff_id;
 
 -- name: GetAllStaffInfo :many
-SELECT staff.staff_id, status, role.tag, staff.name, score, created_at, code
+SELECT status, role.tag, staff.name, score, created_at, code, staff.staff_id
 FROM staff, role, staff_auth
 WHERE staff.role_id = role.role_id
 AND staff.status = TRUE
