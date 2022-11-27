@@ -3,12 +3,18 @@ package model
 
 
 type DinnerFormed struct {
-	ID       int
-	DinnerID int
-	MenuList []int
+	StateID   int
+	OrderedID int
+	ID        int
+	DinnerID  int
+	StyleID   int
+	MenuList  []int
 }
 
 type MenuFormed struct {
+	StateID    int
+	OrderedID  int
+	DinnerID   int
 	ID         int
 	MenuID     int
 	OptionList []int

@@ -15,8 +15,8 @@ type OrderManager struct {
 	Orders map[int]*Order
 	db db.OrderLayer
 
-	Dinner model.DinnerFormed
-	Menu model.MenuFormed
+	Dinner []model.DinnerFormed
+	Menu   []model.MenuFormed
 }
 
 var OrderManagers = &OrderManager{}

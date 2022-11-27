@@ -42,9 +42,17 @@ func (h *AuthMiddlewareHandler) SetAuthority(c *gin.Context) {
 		c.Next()
 		return
 	}
+	staff, err := h.m.GetUserInfo(userid)
+	if err != nil {
+		c.Set("status", model.UserStatusUnauthorized)
+		c.Set("userid", 0)
+		c.Next()
+		return
+	}
 
 	c.Set("status", status)
 	c.Set("userid", userid)
+	c.Set("role", staff.Role)
 	c.Next()
 }
 

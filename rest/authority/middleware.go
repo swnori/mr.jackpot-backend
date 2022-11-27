@@ -11,10 +11,12 @@ type AuthMiddlewareService interface {
 
 type AuthMiddlewareHandler struct {
 	token manager.TokenService
+	m manager.StaffService
 }
 
 func NewAuthMiddlewareHandler() *AuthMiddlewareHandler {
 	return &AuthMiddlewareHandler{
 		token: manager.DefaultToken,
+		m: manager.NewStaffManager(),
 	}
 }

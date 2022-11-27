@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"mr.jackpot-backend/model"
 	"mr.jackpot-backend/service/order"
 )
 
@@ -12,8 +13,37 @@ func (h *TaskHandler) GetAllTaskList(c *gin.Context) {
 }
 
 func (h *TaskHandler) SetTaskNextStatus(c *gin.Context) {
-	c.JSON(http.StatusOK, "preparing...")
+	role := c.Keys["role"].(string)
+	task := model.Task{}
+
+	if err := c.ShouldBindJSON(&task); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	switch (role) {
+	case "cook":
+		order.OrderManagers.SetMenuNextStep(task.ID)
+		c.JSON(http.StatusOK, "")
+		return
+
+	case "styler":
+		order.OrderManagers.SetDinnerNextStep(task.ID)
+		c.JSON(http.StatusOK, "")
+		break
+
+	case "delivery":
+		order.OrderManagers.FinishOrderStep(task.ID)
+		c.JSON(http.StatusOK, "")
+		break
+
+	default:
+		order.OrderManagers.FinishOrderStep(task.ID)
+		c.JSON(http.StatusOK, "")
+		break
+	}
 }
+
 
 func (h *TaskHandler) SetTaskPreviousStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, "preparing...")
@@ -21,24 +51,14 @@ func (h *TaskHandler) SetTaskPreviousStatus(c *gin.Context) {
 
 func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 	role := c.Keys["role"].(string)
-	
+
 	switch (role) {
 	case "cook":
-		idlist, err :=  order.OrderManagers.GetAllMenuInfo()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-		}
-		c.JSON(http.StatusOK, idlist)
-		break
-
+		c.JSON(http.StatusOK, order.OrderManagers.Menu)
+		return
 	case "styler":
-		idlist, err :=  order.OrderManagers.GetAllDinnerInfo()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-		}
-		c.JSON(http.StatusOK, idlist)
+		c.JSON(http.StatusOK, order.OrderManagers.Dinner)
 		break
-
 	case "delivery":
 		break
 	default:
