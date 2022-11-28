@@ -74,7 +74,14 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 		c.JSON(http.StatusOK, order.OrderManagers.Dinner)
 		return
 	case "delivery":
-		c.JSON(http.StatusOK, "")
+		for _, order := range order.OrderManagers.Orders {
+			state := order.GetOrderState()
+			if state == 6 || state == 7 || state == 9 {
+				c.JSON(http.StatusOK, order.GetOrderInfo())
+				return				
+			}
+		}
+		c.JSON(http.StatusOK, model.AllOrderInfo{})
 		return
 	default:
 		break
