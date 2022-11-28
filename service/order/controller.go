@@ -29,7 +29,7 @@ func (o *OrderManager) SetMenuNextStep(id int) error {
 	for _, order := range o.Orders {
 		for did, dinner := range order.Order.DinnerList {
 			for mid, menu := range dinner.MenuList {
-				if menu.StateId != 3 {
+				if menu.StateId != 3 && menu.OrderedMenuId == id {
 					order.Order.DinnerList[did].MenuList[mid].StateId += 1
 				}
 			}

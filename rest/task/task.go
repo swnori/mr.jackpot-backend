@@ -21,21 +21,6 @@ func (h *TaskHandler) SetTaskNextStatus(c *gin.Context) {
 		return
 	}
 
-	if role == "styler" && task.Type == "all" {
-		state, err := order.OrderManagers.GetOrderState(task.ID)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
-		if state == 5 {
-			order.OrderManagers.FinishOrderStep(task.ID)
-			c.JSON(http.StatusOK, "")
-			return
-		}
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-
 	switch (role) {
 
 	case "cook":
