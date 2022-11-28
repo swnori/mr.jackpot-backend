@@ -116,7 +116,7 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 					MenuId: menu.MenuId,
 					Count: 1,
 					OptionId: menu.OptionId,
-					StateId: 1,
+					StateId: 0,
 				})
 			}
 		}

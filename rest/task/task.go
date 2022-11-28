@@ -68,7 +68,13 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 
 	switch (role) {
 	case "cook":
-		c.JSON(http.StatusOK, order.OrderManagers.Menu)
+		menulist := make([]model.MenuFormed, 0)
+		for _, menu := range order.OrderManagers.Menu {
+			if menu.StateID != 0 {
+				menulist = append(menulist, menu)
+			}
+		}
+		c.JSON(http.StatusOK, menulist)
 		return
 	case "styler":
 		c.JSON(http.StatusOK, order.OrderManagers.Dinner)
@@ -81,6 +87,7 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 				return
 			}
 		}
+
 		c.JSON(http.StatusOK, "no delivery")
 		return
 	default:
