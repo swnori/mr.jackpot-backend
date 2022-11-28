@@ -2,6 +2,7 @@ package order
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 	"time"
 
@@ -129,6 +130,8 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 			StyleID: dinner.StyleId,
 			MenuList: menulist,
 		})
+
+		fmt.Println(dinner.OrderedDinnerId)
 	}
 
 	sort.Slice(dinnerlist, func(i, j int) bool {

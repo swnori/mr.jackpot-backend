@@ -80,26 +80,27 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 
 		for _, menu := range dinner.MenuList {
 
+			menuStruct := orm.CreateOrderedMenuParams{
+				OrderID:  orderID,
+				DinnerID: dinnerID,
+				MenuID:   int32(menu.MenuId),
+				Count:    1,
+			}
+
+			if len(menu.OptionId) >= 1 {
+				menuStruct.Option1ID = sql.NullInt32{
+					Int32: int32(menu.OptionId[0]),
+					Valid: true,
+				}
+			}
+			if len(menu.OptionId) >= 2 {
+				menuStruct.Option2ID = sql.NullInt32{
+					Int32: int32(menu.OptionId[1]),
+					Valid: true,
+				}
+			}
+
 			for i := 0; i < menu.Count; i++ {
-				menuStruct := orm.CreateOrderedMenuParams{
-					OrderID:  orderID,
-					DinnerID: dinnerID,
-					MenuID:   int32(menu.MenuId),
-					Count:    1,
-				}
-	
-				if len(menu.OptionId) >= 1 {
-					menuStruct.Option1ID = sql.NullInt32{
-						Int32: int32(menu.OptionId[0]),
-						Valid: true,
-					}
-				}
-				if len(menu.OptionId) >= 2 {
-					menuStruct.Option2ID = sql.NullInt32{
-						Int32: int32(menu.OptionId[1]),
-						Valid: true,
-					}
-				}
 
 				result, err := db.q.CreateOrderedMenu(ctx, menuStruct)
 				if err != nil {
@@ -119,6 +120,8 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 				})
 			}
 		}
+
+		order.DinnerList[didx].MenuList = make([]model.MenuOrder, 0)
 		order.DinnerList[didx].MenuList = append(order.DinnerList[didx].MenuList, newMenuList...)
 	}
 
