@@ -80,10 +80,18 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 		c.JSON(http.StatusOK, order.OrderManagers.Dinner)
 		return
 	case "delivery":
-		for _, order := range order.OrderManagers.Orders {
-			state := order.GetOrderState()
+		for _, orderr := range order.OrderManagers.Orders {
+			state := orderr.GetOrderState()
 			if state == 6 || state == 7 || state == 9 {
-				c.JSON(http.StatusOK, order.GetOrderInfo())
+				order, err := order.OrderManagers.GetOrderInfo(orderr.GetOrderInfo().ID);
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, err.Error())
+				}
+
+				c.JSON(http.StatusOK, gin.H{
+					"orderinfo": order.AllOrderInfoResponse,
+					"order": order.Order,
+				})
 				return
 			}
 		}

@@ -12,8 +12,6 @@ type Order struct {
 	OrderInfo model.AllOrderInfo
 	Order     model.Order
 
-
-
 	TaskList map[int][]int
 
 	currentState state.OrderState

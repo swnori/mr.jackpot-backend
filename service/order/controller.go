@@ -24,7 +24,6 @@ func (o *OrderManager) SetMenuNextStep(id int) error {
 		dinnerid = 0
 	)
 	
-
 	for i := range o.Menu {
 		if o.Menu[i].ID == id {
 			if o.Menu[i].StateID != 3 {
