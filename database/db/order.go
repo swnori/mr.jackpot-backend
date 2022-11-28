@@ -76,7 +76,9 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 
 		order.DinnerList[didx].OrderedDinnerId = int(dinnerID)
 
-		for midx, menu := range dinner.MenuList {
+		newMenuList := make([]model.MenuOrder, 0)
+
+		for _, menu := range dinner.MenuList {
 
 			for i := 0; i < menu.Count; i++ {
 				menuStruct := orm.CreateOrderedMenuParams{
@@ -108,9 +110,16 @@ func (db *OrderDB) CreateOrder(userid int, order model.Order, info model.AllOrde
 					return 0, order, err
 				}
 
-				order.DinnerList[didx].MenuList[midx].OrderedMenuId = int(menuid)
+				newMenuList = append(newMenuList, model.MenuOrder{
+					OrderedMenuId: int(menuid),
+					MenuId: menu.MenuId,
+					Count: 1,
+					OptionId: menu.OptionId,
+					StateId: 1,
+				})
 			}
 		}
+		order.DinnerList[didx].MenuList = append(order.DinnerList[didx].MenuList, newMenuList...)
 	}
 
 	return id, order, nil

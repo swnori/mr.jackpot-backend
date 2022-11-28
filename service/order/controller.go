@@ -98,17 +98,14 @@ func (o *OrderManager) CreateOrder(userid int, info model.OrderRequestInfo, orde
 	menulist := make([]model.MenuFormed, 0)
 	for _, dinner := range neworder.DinnerList {
 		for _, menu := range dinner.MenuList {
-
-			for i := 0; i < menu.Count; i++ {
-				menulist = append(menulist, model.MenuFormed{
-					StateID: 1,
-					OrderedID: orderid,
-					DinnerID: dinner.DinnerId,
-					MenuID: menu.MenuId,
-					ID: menu.OrderedMenuId,
-					OptionList: menu.OptionId,
-				})
-			}
+			menulist = append(menulist, model.MenuFormed{
+				StateID: 1,
+				OrderedID: orderid,
+				DinnerID: dinner.DinnerId,
+				MenuID: menu.MenuId,
+				ID: menu.OrderedMenuId,
+				OptionList: menu.OptionId,
+			})
 		}
 	}
 	o.Menu = menulist
