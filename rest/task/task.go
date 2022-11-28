@@ -83,9 +83,11 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 		for _, orderr := range order.OrderManagers.Orders {
 			state := orderr.GetOrderState()
 			if state == 6 || state == 7 || state == 9 {
-				order, err := order.OrderManagers.GetOrderInfo(orderr.GetOrderInfo().ID);
+				id := orderr.ID
+				order, err :=  order.OrderManagers.GetOrderInfo(id)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, err.Error())
+					return
 				}
 
 				c.JSON(http.StatusOK, gin.H{
