@@ -17,6 +17,7 @@ type MenuFormed struct {
 	DinnerID   int   `json:"dinnerId"`
 	ID         int   `json:"id"`
 	MenuID     int   `json:"menuId"`
+	TypeID     int   `json:"typeId"`
 	OptionList []int `json:"optionList"`
 }
 

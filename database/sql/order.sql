@@ -5,6 +5,3 @@ SELECT state_id
 FROM state
 WHERE name = (?))
 WHERE order_id = (?);
-
--- name: GetDish :one
-SELECT 

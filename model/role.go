@@ -8,5 +8,6 @@ var RoleDeliveryGangNam    string = "GangNam"
 var RoleDeliveryDongDaeMun string = "DongDaeMun"
 
 type Task struct {
-	ID int
+	ID   int    `json:"id"`
+	Type string `json:"type"`
 }

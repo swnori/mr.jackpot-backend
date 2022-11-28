@@ -89,13 +89,13 @@ func (h *OrderHandler) CancleOrder(c *gin.Context) {
 
 func (h *OrderHandler) RequestCollecting(c *gin.Context) {
 
-	var orderid int
-	if err := c.ShouldBindJSON(&orderid); err != nil {
+	var order model.OrderID
+	if err := c.ShouldBindJSON(&order); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	orderState, err := h.order.GetOrderState(orderid)
+	orderState, err := h.order.GetOrderState(order.OrdrID)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, err.Error())
 		return
@@ -106,7 +106,7 @@ func (h *OrderHandler) RequestCollecting(c *gin.Context) {
 		return
 	}
 
-	if err := h.order.FinishOrderStep(orderid); err != nil {
+	if err := h.order.FinishOrderStep(order.OrdrID); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
