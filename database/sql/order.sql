@@ -15,4 +15,7 @@ AND order_state.state_id = (
     SELECT state_id 
     FROM state
     WHERE name = "Finished"
-);*/
+);
+
+-- name: GetDish :one
+SELECT */

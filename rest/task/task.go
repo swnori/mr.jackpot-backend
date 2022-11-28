@@ -30,12 +30,12 @@ func (h *TaskHandler) SetTaskNextStatus(c *gin.Context) {
 	case "styler":
 		order.OrderManagers.SetDinnerNextStep(task.ID)
 		c.JSON(http.StatusOK, "")
-		break
+		return
 
 	case "delivery":
 		order.OrderManagers.FinishOrderStep(task.ID)
 		c.JSON(http.StatusOK, "")
-		break
+		return
 
 	default:
 		state := order.OrderManagers.Orders[task.ID].GetOrderState()
