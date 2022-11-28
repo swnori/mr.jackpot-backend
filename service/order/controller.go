@@ -18,12 +18,31 @@ type OrderController interface {
 }
 
 func (o *OrderManager) SetMenuNextStep(id int) error {
+
+	var (
+		flag = true
+		dinnerid = 0
+	)
+	
+
 	for i := range o.Menu {
 		if o.Menu[i].ID == id {
 			if o.Menu[i].StateID != 3 {
 				o.Menu[i].StateID += 1
+				dinnerid = o.Menu[i].DinnerID
 			}
 		}
+	}
+
+	for i := range o.Menu {
+		if o.Menu[i].StateID != 3 {
+			flag = false
+			break
+		}
+	}
+
+	if flag == true {
+		o.SetDinnerNextStep(dinnerid)
 	}
 
 	for _, order := range o.Orders {
@@ -36,18 +55,36 @@ func (o *OrderManager) SetMenuNextStep(id int) error {
 		}
 	}
 
-
 	return nil
 }
 
 func (o *OrderManager) SetDinnerNextStep(id int) error {
+
+	var (
+		flag = true
+		orderid = 0
+	)
+
 	for i := range o.Dinner {
 		if o.Dinner[i].ID == id {
 			if o.Dinner[i].ID != 3 {
 				o.Dinner[i].StateID += 1
+				orderid = o.Dinner[i].OrderedID
 			}
 		}
 	}
+
+	for i := range o.Dinner {
+		if o.Dinner[i].StateID != 3 {
+			flag = false
+			break
+		}
+	}
+
+	if flag == true {
+		o.FinishOrderStep(orderid)
+	}
+
 	for _, order := range o.Orders {
 		for did, dinner := range order.Order.DinnerList {
 			if dinner.DinnerId != 3 {
