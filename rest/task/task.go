@@ -64,6 +64,7 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 		c.JSON(http.StatusOK, order.OrderManagers.Dinner)
 		break
 	case "delivery":
+		c.JSON(http.StatusOK, "")
 		break
 	default:
 		break

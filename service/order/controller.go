@@ -24,6 +24,18 @@ func (o *OrderManager) SetMenuNextStep(id int) error {
 			}
 		}
 	}
+
+	for _, order := range o.Orders {
+		for did, dinner := range order.Order.DinnerList {
+			for mid, menu := range dinner.MenuList {
+				if menu.StateId != 3 {
+					order.Order.DinnerList[did].MenuList[mid].StateId += 1
+				}
+			}
+		}
+	}
+
+
 	return nil
 }
 
@@ -35,13 +47,13 @@ func (o *OrderManager) SetDinnerNextStep(id int) error {
 			}
 		}
 	}
-	//for _, order := range o.Orders {
-	//	for did, dinner := range order.Order.DinnerList {
-	//		if dinner.DinnerId != 3 {
-	//			
-	//		}
-	//	}
-	//}
+	for _, order := range o.Orders {
+		for did, dinner := range order.Order.DinnerList {
+			if dinner.DinnerId != 3 {
+				order.Order.DinnerList[did].StateId += 1
+			}
+		}
+	}
 	return nil
 }
 
