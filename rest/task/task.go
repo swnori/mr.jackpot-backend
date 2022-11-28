@@ -78,10 +78,10 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 			state := order.GetOrderState()
 			if state == 6 || state == 7 || state == 9 {
 				c.JSON(http.StatusOK, order.GetOrderInfo())
-				return				
+				return
 			}
 		}
-		c.JSON(http.StatusOK, model.AllOrderInfo{})
+		c.JSON(http.StatusOK, "no delivery")
 		return
 	default:
 		break
