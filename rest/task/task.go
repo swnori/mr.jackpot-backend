@@ -62,10 +62,10 @@ func (h *TaskHandler) GetTaskListByRole(c *gin.Context) {
 		return
 	case "styler":
 		c.JSON(http.StatusOK, order.OrderManagers.Dinner)
-		break
+		return
 	case "delivery":
 		c.JSON(http.StatusOK, "")
-		break
+		return
 	default:
 		break
 	}
